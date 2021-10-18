@@ -1,17 +1,19 @@
 import React from 'react';
 import cn from 'classnames';
-import { observer } from 'mobx-react-lite';
 
-import { boardStore } from '../../../mobx';
 import { VERTICAL_SYMBOLS_REVERSE } from '../constants';
 
-const VerticalSymbols: React.FC = observer(() => {
+interface IProps {
+  isRotate: boolean;
+}
+
+const VerticalSymbols: React.FC<IProps> = ({ isRotate }) => {
   return (
     <div className="chessboard__vertical-panel">
       {VERTICAL_SYMBOLS_REVERSE.map((sym) => (
         <div
           className={cn('chessboard__digit-symbol', {
-            'chessboard__digit-symbol--rotate': boardStore.board.isRotate,
+            'chessboard__digit-symbol--rotate': isRotate,
           })}
           key={sym}
         >
@@ -20,6 +22,6 @@ const VerticalSymbols: React.FC = observer(() => {
       ))}
     </div>
   );
-});
+};
 
 export { VerticalSymbols };
