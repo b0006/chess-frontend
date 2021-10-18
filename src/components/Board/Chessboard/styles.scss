@@ -1,0 +1,50 @@
+.chessboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__inner {
+        font-size: 2vmin;
+        background-color: gray;
+    }
+
+    &__horizontal-panel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(10vmin * 0.4);
+    }
+
+    &__alphabet-symbol {
+
+    }
+
+    &__game {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__board {
+        flex: 1;
+        box-shadow: 0 0 0 2px white inset;
+        // border: 2px solid white;
+    }
+
+    &__row {
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__cell {
+        width: 11vmin;
+        height: 11vmin;
+
+        &--light {
+            background-color: yellow;
+        }
+
+        &--dark {
+            background-color: blueviolet;
+        }
+    }
+}
