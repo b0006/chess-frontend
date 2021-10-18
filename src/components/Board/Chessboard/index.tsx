@@ -63,7 +63,13 @@ const Chessboard: React.FC<IProps> = ({
         </div>
         <HorizontalSymbols isRotate={isRotate} />
       </div>
-      <Popup title="Game over" description="Stupid" isVisible={isVisibleEnd} onClose={() => setIsVisibleEnd(false)} />
+      <Popup
+        title="Game over"
+        confirm={{ label: 'curva', handler: () => setIsVisibleEnd(false) }}
+        description="Stupid"
+        isVisible={isVisibleEnd}
+        onClose={() => setIsVisibleEnd(false)}
+      />
     </div>
   );
 };

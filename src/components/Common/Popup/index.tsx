@@ -1,16 +1,18 @@
 import React from 'react';
 import cn from 'classnames';
 
-import ModalLayout from '../ModalLayout';
+import { ModalLayout } from '../ModalLayout';
+import { Button } from '../Button';
+import { SvgIcon, ICON_LIST } from '../SvgIcon';
 
 import { TAppearance } from './types';
 import './styles.scss';
 
-const ICON_KIND_DATA: Record<TAppearance, string> = {
+const ICON_KIND_DATA: Record<TAppearance, keyof typeof ICON_LIST> = {
   success: 'checked',
   error: 'cross',
   info: 'info',
-  warning: 'exclamationTriangle',
+  warning: 'warning',
 };
 
 export interface IHandler {
@@ -68,7 +70,7 @@ const Popup: React.FC<IProps> = ({
       <div className="popup__content">
         <div className="popup__icon-wrapper">
           <div className={cn('popup__icon-inner', `popup__icon-inner--${appearance}`)}>
-            {ICON_KIND_DATA[appearance]}
+            <SvgIcon kind={ICON_KIND_DATA[appearance]} className="popup__icon" />
           </div>
         </div>
         {title && <h4 className="popup__title">{title}</h4>}
@@ -76,16 +78,8 @@ const Popup: React.FC<IProps> = ({
       </div>
       {hasButtons && (
         <div className="popup__buttons">
-          {confirm && (
-            <button className="popup__button" onClick={onConfirm}>
-              {confirm.label}
-            </button>
-          )}
-          {cancel && (
-            <button className="popup__button" onClick={onCancel}>
-              {cancel.label}
-            </button>
-          )}
+          {confirm && <Button className="popup__button" text={confirm.label} onClick={onConfirm} theme="primary" />}
+          {cancel && <Button className="popup__button" text={cancel.label} onClick={onCancel} theme="secondary" />}
         </div>
       )}
     </ModalLayout>
