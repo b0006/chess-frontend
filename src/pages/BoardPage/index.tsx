@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import * as ChessJS from 'chess.js';
 
-import { Chessboard } from '../../components/Board/Chessboard';
-import { IGameOver } from '../../components/Board/Chessboard/types';
+import { Wrapper as Chessboard } from '../../components/Board/Wrapper';
+import { IGameOver } from '../../components/Board/Wrapper/types';
 
 const Chess = typeof ChessJS === 'function' ? ChessJS : ChessJS.Chess;
 

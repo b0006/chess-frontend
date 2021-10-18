@@ -12,7 +12,7 @@ import { ReactComponent as QueenDark } from '../../../assets/chess-icons/queen-d
 import { ReactComponent as QueenLight } from '../../../assets/chess-icons/queen-light.svg';
 import { ReactComponent as RookDark } from '../../../assets/chess-icons/rook-dark.svg';
 import { ReactComponent as RookLight } from '../../../assets/chess-icons/rook-light.svg';
-import { TChessColor } from '../Chessboard/types';
+import { TChessColor } from '../Wrapper/types';
 
 type IChessType = {
   [key in ChessJS.PieceType]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;

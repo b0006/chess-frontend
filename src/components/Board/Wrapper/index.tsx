@@ -20,7 +20,7 @@ interface IProps {
   isGameOver: () => IGameOver;
 }
 
-const Chessboard: React.FC<IProps> = ({
+const Wrapper: React.FC<IProps> = ({
   isRotate,
   initBoard,
   getLegalMoves,
@@ -74,4 +74,4 @@ const Chessboard: React.FC<IProps> = ({
   );
 };
 
-export { Chessboard };
+export { Wrapper };

@@ -3,7 +3,7 @@ import * as ChessJS from 'chess.js';
 import cn from 'classnames';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
-import { TChessBoard, TChessColor, TMoves } from '../Chessboard/types';
+import { TChessBoard, TChessColor, TMoves } from '../Wrapper/types';
 
 import { ICONS_DEFAULT, SvgIcon } from './icons';
 
