@@ -5,7 +5,7 @@
 
     &__inner {
         font-size: 2vmin;
-        background-color: gray;
+        background-color: #8093b6;
     }
 
     &__horizontal-panel {
@@ -15,8 +15,21 @@
         height: calc(10vmin * 0.4);
     }
 
-    &__alphabet-symbol {
+    &__vertical-panel {
+        width: calc(10vmin * 0.4);
+    }
 
+    &__alphabet-symbol {
+        width: 11vmin;
+        display: flex;
+        justify-content: center;
+    }
+
+    &__digit-symbol {
+        height: 11vmin;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     &__game {
@@ -26,8 +39,7 @@
 
     &__board {
         flex: 1;
-        box-shadow: 0 0 0 2px white inset;
-        // border: 2px solid white;
+        box-shadow: 0 0 0 2px white;
     }
 
     &__row {
@@ -40,11 +52,11 @@
         height: 11vmin;
 
         &--light {
-            background-color: yellow;
+            background-color: #ced3dd;
         }
 
         &--dark {
-            background-color: blueviolet;
+            background-color: #8093b6;
         }
     }
 }

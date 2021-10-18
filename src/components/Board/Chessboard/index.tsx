@@ -44,8 +44,8 @@ const Board: React.FC = () => {
                   key={id}
                   id={id}
                   className={cn('chessboard__cell', {
-                    'chessboard__cell--light': false,
-                    'chessboard__cell--dark': false,
+                    'chessboard__cell--light': (symIndex + digitindex) % 2 === 0,
+                    'chessboard__cell--dark': (symIndex + digitindex) % 2 !== 0,
                   })}
                 >
                   {id}
