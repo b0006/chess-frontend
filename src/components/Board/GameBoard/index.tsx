@@ -3,18 +3,21 @@ import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
-import { TChessBoard, TChessColor } from '../Chessboard/types';
+import { TChessBoard, TChessColor, TMoves } from '../Chessboard/types';
 
 import { ICONS_DEFAULT, SvgIcon } from './icons';
 
 interface IProps {
   isRotate: boolean;
   board: TChessBoard;
+  getLegalMoves: TMoves;
 }
 
-const GameBoard: React.FC<IProps> = ({ isRotate, board }) => {
+const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves }) => {
   const onPieceClick = (id: string, color: TChessColor, pieceType: ChessJS.PieceType) => () => {
     console.log(id, color, pieceType);
+    const legal = getLegalMoves({ verbose: true, square: id });
+    console.log(legal);
   };
 
   return (

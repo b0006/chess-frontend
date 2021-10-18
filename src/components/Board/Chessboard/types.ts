@@ -8,3 +8,12 @@ export interface IChessItemState {
 }
 
 export type TChessBoard = (IChessItemState | null)[][];
+
+export interface IMovesOptions {
+  verbose?: boolean;
+  square?: string;
+}
+
+export type TMovesReturn = ChessJS.Move[] | string[];
+
+export type TMoves = (options: IMovesOptions) => TMovesReturn;
