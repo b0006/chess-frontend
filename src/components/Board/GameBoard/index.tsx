@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
-import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
 import { TChessBoard, TChessColor, TMoves } from '../Chessboard/types';
@@ -12,19 +11,26 @@ interface IProps {
   board: TChessBoard;
   getLegalMoves: TMoves;
   getTurn: () => TChessColor;
+  setMove: any;
 }
 
-const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves, getTurn }) => {
+const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves, getTurn, setMove }) => {
   const [legalMoves, setLegalMoves] = useState<any>({});
   const [squareActive, setSquareActive] = useState('');
 
-  const onPieceClick = (square: string, color: TChessColor, pieceType: ChessJS.PieceType) => () => {
+  const resetCell = () => {
+    setSquareActive('');
+    setLegalMoves({});
+  };
+
+  const onPieceClick = (square: string, color: TChessColor) => () => {
+    // деактивируем ранее активную ячейку
     if (squareActive === square) {
-      setSquareActive('');
-      setLegalMoves({});
+      resetCell();
       return;
     }
 
+    // Активируем ячейку и проверяем возможные ходы
     const actualTurn = getTurn();
     if (actualTurn === color) {
       setSquareActive(square);
@@ -45,6 +51,11 @@ const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves, getTurn }
     }
   };
 
+  const onLegalCell = (square: string) => {
+    setMove({ from: squareActive, to: square });
+    resetCell();
+  };
+
   return (
     <div className="chessboard__board">
       {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
@@ -58,6 +69,7 @@ const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves, getTurn }
 
               return (
                 <div
+                  onClick={() => legalMoves[id] && onLegalCell(id)}
                   key={id}
                   id={id}
                   className={cn('chessboard__cell', {
@@ -69,11 +81,7 @@ const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves, getTurn }
                   })}
                 >
                   {Icon && cellItem && (
-                    <button
-                      className="chessboard__button"
-                      type="button"
-                      onClick={onPieceClick(id, cellItem.color, cellItem.type)}
-                    >
+                    <button className="chessboard__button" type="button" onClick={onPieceClick(id, cellItem.color)}>
                       <Icon className="chessboard__icon" />
                     </button>
                   )}

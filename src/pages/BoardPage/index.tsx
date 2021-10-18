@@ -2,19 +2,15 @@ import React, { useState } from 'react';
 import * as ChessJS from 'chess.js';
 
 import { Chessboard } from '../../components/Board/Chessboard';
-import { TChessBoard } from '../../components/Board/Chessboard/types';
 
 const Chess = typeof ChessJS === 'function' ? ChessJS : ChessJS.Chess;
 
 const BoardPage: React.FC = () => {
   const [isRotate, setIsRotate] = useState(false);
-  const [board, setBoard] = useState<TChessBoard>([]);
   const [stateChess, setStateChess] = useState<ChessJS.ChessInstance | null>(null);
 
   const onClickNewGame = () => {
     const chess = new Chess();
-    const stateBoard = chess.board();
-    setBoard(stateBoard);
     setStateChess(chess);
   };
 
@@ -28,7 +24,14 @@ const BoardPage: React.FC = () => {
   return (
     <div>
       {stateChess && (
-        <Chessboard isRotate={isRotate} board={board} getLegalMoves={stateChess.moves} getTurn={stateChess.turn} />
+        <Chessboard
+          isRotate={isRotate}
+          initBoard={stateChess.board()}
+          getLegalMoves={stateChess.moves}
+          getTurn={stateChess.turn}
+          setMove={stateChess.move}
+          getBoardState={stateChess.board}
+        />
       )}
       <button onClick={onClickNewGame}>Start a new game</button>
       {/* <button onClick={onClickContinue}>Continue a game</button> */}
