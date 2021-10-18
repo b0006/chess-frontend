@@ -1,3 +1,13 @@
+@keyframes chessboard-show {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .chessboard {
     display: flex;
     flex-direction: column;
@@ -66,7 +76,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.25s;
+        transition: background-color 0.25s, box-shadow 0.25s, border-radius 0.25s;
+
+        svg {
+            transition: transform 0.25s;
+        }
+
+        &:hover svg {
+            transform: scale(1.2);
+        }
 
         &--light {
             background-color: #ced3dd;
@@ -86,6 +104,34 @@
 
         &--rotate {
             transform: rotate(180deg);
+        }
+
+        &--active {
+            box-shadow: 0 0 0 3px #5bcc5b inset;
+            border-radius: 12px;
+        }
+
+        &--move {
+            position: relative;
+            cursor: pointer;
+
+            &::after {
+                content: '';
+                position: absolute;
+                background-color: #5bcc5b;
+                height: 25%;
+                width: 25%;
+                border-radius: 100%;
+                margin: auto;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+
+                animation-name: chessboard-show;
+                animation-duration: 0.25s;
+                animation-iteration-count: 1;
+            }
         }
     }
 

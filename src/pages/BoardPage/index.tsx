@@ -27,7 +27,9 @@ const BoardPage: React.FC = () => {
 
   return (
     <div>
-      {stateChess && <Chessboard isRotate={isRotate} board={board} getLegalMoves={stateChess.moves} />}
+      {stateChess && (
+        <Chessboard isRotate={isRotate} board={board} getLegalMoves={stateChess.moves} getTurn={stateChess.turn} />
+      )}
       <button onClick={onClickNewGame}>Start a new game</button>
       {/* <button onClick={onClickContinue}>Continue a game</button> */}
       <button onClick={() => setIsRotate(!isRotate)}>Rotate board [{String(isRotate)}]</button>
