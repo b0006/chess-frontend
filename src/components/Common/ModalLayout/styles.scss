@@ -1,3 +1,5 @@
+@import 'src/assets/scss/utils';
+
 @keyframes overlay-show {
     0% {
         opacity: 0;
@@ -66,11 +68,11 @@
         animation-name: inner-hide;
     }
   
-    // @media #{$screen-sm} {
-    //   top: 100px;
-    //   width: 520px;
-    //   margin: 0 auto;
-    // }
+    @media #{$screen-sm} {
+      top: 100px;
+      width: 520px;
+      margin: 0 auto;
+    }
 }
   
 .modal-layout__content {
