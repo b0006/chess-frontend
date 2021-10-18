@@ -7,6 +7,10 @@
     &__inner {
         font-size: 2vmin;
         background-color: #8093b6;
+
+        &--rotate {
+            transform: rotate(180deg);
+        }
     }
 
     &__horizontal-panel {
@@ -24,6 +28,10 @@
         width: 11vmin;
         display: flex;
         justify-content: center;
+
+        &--rotate {
+            transform: rotate(180deg);
+        }
     }
 
     &__digit-symbol {
@@ -31,6 +39,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        &--rotate {
+            transform: rotate(180deg);
+        }
     }
 
     &__game {
@@ -70,6 +82,10 @@
             &:hover {
                 background-color: #70809e;
             }
+        }
+
+        &--rotate {
+            transform: rotate(180deg);
         }
     }
 }

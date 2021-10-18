@@ -1,9 +1,11 @@
 import React from 'react';
 import cn from 'classnames';
+import { observer } from 'mobx-react-lite';
 
+import { boardStore } from '../../../mobx';
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
 
-const GameBoard: React.FC = () => {
+const GameBoard: React.FC = observer(() => {
   return (
     <div className="chessboard__board">
       {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
@@ -16,6 +18,7 @@ const GameBoard: React.FC = () => {
                   key={id}
                   id={id}
                   className={cn('chessboard__cell', {
+                    'chessboard__cell--rotate': boardStore.board.isRotate,
                     'chessboard__cell--light': (symIndex + digitindex) % 2 === 0,
                     'chessboard__cell--dark': (symIndex + digitindex) % 2 !== 0,
                   })}
@@ -29,6 +32,6 @@ const GameBoard: React.FC = () => {
       })}
     </div>
   );
-};
+});
 
 export { GameBoard };
