@@ -3,23 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "axios": "^0.19.2",
-    "mobx": "^5.15.4",
-    "mobx-react": "^6.2.2",
-    "mobx-react-lite": "^2.0.6",
-    "node-sass": "^4.14.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
-    "typescript": "~3.7.2"
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.4.1",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.1",
+    "@types/react": "^17.0.30",
+    "@types/react-dom": "^17.0.9",
+    "axios": "^0.23.0",
+    "mobx": "^6.3.5",
+    "mobx-react": "^7.2.1",
+    "mobx-react-lite": "^3.2.1",
+    "node-sass": "^6.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "^4.0.3",
+    "typescript": "~4.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,7 +35,6 @@
       "eslint:recommended",
       "plugin:react/recommended",
       "plugin:@typescript-eslint/recommended",
-      "prettier/@typescript-eslint",
       "plugin:prettier/recommended"
     ],
     "plugins": [
@@ -66,6 +65,7 @@
           "functions": "never"
         }
       ],
+      "linebreak-style": 0,
       "no-shadow": "warn",
       "radix": "error",
       "no-return-await": "error",
@@ -87,24 +87,13 @@
       ],
       "react/display-name": "off",
       "react/prop-types": "off",
-      "@typescript-eslint/interface-name-prefix": [
-        "error",
-        {
-          "prefixWithI": "always"
-        }
-      ],
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/camelcase": [
-        "error",
-        {
-          "properties": "never"
-        }
-      ],
       "prettier/prettier": [
         "error",
         {
           "singleQuote": true,
-          "trailingComma": "es5"
+          "trailingComma": "es5",
+          "endOfLine": "auto"
         }
       ],
       "@typescript-eslint/explicit-member-accessibility": 0,
@@ -132,27 +121,27 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@types/react-router-dom": "^5.1.4",
-    "@typescript-eslint/eslint-plugin": "^2.29.0",
-    "@typescript-eslint/parser": "^2.29.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.14.5",
+    "@types/react-router-dom": "^5.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-config-react": "^1.1.7",
-    "eslint-config-react-app": "^5.2.1",
-    "eslint-loader": "^4.0.0",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "^3.1.3",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^3.0.0",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.1.7",
-    "prettier": "^2.0.5"
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.3",
+    "prettier": "^2.4.1"
   },
   "prettier": {
     "printWidth": 120,
     "singleQuote": true,
-    "jsxBracketSameLine": true
+    "endOfLine": "auto"
   },
   "husky": {
     "hooks": {

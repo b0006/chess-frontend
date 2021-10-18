@@ -34,7 +34,9 @@ const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [
         }
         setResponseData(response.data.data);
       } catch (err) {
-        setError(err);
+        if (err instanceof Error || typeof err === 'string') {
+          setError(err);
+        }
       } finally {
         setIsLoading(false);
       }

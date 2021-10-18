@@ -1,4 +1,4 @@
-import { decorate, observable, action } from 'mobx';
+// import { observable, action } from 'mobx';
 
 import * as service from './userStore.service';
 
@@ -33,10 +33,10 @@ export class UserStore {
   };
 }
 
-decorate(UserStore, {
-  user: observable,
-  signIn: action,
-  logout: action,
-});
+// decorate(UserStore, {
+//   user: observable,
+//   signIn: action,
+//   logout: action,
+// });
 
 export default new UserStore();
