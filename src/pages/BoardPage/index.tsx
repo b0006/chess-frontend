@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as ChessJS from 'chess.js';
 
 import { Chessboard } from '../../components/Board/Chessboard';
+import { IGameOver } from '../../components/Board/Chessboard/types';
 
 const Chess = typeof ChessJS === 'function' ? ChessJS : ChessJS.Chess;
 
@@ -14,12 +15,16 @@ const BoardPage: React.FC = () => {
     setStateChess(chess);
   };
 
-  // const onClickContinue = () => {
-  //   const chess = new Chess('r1k4r/p2nb1p1/2b4p/1p1n1p2/2PP4/3Q1NB1/1P3PPP/R5K1 b - c3 0 19');
-  //   const stateBoard = chess.board();
-  //   setBoard(stateBoard);
-  //   setStateChess(chess);
-  // };
+  const isGameOver = (): IGameOver => ({
+    color: stateChess?.turn(),
+    isGameOver: stateChess?.game_over(),
+    inCheck: stateChess?.in_check(),
+    inCheckmate: stateChess?.in_checkmate(),
+    inDraw: stateChess?.in_draw(),
+    inStalemate: stateChess?.in_stalemate(),
+    inThreefoldRepetition: stateChess?.in_threefold_repetition(),
+    insufficientMaterial: stateChess?.insufficient_material(),
+  });
 
   return (
     <div>
@@ -31,10 +36,10 @@ const BoardPage: React.FC = () => {
           getTurn={stateChess.turn}
           setMove={stateChess.move}
           getBoardState={stateChess.board}
+          isGameOver={isGameOver}
         />
       )}
       <button onClick={onClickNewGame}>Start a new game</button>
-      {/* <button onClick={onClickContinue}>Continue a game</button> */}
       <button onClick={() => setIsRotate(!isRotate)}>Rotate board [{String(isRotate)}]</button>
     </div>
   );

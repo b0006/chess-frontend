@@ -17,3 +17,14 @@ export interface IMovesOptions {
 export type TMovesReturn = ChessJS.Move[] | string[];
 
 export type TMoves = (options: IMovesOptions) => TMovesReturn;
+
+export interface IGameOver {
+  color?: TChessColor;
+  isGameOver?: boolean;
+  inCheck?: boolean;
+  inCheckmate?: boolean;
+  inDraw?: boolean;
+  inStalemate?: boolean;
+  inThreefoldRepetition?: boolean;
+  insufficientMaterial?: boolean;
+}

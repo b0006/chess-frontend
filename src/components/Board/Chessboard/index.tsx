@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import * as ChessJS from 'chess.js';
 import cn from 'classnames';
 
+import { Popup } from '../../Common/Popup';
 import { VerticalSymbols } from '../VerticalSymbols';
 import { GameBoard } from '../GameBoard';
 import { HorizontalSymbols } from '../HorizontalSymbols';
 
-import { TMoves, TChessBoard, TChessColor } from './types';
+import { TMoves, TChessBoard, TChessColor, IGameOver } from './types';
 import './styles.scss';
 
 interface IProps {
@@ -16,14 +17,29 @@ interface IProps {
   getTurn: () => TChessColor;
   setMove: (move: string | ChessJS.ShortMove, options?: { sloppy?: boolean }) => ChessJS.Move | null;
   getBoardState: () => TChessBoard;
+  isGameOver: () => IGameOver;
 }
 
-const Chessboard: React.FC<IProps> = ({ isRotate, initBoard, getLegalMoves, getTurn, setMove, getBoardState }) => {
+const Chessboard: React.FC<IProps> = ({
+  isRotate,
+  initBoard,
+  getLegalMoves,
+  getTurn,
+  setMove,
+  getBoardState,
+  isGameOver,
+}) => {
+  const [isVisibleEnd, setIsVisibleEnd] = useState(false);
   const [board, setBoard] = useState<TChessBoard>(initBoard);
 
   const onMove = (data: ChessJS.ShortMove) => {
     setMove(data);
     setBoard(getBoardState());
+
+    const result = isGameOver();
+    if (result.isGameOver) {
+      setIsVisibleEnd(true);
+    }
   };
 
   useEffect(() => {
@@ -47,6 +63,7 @@ const Chessboard: React.FC<IProps> = ({ isRotate, initBoard, getLegalMoves, getT
         </div>
         <HorizontalSymbols isRotate={isRotate} />
       </div>
+      <Popup title="Game over" description="Stupid" isVisible={isVisibleEnd} onClose={() => setIsVisibleEnd(false)} />
     </div>
   );
 };
