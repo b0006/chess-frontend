@@ -6,4 +6,4 @@ const StartPage: React.FC = () => {
   return <Example />;
 };
 
-export default StartPage;
+export { StartPage };
