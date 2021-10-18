@@ -1,8 +1,9 @@
 import React from 'react';
 import cn from 'classnames';
+import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
-import { TChessBoard } from '../Chessboard/types';
+import { TChessBoard, TChessColor } from '../Chessboard/types';
 
 import { ICONS_DEFAULT, SvgIcon } from './icons';
 
@@ -12,6 +13,10 @@ interface IProps {
 }
 
 const GameBoard: React.FC<IProps> = ({ isRotate, board }) => {
+  const onPieceClick = (id: string, color: TChessColor, pieceType: ChessJS.PieceType) => () => {
+    console.log(id, color, pieceType);
+  };
+
   return (
     <div className="chessboard__board">
       {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
@@ -33,7 +38,15 @@ const GameBoard: React.FC<IProps> = ({ isRotate, board }) => {
                     'chessboard__cell--dark': (symIndex + digitindex) % 2 !== 0,
                   })}
                 >
-                  {Icon && <Icon className="chessboard__icon" />}
+                  {Icon && cellItem && (
+                    <button
+                      className="chessboard__button"
+                      type="button"
+                      onClick={onPieceClick(id, cellItem.color, cellItem.type)}
+                    >
+                      <Icon className="chessboard__icon" />
+                    </button>
+                  )}
                 </div>
               );
             })}

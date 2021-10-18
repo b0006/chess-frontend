@@ -90,6 +90,18 @@
     }
 
     &__icon {
+        height: 85%;
+        width: 85%;
+    }
+
+    &__button {
         cursor: pointer;
+        background-color: transparent;
+        appearance: none;
+        border: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
     }
 }
