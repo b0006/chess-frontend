@@ -1,4 +1,4 @@
-// import { observable, action } from 'mobx';
+import { makeAutoObservable } from 'mobx';
 
 import * as service from './userStore.service';
 
@@ -17,10 +17,21 @@ const initUser: IUserData = {
 export class UserStore {
   public user: IUserData = initUser;
 
+  constructor() {
+    makeAutoObservable(this);
+  }
+
   public signIn = () => {
     this.user = {
       ...this.user,
       isAuth: true,
+    };
+  };
+
+  public changeUserName = (newName: string) => {
+    this.user = {
+      ...this.user,
+      name: newName,
     };
   };
 
@@ -32,11 +43,5 @@ export class UserStore {
     return result;
   };
 }
-
-// decorate(UserStore, {
-//   user: observable,
-//   signIn: action,
-//   logout: action,
-// });
 
 export default new UserStore();
