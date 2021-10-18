@@ -11,7 +11,7 @@ export type TChessBoard = (IChessItemState | null)[][];
 
 export interface IMovesOptions {
   verbose?: boolean;
-  square?: string;
+  square?: ChessJS.Square;
 }
 
 export type TMovesReturn = ChessJS.Move[] | string[];

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import * as ChessJS from 'chess.js';
 import cn from 'classnames';
 
 import { VerticalSymbols } from '../VerticalSymbols';
@@ -13,17 +14,21 @@ interface IProps {
   initBoard: TChessBoard;
   getLegalMoves: TMoves;
   getTurn: () => TChessColor;
-  setMove: any;
-  getBoardState: () => any;
+  setMove: (move: string | ChessJS.ShortMove, options?: { sloppy?: boolean }) => ChessJS.Move | null;
+  getBoardState: () => TChessBoard;
 }
 
 const Chessboard: React.FC<IProps> = ({ isRotate, initBoard, getLegalMoves, getTurn, setMove, getBoardState }) => {
   const [board, setBoard] = useState<TChessBoard>(initBoard);
 
-  const onMove = (data: any) => {
+  const onMove = (data: ChessJS.ShortMove) => {
     setMove(data);
     setBoard(getBoardState());
   };
+
+  useEffect(() => {
+    setBoard(initBoard);
+  }, [initBoard]);
 
   return (
     <div className="chessboard">
