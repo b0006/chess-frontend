@@ -9,10 +9,28 @@
 }
 
 .chessboard {
+    $_self: &;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
+
+    &--overlay {
+        #{$_self}__inner {
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(115, 127, 138, 0.77);
+            }
+        }
+    }
 
     &__inner {
         font-size: 2vmin;
@@ -132,6 +150,10 @@
                 animation-duration: 0.25s;
                 animation-iteration-count: 1;
             }
+        }
+
+        &--no-events {
+            pointer-events: none;
         }
     }
 

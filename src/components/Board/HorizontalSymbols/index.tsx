@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { HORIZONTAL_SYMBOLS } from '../constants';
 
 interface IProps {
-  isRotate: boolean;
+  isRotate?: boolean;
 }
 
 const HorizontalSymbols: React.FC<IProps> = ({ isRotate }) => {

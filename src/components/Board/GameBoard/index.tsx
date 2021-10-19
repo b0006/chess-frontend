@@ -8,7 +8,7 @@ import { TChessBoard, TChessColor, TMoves } from '../Wrapper/types';
 import { ICONS_DEFAULT, SvgIcon } from './icons';
 
 interface IProps {
-  isRotate: boolean;
+  isRotate?: boolean;
   board: TChessBoard;
   getLegalMoves: TMoves;
   getTurn: () => TChessColor;

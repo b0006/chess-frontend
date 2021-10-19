@@ -1,9 +1,13 @@
 import React from 'react';
 
-import Example from '../../components/Example';
+import { RandomBoard } from '../../components/Board/RandomBoard';
 
 const StartPage: React.FC = () => {
-  return <Example />;
+  return (
+    <div>
+      <RandomBoard />
+    </div>
+  );
 };
 
 export { StartPage };

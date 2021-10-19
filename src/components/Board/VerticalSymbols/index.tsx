@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { VERTICAL_SYMBOLS_REVERSE } from '../constants';
 
 interface IProps {
-  isRotate: boolean;
+  isRotate?: boolean;
 }
 
 const VerticalSymbols: React.FC<IProps> = ({ isRotate }) => {
