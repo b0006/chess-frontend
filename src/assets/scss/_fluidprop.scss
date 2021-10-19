@@ -1,0 +1,74 @@
+/**
+ * FluidProp for Sass
+ * 
+ * @version 1.0
+ * @author Niels Lyngsø
+ * @license MIT License
+ * @website: https://github.com/nielslyngsoe/sass-fluid-prop
+*/
+
+$FluidProp__currentPropName: font-size !global;
+$FluidProp__currentMapValue: 1 !global;
+$FluidProp__currentPropValue: 1 !global;
+$FluidProp__currentPropUnit: px !global;
+
+@mixin FluidProp-start($propertyName:font-size, $startMappingAt:0, $propertyStartValue:0, $propertyUnit:px) {
+
+	$FluidProp__currentPropName: $propertyName !global;
+	$FluidProp__currentMapValue: $startMappingAt !global;
+	$FluidProp__currentPropValue: $propertyStartValue !global;
+	$FluidProp__currentPropUnit: $propertyUnit !global;
+
+	#{$propertyName}: #{$propertyStartValue}#{$FluidProp__currentPropUnit};
+
+}
+
+@mixin FluidProp-step($mapAt, $propertyValue) {
+
+	$viewportGrowth: $mapAt - $FluidProp__currentMapValue;
+	$sizeGrowth: $propertyValue - $FluidProp__currentPropValue;
+	$relationRatio: $sizeGrowth / $viewportGrowth;
+	$correction: $FluidProp__currentPropValue - $FluidProp__currentMapValue * $relationRatio;
+
+	$propertyName: $FluidProp__currentPropName;
+
+	@media (min-width: #{$FluidProp__currentMapValue}px ) and (max-width: #{$mapAt}px ) {
+		#{$propertyName}: calc(#{($relationRatio*100)}vw + #{$correction}#{$FluidProp__currentPropUnit});
+	}
+
+	$FluidProp__currentPropValue: $propertyValue !global;
+	$FluidProp__currentMapValue: $mapAt !global;
+}
+
+
+@mixin FluidProp-stay($mapAt) {
+
+	$propertyName: $FluidProp__currentPropName;
+
+	@media (min-width: #{$FluidProp__currentMapValue}px ) and (max-width: #{$mapAt}px ) {
+		#{$propertyName}: #{$FluidProp__currentPropValue}#{$FluidProp__currentPropUnit};
+	}
+
+	$FluidProp__currentMapValue: $mapAt !global;
+
+}
+
+@mixin FluidProp-end() {
+
+	$propertyName: $FluidProp__currentPropName;
+
+	@media (min-width: #{$FluidProp__currentMapValue}px ) {
+		#{$propertyName}: #{$FluidProp__currentPropValue}#{$FluidProp__currentPropUnit};
+	}
+
+}
+
+@mixin FluidProp-endless($growthRelationRatio) {
+
+	$correction: $FluidProp__currentPropValue - $FluidProp__currentMapValue * $growthRelationRatio;
+	$propertyName: $FluidProp__currentPropName;
+
+	@media (min-width: #{$FluidProp__currentMapValue}px ) {
+		#{$propertyName}: calc(#{($growthRelationRatio*100)}vw + #{$correction}#{$FluidProp__currentPropUnit});
+	}
+}

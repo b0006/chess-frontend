@@ -1,0 +1,30 @@
+@import 'src/assets/scss/utils';
+
+.header {
+  box-shadow: $shadow-default;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: $c-white;
+  z-index: 100;
+}
+
+.inner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.left, .center, .right {
+  flex: 1;
+}
+
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
