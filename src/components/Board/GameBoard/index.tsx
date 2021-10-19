@@ -61,6 +61,11 @@ const GameBoard: React.FC<IProps> = ({ isRotate, board, getLegalMoves, getTurn, 
   ) => {
     if (legalMoves[square] && squareActive) {
       event.preventDefault();
+      if (legalMoves[square].promotion) {
+        setMove({ from: squareActive, to: square, promotion: 'b' });
+        resetCell();
+        return;
+      }
       setMove({ from: squareActive, to: square });
       resetCell();
     }
