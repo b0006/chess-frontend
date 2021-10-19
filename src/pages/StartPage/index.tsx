@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { RandomBoard } from '../../components/Board/RandomBoard';
+import { Container } from '../../components/Layout/Container';
+import { StartMenu } from '../../components/Start/StartMenu';
 
 const StartPage: React.FC = () => {
   return (
-    <div>
-      <RandomBoard />
-    </div>
+    <Container>
+      <StartMenu />
+    </Container>
   );
 };
 
