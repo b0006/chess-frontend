@@ -1,11 +1,6 @@
 @import 'src/assets/scss/utils';
 
 .header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  min-height: $offset-header;
   box-shadow: $shadow-default;
   display: flex;
   flex-direction: row;
@@ -18,6 +13,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .left, .center, .right {

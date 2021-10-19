@@ -6,7 +6,6 @@ import { HorizontalSymbols } from '../HorizontalSymbols';
 import { VerticalSymbols } from '../VerticalSymbols';
 import { TemplateBoard } from '../TemplateBoard';
 import { TChessBoard } from '../Wrapper/types';
-import { sleep } from '../../../utils/time';
 
 import styles from './RandomBoard.module.scss';
 
@@ -20,32 +19,33 @@ const RandomBoard: React.FC = () => {
     const chess = new Chess();
     setStateChess(chess);
     setBoardState(chess.board());
-  }, []);
 
-  useEffect(() => {
-    if (stateChess) {
-      const setRandomMove = async () => {
-        const moves = stateChess.moves();
+    let intervalId: NodeJS.Timeout | null = null;
+
+    const setRandomMove = () => {
+      intervalId = setInterval(() => {
+        const moves = chess.moves();
         const randomMove = moves[Math.floor(Math.random() * moves.length)];
-        stateChess.move(randomMove);
-        setBoardState(stateChess.board());
-        await sleep(1000);
+        chess.move(randomMove);
+        setBoardState(chess.board());
 
-        if (!stateChess.game_over()) {
+        if (chess.game_over() && intervalId) {
+          clearInterval(intervalId);
+          chess.reset();
           setRandomMove();
-        } else {
-          setTimeout(() => {
-            stateChess.reset();
-            setRandomMove();
-          }, 2000);
         }
-      };
+      }, 1000);
+    };
 
-      setTimeout(() => {
-        setRandomMove();
-      }, 2000);
-    }
-  }, [stateChess]);
+    setRandomMove();
+
+    return () => {
+      chess.clear();
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, []);
 
   if (!stateChess) {
     return null;
