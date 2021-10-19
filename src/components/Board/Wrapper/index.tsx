@@ -8,7 +8,7 @@ import { GameBoard } from '../GameBoard';
 import { HorizontalSymbols } from '../HorizontalSymbols';
 
 import { TMoves, TChessBoard, TChessColor, IGameOver } from './types';
-import './styles.scss';
+import styles from './Wrapper.module.scss';
 
 interface IProps {
   isRotate: boolean;
@@ -47,10 +47,10 @@ const Wrapper: React.FC<IProps> = ({
   }, [initBoard]);
 
   return (
-    <div className="chessboard">
-      <div className={cn('chessboard__inner', { 'chessboard__inner--rotate': isRotate })}>
+    <div className={styles.chessboard}>
+      <div className={cn(styles.inner, { [styles['inner--rotate']]: isRotate })}>
         <HorizontalSymbols isRotate={isRotate} />
-        <div className="chessboard__game">
+        <div className={styles.game}>
           <VerticalSymbols isRotate={isRotate} />
           <GameBoard
             isRotate={isRotate}

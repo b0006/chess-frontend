@@ -3,17 +3,19 @@ import cn from 'classnames';
 
 import { HORIZONTAL_SYMBOLS } from '../constants';
 
+import styles from './HorizontalSymbols.module.scss';
+
 interface IProps {
   isRotate?: boolean;
 }
 
 const HorizontalSymbols: React.FC<IProps> = ({ isRotate }) => {
   return (
-    <div className="chessboard__horizontal-panel">
+    <div className={styles['horizontal-panel']}>
       {HORIZONTAL_SYMBOLS.map((sym) => (
         <div
-          className={cn('chessboard__alphabet-symbol', {
-            'chessboard__alphabet-symbol--rotate': isRotate,
+          className={cn(styles['alphabet-symbol'], {
+            [styles['alphabet-symbol--rotate']]: isRotate,
           })}
           key={sym}
         >

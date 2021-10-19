@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { SvgIcon, ICON_LIST } from '../SvgIcon';
 
-import './styles.scss';
+import styles from './Button.module.scss';
 
 export interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Текст кнопки */
@@ -47,11 +47,11 @@ const Button = forwardRef<HTMLButtonElement, IProps>(
     const iconLeftSide = iconSide === 'left';
     const iconRightSide = iconSide === 'right';
 
-    const classesIcon = cn('button__icon', {
-      'button__icon--left': iconLeftSide && text,
-      'button__icon--right': iconRightSide && text,
-      'button__icon--only': isCircle,
-      'button__icon--loading': isLoading,
+    const classesIcon = cn(styles.icon, {
+      [styles.icon_left]: iconLeftSide && text,
+      [styles.icon_right]: iconRightSide && text,
+      [styles.icon_only]: isCircle,
+      [styles.icon_loading]: isLoading,
     });
 
     const svgIconLoader = <SvgIcon className={classesIcon} kind="loader" />;
@@ -61,8 +61,8 @@ const Button = forwardRef<HTMLButtonElement, IProps>(
 
     const button = (
       <button
-        className={cn('button', className, `button--${theme}`, {
-          'button--circle': isCircle,
+        className={cn(styles.button, className, styles[`button_${theme}`], {
+          [styles.button_circle]: isCircle,
         })}
         type={type}
         disabled={isLoading || disabled}
@@ -82,7 +82,7 @@ const Button = forwardRef<HTMLButtonElement, IProps>(
     );
 
     return href ? (
-      <Link to={href} className="button__link">
+      <Link to={href} className={styles.link}>
         {button}
       </Link>
     ) : (

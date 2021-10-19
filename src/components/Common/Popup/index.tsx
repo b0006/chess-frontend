@@ -2,11 +2,11 @@ import React from 'react';
 import cn from 'classnames';
 
 import { ModalLayout } from '../ModalLayout';
-import { Button } from '../Button';
 import { SvgIcon, ICON_LIST } from '../SvgIcon';
+import { Button } from '../Button';
 
 import { TAppearance } from './types';
-import './styles.scss';
+import styles from './Popup.module.scss';
 
 const ICON_KIND_DATA: Record<TAppearance, keyof typeof ICON_LIST> = {
   success: 'checked',
@@ -65,21 +65,21 @@ const Popup: React.FC<IProps> = ({
       isVisible={isVisible}
       overlayClickClose={overlayClickClose}
       onClose={onClose}
-      classNameInner="popup__modal-inner"
+      classNameInner={styles['modal-inner']}
     >
-      <div className="popup__content">
-        <div className="popup__icon-wrapper">
-          <div className={cn('popup__icon-inner', `popup__icon-inner--${appearance}`)}>
-            <SvgIcon kind={ICON_KIND_DATA[appearance]} className="popup__icon" />
+      <div className={styles.content}>
+        <div className={styles['icon-wrapper']}>
+          <div className={cn(styles['icon-inner'], styles[`icon-inner_${appearance}`])}>
+            <SvgIcon kind={ICON_KIND_DATA[appearance]} className={styles.icon} />
           </div>
         </div>
-        {title && <h4 className="popup__title">{title}</h4>}
-        {description && <div className="popup__description">{description}</div>}
+        {title && <h4 className={styles.title}>{title}</h4>}
+        {description && <div className={styles.description}>{description}</div>}
       </div>
       {hasButtons && (
-        <div className="popup__buttons">
-          {confirm && <Button className="popup__button" text={confirm.label} onClick={onConfirm} theme="primary" />}
-          {cancel && <Button className="popup__button" text={cancel.label} onClick={onCancel} theme="secondary" />}
+        <div className={styles.buttons}>
+          {confirm && <Button className={styles.button} text={confirm.label} onClick={onConfirm} theme="primary" />}
+          {cancel && <Button className={styles.button} text={cancel.label} onClick={onCancel} theme="secondary" />}
         </div>
       )}
     </ModalLayout>

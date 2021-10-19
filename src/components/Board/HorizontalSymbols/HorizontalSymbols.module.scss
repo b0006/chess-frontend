@@ -1,0 +1,18 @@
+@import 'src/assets/scss/utils';
+
+.horizontal-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(10vmin * 0.4);
+}
+
+.alphabet-symbol {
+  width: 11vmin;
+  display: flex;
+  justify-content: center;
+
+  &--rotate {
+    transform: rotate(180deg);
+  }
+}

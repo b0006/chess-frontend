@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import './styles.scss';
+import styles from './Container.module.scss';
 
 interface IProps {
   children: React.ReactNode | React.ReactNode[];
@@ -13,7 +13,7 @@ const Container = React.forwardRef(
   ({ children, className, as = 'div', ...rest }: IProps, ref: React.LegacyRef<never>) => {
     const Tag = as;
     return (
-      <Tag {...rest} className={cn(className, 'container')} ref={ref}>
+      <Tag {...rest} className={cn(className, styles.container)} ref={ref}>
         {children}
       </Tag>
     );

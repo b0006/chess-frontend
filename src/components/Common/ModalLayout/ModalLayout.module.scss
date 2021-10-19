@@ -1,0 +1,109 @@
+@import 'src/assets/scss/utils';
+
+@keyframes overlay-show {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes inner-show {
+  0% {
+    transform: scale(0.2, 0.2);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes overlay-hide {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes inner-hide {
+  0% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(0.2, 0.2);
+  }
+}
+
+.overlay {
+  animation-name: overlay-show;
+  animation-duration: 0.25s;
+  animation-iteration-count: 1;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.14);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: 110;
+
+  &_hide {
+    animation-name: overlay-hide;
+  }
+}
+
+.inner {
+  animation-name: inner-show;
+  animation-duration: 0.25s;
+  animation-iteration-count: 1;
+  position: relative;
+  width: 98%;
+  margin: 8px auto;
+  padding-bottom: 24px;
+  top: 0;
+
+  &_hide {
+    animation-name: inner-hide;
+  }
+
+  @media #{$screen-sm} {
+    top: 100px;
+    width: 520px;
+    margin: 0 auto;
+  }
+}
+
+.content {
+  position: relative;
+  background-color: $c-white;
+  box-shadow: $shadow-default;
+  border-radius: 8px;
+  min-height: 300px;
+  padding: 30px 25px;
+}
+
+.button-close {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  border: none;
+  background-color: $c-primary;
+  color: $c-white;
+  padding: 8px;
+  margin: 0;
+  display: flex;
+  border-radius: 100%;
+  cursor: pointer;
+  transition: background-color 0.25s;
+
+  &:hover {
+    background-color: $c-primary-hover;
+  }
+}
+
+.icon {
+  width: 12px;
+  height: 12px;
+}

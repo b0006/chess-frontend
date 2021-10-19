@@ -3,17 +3,19 @@ import cn from 'classnames';
 
 import { VERTICAL_SYMBOLS_REVERSE } from '../constants';
 
+import styles from './VerticalSymbols.module.scss';
+
 interface IProps {
   isRotate?: boolean;
 }
 
 const VerticalSymbols: React.FC<IProps> = ({ isRotate }) => {
   return (
-    <div className="chessboard__vertical-panel">
+    <div className={styles['vertical-panel']}>
       {VERTICAL_SYMBOLS_REVERSE.map((sym) => (
         <div
-          className={cn('chessboard__digit-symbol', {
-            'chessboard__digit-symbol--rotate': isRotate,
+          className={cn(styles['digit-symbol'], {
+            [styles['digit-symbol--rotate']]: isRotate,
           })}
           key={sym}
         >

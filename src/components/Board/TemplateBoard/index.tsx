@@ -6,6 +6,8 @@ import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
 import { ICONS_DEFAULT, SvgIcon } from '../GameBoard/icons';
 import { TChessBoard, TChessColor } from '../Wrapper/types';
 
+import styles from './TemplateBoard.module.scss';
+
 interface IProps {
   isRotate?: boolean;
   legalMoves?: any;
@@ -26,10 +28,10 @@ const TemplateBoard: React.FC<IProps> = ({
   isNoEvents = false,
 }) => {
   return (
-    <div className="chessboard__board">
+    <div className={styles.board}>
       {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
         return (
-          <div key={sym} className="chessboard__row">
+          <div key={sym} className={styles.row}>
             {VERTICAL_SYMBOLS_REVERSE.map((_, digitindex) => {
               const id = `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
               const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
@@ -57,18 +59,18 @@ const TemplateBoard: React.FC<IProps> = ({
                   onClick={_onClickCell}
                   key={id}
                   id={id}
-                  className={cn('chessboard__cell', {
-                    'chessboard__cell--no-events': isNoEvents,
-                    'chessboard__cell--move': legalMoves[id],
-                    'chessboard__cell--active': squareActive === id,
-                    'chessboard__cell--rotate': isRotate,
-                    'chessboard__cell--light': (symIndex + digitindex) % 2 === 0,
-                    'chessboard__cell--dark': (symIndex + digitindex) % 2 !== 0,
+                  className={cn(styles.cell, {
+                    [styles['cell--no-events']]: isNoEvents,
+                    [styles['cell--move']]: legalMoves[id],
+                    [styles['cell--active']]: squareActive === id,
+                    [styles['cell--rotate']]: isRotate,
+                    [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
+                    [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
                   })}
                 >
                   {Icon && cellItem && (
-                    <button className="chessboard__button" type="button" onClick={_onClickPiece(id, cellItem.color)}>
-                      <Icon className="chessboard__icon" />
+                    <button className={styles.button} type="button" onClick={_onClickPiece(id, cellItem.color)}>
+                      <Icon className={styles.icon} />
                     </button>
                   )}
                 </div>

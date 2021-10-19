@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { SvgIcon } from '../SvgIcon';
 
 import { ClientOnlyPortal } from './ClientOnlyPortal';
-import './styles.scss';
+import styles from './ModalLayout.module.scss';
 
 export interface IProps {
   isVisible: boolean;
@@ -76,8 +76,8 @@ const ModalLayout: React.FC<IProps> = ({
   return (
     <ClientOnlyPortal selector={portalTargetSelector}>
       <div
-        className={cn('modal-layout-overlay', classNameOverlay, {
-          'modal-layout-overlay--hide': needClose,
+        className={cn(styles.overlay, classNameOverlay, {
+          [styles.overlay_hide]: needClose,
         })}
         tabIndex={0}
         role="button"
@@ -87,14 +87,14 @@ const ModalLayout: React.FC<IProps> = ({
       >
         <div
           ref={innerRef}
-          className={cn('modal-layout__inner', classNameInner, {
-            'modal-layout__inner--hide': needClose,
+          className={cn(styles.inner, classNameInner, {
+            [styles.inner_hide]: needClose,
           })}
         >
-          <div className={cn('modal-layout__content', classNameContent)}>
+          <div className={cn(styles.content, classNameContent)}>
             {showCloseButton && (
-              <button className="modal-layout__button-close" type="button" onClick={onNeedClose}>
-                <SvgIcon kind="cross" className="modal-layout__icon" />
+              <button className={styles['button-close']} type="button" onClick={onNeedClose}>
+                <SvgIcon kind="cross" className={styles.icon} />
               </button>
             )}
             {children}

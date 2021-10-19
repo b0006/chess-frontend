@@ -8,6 +8,8 @@ import { TemplateBoard } from '../TemplateBoard';
 import { TChessBoard } from '../Wrapper/types';
 import { sleep } from '../../../utils/time';
 
+import styles from './RandomBoard.module.scss';
+
 const Chess = typeof ChessJS === 'function' ? ChessJS : ChessJS.Chess;
 
 const RandomBoard: React.FC = () => {
@@ -50,10 +52,10 @@ const RandomBoard: React.FC = () => {
   }
 
   return (
-    <div className={cn('chessboard', 'chessboard--overlay')}>
-      <div className="chessboard__inner">
+    <div className={cn(styles.chessboard, styles['chessboard--overlay'])}>
+      <div className={styles.inner}>
         <HorizontalSymbols />
-        <div className="chessboard__game">
+        <div className={styles.game}>
           <VerticalSymbols />
           <TemplateBoard board={boardState} isRotate={false} isNoEvents />
           <VerticalSymbols />
