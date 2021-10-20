@@ -3,6 +3,7 @@ import * as ChessJS from 'chess.js';
 
 import { Container } from '../../components/Layout/Container';
 import { TemplateBoard } from '../../components/Board/TemplateBoard';
+import { Button } from '../../components/Common/Button';
 
 const Chess = typeof ChessJS === 'function' ? ChessJS : ChessJS.Chess;
 
@@ -21,7 +22,7 @@ const StartPage: React.FC = () => {
 
   return (
     <Container>
-      <button onClick={() => setIsRotate(!isRotate)}>Rotate</button>
+      <Button text="Rotate" onClick={() => setIsRotate(!isRotate)} />
       <TemplateBoard stateChess={stateChess} isRotate={isRotate} myColor="w" />
     </Container>
   );
