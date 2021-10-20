@@ -23,7 +23,7 @@ const StartPage: React.FC = () => {
   return (
     <Container>
       <Button text="Rotate" onClick={() => setIsRotate(!isRotate)} />
-      <TemplateBoard stateChess={stateChess} isRotate={isRotate} myColor="w" />
+      <TemplateBoard stateChess={stateChess} isRotate={isRotate} myColor="w" isRandom />
     </Container>
   );
 };

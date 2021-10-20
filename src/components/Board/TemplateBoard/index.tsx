@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
@@ -9,6 +9,7 @@ import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
 import { ICONS_DEFAULT, SvgIcon } from './icons';
 import styles from './TemplateBoard.module.scss';
+import { useRandomGame } from './useRandomGame.hook';
 
 export type ChessColor = 'b' | 'w';
 export type PromotionPieceType = Exclude<ChessJS.PieceType, 'p' | 'k'>;
@@ -20,10 +21,10 @@ type LegalMoves = {
 interface IProps {
   isRotate?: boolean;
   stateChess: ChessJS.ChessInstance;
-  isNoEvents?: boolean;
   myColor?: ChessColor;
   withAnimation?: boolean;
   isColoredMoves?: boolean;
+  isRandom?: boolean;
 }
 
 const getCenterOfCell = (el: Element) => {
@@ -39,8 +40,8 @@ const TemplateBoard: React.FC<IProps> = ({
   stateChess,
   isRotate,
   withAnimation = true,
-  isNoEvents = false,
   isColoredMoves = true,
+  isRandom = false,
   // myColor = 'w',
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
@@ -72,48 +73,58 @@ const TemplateBoard: React.FC<IProps> = ({
     setLegalMoves(legalMovesData);
   };
 
-  const animationMove = (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
-    resetCell();
-    const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
-    const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
+  const animationMove = useCallback(
+    (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
+      resetCell();
+      const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
+      const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
 
-    if (fromCellEl && toCellEl) {
-      const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
-      const { x: toX, y: toY } = getCenterOfCell(toCellEl);
+      if (fromCellEl && toCellEl) {
+        const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
+        const { x: toX, y: toY } = getCenterOfCell(toCellEl);
 
-      const x = toX - fromX;
-      const y = toY - fromY;
+        const x = toX - fromX;
+        const y = toY - fromY;
 
-      const pieceEl = fromCellEl?.firstChild as HTMLElement;
-      if (!pieceEl) {
-        return;
+        const pieceEl = fromCellEl?.firstChild as HTMLElement;
+        if (!pieceEl) {
+          return;
+        }
+
+        pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+        if (!isPromotion) {
+          setTimeout(() => {
+            stateChess.move({ from, to });
+            setBoard(stateChess.board());
+
+            // TEMP
+            myColor = myColor === 'b' ? 'w' : 'b';
+          }, 250);
+        }
       }
+    },
+    [stateChess]
+  );
 
-      pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
+  const staticMove = useCallback(
+    (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
+      stateChess.move({ from, to });
+      setBoard(stateChess.board());
+      resetCell();
+      // TEMP
       if (!isPromotion) {
-        setTimeout(() => {
-          stateChess.move({ from, to });
-          setBoard(stateChess.board());
-
-          // TEMP
-          myColor = myColor === 'b' ? 'w' : 'b';
-        }, 250);
+        myColor = myColor === 'b' ? 'w' : 'b';
       }
-    }
-  };
-
-  const staticMove = (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
-    stateChess.move({ from, to });
-    setBoard(stateChess.board());
-    resetCell();
-    // TEMP
-    if (!isPromotion) {
-      myColor = myColor === 'b' ? 'w' : 'b';
-    }
-  };
+    },
+    [stateChess]
+  );
 
   const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
+    if (isRandom) {
+      return;
+    }
+
     const actualTurn = stateChess.turn();
     if (myColor !== actualTurn) {
       return;
@@ -151,6 +162,8 @@ const TemplateBoard: React.FC<IProps> = ({
     }
   };
 
+  useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
+
   return (
     <React.Fragment>
       <div className={styles.chessboard}>
@@ -177,7 +190,7 @@ const TemplateBoard: React.FC<IProps> = ({
                           key={id}
                           id={id}
                           className={cn(styles.cell, {
-                            [styles['cell--no-events']]: isNoEvents,
+                            [styles['cell--no-events']]: isRandom,
                             [styles['cell--move']]: isColoredMoves && legalMoves[id],
                             [styles['cell--active']]: squareActive === id,
                             [styles['cell--rotate']]: isRotate,
