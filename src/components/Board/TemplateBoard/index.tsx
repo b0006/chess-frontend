@@ -8,7 +8,7 @@ import { Popup } from '../../Common/Popup';
 
 import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
-import { ICONS_DEFAULT, SvgIcon } from './icons';
+import { ICONS_DEFAULT } from './icons';
 import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
 
@@ -184,7 +184,7 @@ const TemplateBoard: React.FC<IProps> = ({
                         `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
                       const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
 
-                      const Icon: SvgIcon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
+                      const Icon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
 
                       return (
                         <div
