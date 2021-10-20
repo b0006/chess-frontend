@@ -58,6 +58,7 @@
 }
 
 .cell {
+  cursor: pointer;
   position: relative;
   width: 10vmin;
   height: 10vmin;
@@ -65,14 +66,6 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.25s, box-shadow 0.25s, border-radius 0.25s;
-
-  svg {
-    transition: transform 0.25s;
-  }
-
-  &:hover svg {
-    transform: scale(1.2);
-  }
 
   &--light {
     background-color: #ced3dd;
@@ -101,7 +94,6 @@
 
   &--move {
     position: relative;
-    cursor: pointer;
 
     &::after {
       content: '';
@@ -133,6 +125,7 @@
   z-index: 10;
   height: 85%;
   width: 85%;
+  transition: transform 0.25s;
 }
 
 .button {
