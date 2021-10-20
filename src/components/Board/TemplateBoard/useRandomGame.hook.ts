@@ -11,7 +11,7 @@ interface IProps {
   staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
 }
 
-const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: IProps) => {
+const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: IProps): void => {
   useEffect(() => {
     if (isRandom) {
       let intervalId: NodeJS.Timeout | null = null;
