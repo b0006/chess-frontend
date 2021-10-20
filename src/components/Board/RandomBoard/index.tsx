@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
-import { HorizontalSymbols } from '../HorizontalSymbols';
-import { VerticalSymbols } from '../VerticalSymbols';
-import { TemplateBoard } from '../TemplateBoard';
-import { TChessBoard } from '../Wrapper/types';
+import { HorizontalSymbols } from '../TemplateBoard/HorizontalSymbols';
+import { VerticalSymbols } from '../TemplateBoard/VerticalSymbols';
+
+// import { TemplateBoard } from '../TemplateBoard';
+// import { TChessBoard } from '../Wrapper/types';
 
 import styles from './RandomBoard.module.scss';
 
 const Chess = typeof ChessJS === 'function' ? ChessJS : ChessJS.Chess;
 
 const RandomBoard: React.FC = () => {
-  const [boardState, setBoardState] = useState<TChessBoard>([]);
+  const [boardState, setBoardState] = useState<any>([]);
   const [stateChess, setStateChess] = useState<ChessJS.ChessInstance | null>(null);
 
   useEffect(() => {

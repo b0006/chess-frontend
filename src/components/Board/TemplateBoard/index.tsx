@@ -3,11 +3,13 @@ import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
-import { ICONS_DEFAULT, SvgIcon } from '../GameBoard/icons';
 
+import { HorizontalSymbols } from './HorizontalSymbols';
+import { VerticalSymbols } from './VerticalSymbols';
+import { ICONS_DEFAULT, SvgIcon } from './icons';
 import styles from './TemplateBoard.module.scss';
 
-type ChessColor = 'b' | 'w';
+export type ChessColor = 'b' | 'w';
 
 type LegalMoves = {
   [key in ChessJS.Square]: ChessJS.Square;
@@ -118,39 +120,50 @@ const TemplateBoard: React.FC<IProps> = ({
   };
 
   return (
-    <div className={styles.board} ref={boardRef}>
-      {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
-        return (
-          <div key={sym} className={styles.row}>
-            {VERTICAL_SYMBOLS_REVERSE.map((_, digitindex) => {
-              const id = `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
-              const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
-
-              const Icon: SvgIcon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
-
+    <div className={styles.chessboard}>
+      <div className={cn(styles.inner, { [styles['inner--rotate']]: isRotate })}>
+        <HorizontalSymbols isRotate={isRotate} />
+        <div className={styles.game}>
+          <VerticalSymbols isRotate={isRotate} />
+          <div className={styles.board} ref={boardRef}>
+            {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
               return (
-                <div
-                  tabIndex={0}
-                  onKeyDown={onClickCell(id, cellItem?.color, cellItem?.type)}
-                  onClick={onClickCell(id, cellItem?.color, cellItem?.type)}
-                  key={id}
-                  id={id}
-                  className={cn(styles.cell, {
-                    [styles['cell--no-events']]: isNoEvents,
-                    [styles['cell--move']]: legalMoves[id],
-                    [styles['cell--active']]: squareActive === id,
-                    [styles['cell--rotate']]: isRotate,
-                    [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
-                    [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
+                <div key={sym} className={styles.row}>
+                  {VERTICAL_SYMBOLS_REVERSE.map((_, digitindex) => {
+                    const id =
+                      `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
+                    const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
+
+                    const Icon: SvgIcon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
+
+                    return (
+                      <div
+                        tabIndex={0}
+                        onKeyDown={onClickCell(id, cellItem?.color, cellItem?.type)}
+                        onClick={onClickCell(id, cellItem?.color, cellItem?.type)}
+                        key={id}
+                        id={id}
+                        className={cn(styles.cell, {
+                          [styles['cell--no-events']]: isNoEvents,
+                          [styles['cell--move']]: legalMoves[id],
+                          [styles['cell--active']]: squareActive === id,
+                          [styles['cell--rotate']]: isRotate,
+                          [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
+                          [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
+                        })}
+                      >
+                        {Icon && cellItem && <Icon className={styles.icon} />}
+                      </div>
+                    );
                   })}
-                >
-                  {Icon && cellItem && <Icon className={styles.icon} />}
                 </div>
               );
             })}
           </div>
-        );
-      })}
+          <VerticalSymbols isRotate={isRotate} />
+        </div>
+        <HorizontalSymbols isRotate={isRotate} />
+      </div>
     </div>
   );
 };

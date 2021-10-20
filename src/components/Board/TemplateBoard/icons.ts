@@ -12,14 +12,15 @@ import { ReactComponent as QueenDark } from '../../../assets/chess-icons/queen-d
 import { ReactComponent as QueenLight } from '../../../assets/chess-icons/queen-light.svg';
 import { ReactComponent as RookDark } from '../../../assets/chess-icons/rook-dark.svg';
 import { ReactComponent as RookLight } from '../../../assets/chess-icons/rook-light.svg';
-import { TChessColor } from '../Wrapper/types';
+
+import { ChessColor } from '.';
 
 type IChessType = {
   [key in ChessJS.PieceType]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 };
 
 type IIcons = {
-  [key in TChessColor]: IChessType;
+  [key in ChessColor]: IChessType;
 };
 
 export const ICONS_DEFAULT: IIcons = {

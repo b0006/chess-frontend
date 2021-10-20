@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { VERTICAL_SYMBOLS_REVERSE } from '../constants';
+import { VERTICAL_SYMBOLS_REVERSE } from '../../constants';
 
 import styles from './VerticalSymbols.module.scss';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { HORIZONTAL_SYMBOLS } from '../constants';
+import { HORIZONTAL_SYMBOLS } from '../../constants';
 
 import styles from './HorizontalSymbols.module.scss';
 
