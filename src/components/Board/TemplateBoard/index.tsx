@@ -23,6 +23,7 @@ interface IProps {
   isNoEvents?: boolean;
   myColor?: ChessColor;
   withAnimation?: boolean;
+  isColoredMoves?: boolean;
 }
 
 const getCenterOfCell = (el: Element) => {
@@ -32,14 +33,15 @@ const getCenterOfCell = (el: Element) => {
   return { x, y };
 };
 
-// let myColor: ChessColor = 'w';
+let myColor: ChessColor = 'w';
 
 const TemplateBoard: React.FC<IProps> = ({
   stateChess,
   isRotate,
   withAnimation = true,
   isNoEvents = false,
-  myColor = 'w',
+  isColoredMoves = true,
+  // myColor = 'w',
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
 
@@ -95,18 +97,20 @@ const TemplateBoard: React.FC<IProps> = ({
           setBoard(stateChess.board());
 
           // TEMP
-          // myColor = myColor === 'b' ? 'w' : 'b';
+          myColor = myColor === 'b' ? 'w' : 'b';
         }, 250);
       }
     }
   };
 
-  const staticMove = (from: ChessJS.Square, to: ChessJS.Square) => {
+  const staticMove = (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
     stateChess.move({ from, to });
     setBoard(stateChess.board());
     resetCell();
     // TEMP
-    // myColor = myColor === 'b' ? 'w' : 'b';
+    if (!isPromotion) {
+      myColor = myColor === 'b' ? 'w' : 'b';
+    }
   };
 
   const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
@@ -121,14 +125,14 @@ const TemplateBoard: React.FC<IProps> = ({
     }
 
     if (legalMoves[square] && squareActive) {
-      if (legalMoves[square].promotion) {
+      const isPromotion = Boolean(legalMoves[square].promotion);
+
+      if (isPromotion) {
         setIsVisiblePromotion(true);
         setSquareTo({ from: squareActive, to: square });
-        withAnimation ? animationMove(squareActive, square, true) : staticMove(squareActive, square);
-        return;
       }
 
-      withAnimation ? animationMove(squareActive, square) : staticMove(squareActive, square);
+      withAnimation ? animationMove(squareActive, square, isPromotion) : staticMove(squareActive, square, isPromotion);
       return;
     }
 
@@ -143,7 +147,7 @@ const TemplateBoard: React.FC<IProps> = ({
       setSquareTo({ from: null, to: null });
       setBoard(stateChess.board());
       // TEMP
-      // myColor = myColor === 'b' ? 'w' : 'b';
+      myColor = myColor === 'b' ? 'w' : 'b';
     }
   };
 
@@ -174,7 +178,7 @@ const TemplateBoard: React.FC<IProps> = ({
                           id={id}
                           className={cn(styles.cell, {
                             [styles['cell--no-events']]: isNoEvents,
-                            [styles['cell--move']]: legalMoves[id],
+                            [styles['cell--move']]: isColoredMoves && legalMoves[id],
                             [styles['cell--active']]: squareActive === id,
                             [styles['cell--rotate']]: isRotate,
                             [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
