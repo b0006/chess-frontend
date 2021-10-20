@@ -3,6 +3,7 @@ import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
+import { PromotionModal } from '../PromotionModal';
 
 import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
@@ -10,9 +11,10 @@ import { ICONS_DEFAULT, SvgIcon } from './icons';
 import styles from './TemplateBoard.module.scss';
 
 export type ChessColor = 'b' | 'w';
+export type PromotionPieceType = Exclude<ChessJS.PieceType, 'p' | 'k'>;
 
 type LegalMoves = {
-  [key in ChessJS.Square]: ChessJS.Square;
+  [key in ChessJS.Square]: ChessJS.Move;
 };
 
 interface IProps {
@@ -30,7 +32,7 @@ const getCenterOfCell = (el: Element) => {
   return { x, y };
 };
 
-// let myColor = 'w';
+// let myColor: ChessColor = 'w';
 
 const TemplateBoard: React.FC<IProps> = ({
   stateChess,
@@ -41,9 +43,14 @@ const TemplateBoard: React.FC<IProps> = ({
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
 
+  const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
   const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
   const [board, setBoard] = useState(stateChess.board());
   const [squareActive, setSquareActive] = useState<ChessJS.Square | null>(null);
+  const [squareTo, setSquareTo] = useState<{ from: ChessJS.Square | null; to: ChessJS.Square | null }>({
+    from: null,
+    to: null,
+  });
 
   const resetCell = () => {
     setSquareActive(null);
@@ -59,8 +66,47 @@ const TemplateBoard: React.FC<IProps> = ({
     setSquareActive(square);
 
     const moves = stateChess.moves({ square, verbose: true });
-    const legalMovesData = moves.reduce((result, move) => ({ ...result, [move.to]: move.to }), {});
+    const legalMovesData = moves.reduce((result, move) => ({ ...result, [move.to]: move }), {});
     setLegalMoves(legalMovesData);
+  };
+
+  const animationMove = (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
+    resetCell();
+    const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
+    const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
+
+    if (fromCellEl && toCellEl) {
+      const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
+      const { x: toX, y: toY } = getCenterOfCell(toCellEl);
+
+      const x = toX - fromX;
+      const y = toY - fromY;
+
+      const pieceEl = fromCellEl?.firstChild as HTMLElement;
+      if (!pieceEl) {
+        return;
+      }
+
+      pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+      if (!isPromotion) {
+        setTimeout(() => {
+          stateChess.move({ from, to });
+          setBoard(stateChess.board());
+
+          // TEMP
+          // myColor = myColor === 'b' ? 'w' : 'b';
+        }, 250);
+      }
+    }
+  };
+
+  const staticMove = (from: ChessJS.Square, to: ChessJS.Square) => {
+    stateChess.move({ from, to });
+    setBoard(stateChess.board());
+    resetCell();
+    // TEMP
+    // myColor = myColor === 'b' ? 'w' : 'b';
   };
 
   const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
@@ -69,48 +115,20 @@ const TemplateBoard: React.FC<IProps> = ({
       return;
     }
 
-    if ((!legalMoves[square] && !piece) || (piece && color !== myColor)) {
+    if ((!legalMoves[square] && !piece) || (!legalMoves[square] && piece && color !== myColor)) {
       resetCell();
       return;
     }
 
     if (legalMoves[square] && squareActive) {
-      if (withAnimation) {
-        resetCell();
-        const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${squareActive}`);
-        const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${square}`);
-
-        if (fromCellEl && toCellEl) {
-          const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
-          const { x: toX, y: toY } = getCenterOfCell(toCellEl);
-
-          const x = toX - fromX;
-          const y = toY - fromY;
-
-          const pieceEl = fromCellEl?.firstChild as HTMLElement;
-          if (!pieceEl) {
-            return;
-          }
-
-          pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
-          setTimeout(() => {
-            stateChess.move({ from: squareActive, to: square });
-            setBoard(stateChess.board());
-
-            // // TEMP
-            // myColor = myColor === 'b' ? 'w' : 'b';
-          }, 250);
-        }
-
+      if (legalMoves[square].promotion) {
+        setIsVisiblePromotion(true);
+        setSquareTo({ from: squareActive, to: square });
+        withAnimation ? animationMove(squareActive, square, true) : staticMove(squareActive, square);
         return;
       }
 
-      stateChess.move({ from: squareActive, to: square });
-      setBoard(stateChess.board());
-      resetCell();
-      // // TEMP
-      // myColor = myColor === 'b' ? 'w' : 'b';
+      withAnimation ? animationMove(squareActive, square) : staticMove(squareActive, square);
       return;
     }
 
@@ -119,52 +137,70 @@ const TemplateBoard: React.FC<IProps> = ({
     }
   };
 
+  const onChooseFigure = (pieceType: PromotionPieceType) => {
+    if (squareTo.from && squareTo.to) {
+      stateChess.move({ from: squareTo.from, to: squareTo.to, promotion: pieceType });
+      setSquareTo({ from: null, to: null });
+      setBoard(stateChess.board());
+      // TEMP
+      // myColor = myColor === 'b' ? 'w' : 'b';
+    }
+  };
+
   return (
-    <div className={styles.chessboard}>
-      <div className={cn(styles.inner, { [styles['inner--rotate']]: isRotate })}>
-        <HorizontalSymbols isRotate={isRotate} />
-        <div className={styles.game}>
-          <VerticalSymbols isRotate={isRotate} />
-          <div className={styles.board} ref={boardRef}>
-            {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
-              return (
-                <div key={sym} className={styles.row}>
-                  {VERTICAL_SYMBOLS_REVERSE.map((_, digitindex) => {
-                    const id =
-                      `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
-                    const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
+    <React.Fragment>
+      <div className={styles.chessboard}>
+        <div className={cn(styles.inner, { [styles['inner--rotate']]: isRotate })}>
+          <HorizontalSymbols isRotate={isRotate} />
+          <div className={styles.game}>
+            <VerticalSymbols isRotate={isRotate} />
+            <div className={styles.board} ref={boardRef}>
+              {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
+                return (
+                  <div key={sym} className={styles.row}>
+                    {VERTICAL_SYMBOLS_REVERSE.map((_, digitindex) => {
+                      const id =
+                        `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
+                      const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
 
-                    const Icon: SvgIcon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
+                      const Icon: SvgIcon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
 
-                    return (
-                      <div
-                        tabIndex={0}
-                        onKeyDown={onClickCell(id, cellItem?.color, cellItem?.type)}
-                        onClick={onClickCell(id, cellItem?.color, cellItem?.type)}
-                        key={id}
-                        id={id}
-                        className={cn(styles.cell, {
-                          [styles['cell--no-events']]: isNoEvents,
-                          [styles['cell--move']]: legalMoves[id],
-                          [styles['cell--active']]: squareActive === id,
-                          [styles['cell--rotate']]: isRotate,
-                          [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
-                          [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
-                        })}
-                      >
-                        {Icon && cellItem && <Icon className={styles.icon} />}
-                      </div>
-                    );
-                  })}
-                </div>
-              );
-            })}
+                      return (
+                        <div
+                          tabIndex={0}
+                          onKeyDown={onClickCell(id, cellItem?.color, cellItem?.type)}
+                          onClick={onClickCell(id, cellItem?.color, cellItem?.type)}
+                          key={id}
+                          id={id}
+                          className={cn(styles.cell, {
+                            [styles['cell--no-events']]: isNoEvents,
+                            [styles['cell--move']]: legalMoves[id],
+                            [styles['cell--active']]: squareActive === id,
+                            [styles['cell--rotate']]: isRotate,
+                            [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
+                            [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
+                          })}
+                        >
+                          {Icon && <Icon className={styles.icon} />}
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+            <VerticalSymbols isRotate={isRotate} />
           </div>
-          <VerticalSymbols isRotate={isRotate} />
+          <HorizontalSymbols isRotate={isRotate} />
         </div>
-        <HorizontalSymbols isRotate={isRotate} />
       </div>
-    </div>
+      <PromotionModal
+        isVisible={isVisiblePromotion}
+        onChooseFigure={onChooseFigure}
+        color={myColor}
+        onClose={() => setIsVisiblePromotion(false)}
+      />
+    </React.Fragment>
   );
 };
 
