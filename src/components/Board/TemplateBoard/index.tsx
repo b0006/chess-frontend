@@ -1,9 +1,10 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
 import { PromotionModal } from '../PromotionModal';
+import { Popup } from '../../Common/Popup';
 
 import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
@@ -46,6 +47,7 @@ const TemplateBoard: React.FC<IProps> = ({
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
 
+  const [isVisibleGameOver, setIsVisibleGameOver] = useState(false);
   const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
   const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
   const [board, setBoard] = useState(stateChess.board());
@@ -164,6 +166,12 @@ const TemplateBoard: React.FC<IProps> = ({
 
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
 
+  useEffect(() => {
+    if (stateChess.game_over() && !isRandom) {
+      setIsVisibleGameOver(true);
+    }
+  }, [board, stateChess, isRandom]);
+
   return (
     <React.Fragment>
       <div className={styles.chessboard}>
@@ -216,6 +224,12 @@ const TemplateBoard: React.FC<IProps> = ({
         onChooseFigure={onChooseFigure}
         color={myColor}
         onClose={() => setIsVisiblePromotion(false)}
+      />
+      <Popup
+        title="Game over"
+        description="kurwa"
+        isVisible={isVisibleGameOver}
+        onClose={() => setIsVisibleGameOver(false)}
       />
     </React.Fragment>
   );
