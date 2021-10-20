@@ -21,8 +21,9 @@
 }
 
 .cell {
-  width: 11vmin;
-  height: 11vmin;
+  position: relative;
+  width: 10vmin;
+  height: 10vmin;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,6 +78,7 @@
       left: 0;
       right: 0;
       bottom: 0;
+      z-index: 100;
 
       animation-name: chessboard-show;
       animation-duration: 0.25s;
@@ -90,6 +92,8 @@
 }
 
 .icon {
+  position: absolute;
+  z-index: 10;
   height: 85%;
   width: 85%;
 }

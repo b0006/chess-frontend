@@ -1,34 +1,124 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
 import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
 import { ICONS_DEFAULT, SvgIcon } from '../GameBoard/icons';
-import { TChessBoard, TChessColor } from '../Wrapper/types';
 
 import styles from './TemplateBoard.module.scss';
 
+type ChessColor = 'b' | 'w';
+
+type LegalMoves = {
+  [key in ChessJS.Square]: ChessJS.Square;
+};
+
 interface IProps {
   isRotate?: boolean;
-  legalMoves?: any;
-  squareActive?: ChessJS.Square;
-  board?: TChessBoard;
-  onClickPiece?: any;
-  onClickCell?: any;
+  stateChess: ChessJS.ChessInstance;
   isNoEvents?: boolean;
+  myColor?: ChessColor;
+  withAnimation?: boolean;
 }
 
+const getCenterOfCell = (el: Element) => {
+  const state = el.getBoundingClientRect();
+  const x = state.left + state.width / 2;
+  const y = state.top + state.height / 2;
+  return { x, y };
+};
+
+// let myColor = 'w';
+
 const TemplateBoard: React.FC<IProps> = ({
-  onClickPiece,
-  onClickCell,
-  board = [],
+  stateChess,
   isRotate,
-  squareActive,
-  legalMoves = {},
+  withAnimation = true,
   isNoEvents = false,
+  myColor = 'w',
 }) => {
+  const boardRef = useRef<HTMLDivElement>(null);
+
+  const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
+  const [board, setBoard] = useState(stateChess.board());
+  const [squareActive, setSquareActive] = useState<ChessJS.Square | null>(null);
+
+  const resetCell = () => {
+    setSquareActive(null);
+    setLegalMoves({});
+  };
+
+  const setActiveCell = (square: ChessJS.Square) => {
+    if (squareActive === square) {
+      resetCell();
+      return;
+    }
+
+    setSquareActive(square);
+
+    const moves = stateChess.moves({ square, verbose: true });
+    const legalMovesData = moves.reduce((result, move) => ({ ...result, [move.to]: move.to }), {});
+    setLegalMoves(legalMovesData);
+  };
+
+  const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
+    const actualTurn = stateChess.turn();
+    if (myColor !== actualTurn) {
+      return;
+    }
+
+    if ((!legalMoves[square] && !piece) || (piece && color !== myColor)) {
+      resetCell();
+      return;
+    }
+
+    if (legalMoves[square] && squareActive) {
+      if (withAnimation) {
+        resetCell();
+        const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${squareActive}`);
+        const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${square}`);
+
+        if (fromCellEl && toCellEl) {
+          const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
+          const { x: toX, y: toY } = getCenterOfCell(toCellEl);
+
+          const x = toX - fromX;
+          const y = toY - fromY;
+
+          const pieceEl = fromCellEl?.firstChild as HTMLElement;
+          if (!pieceEl) {
+            return;
+          }
+
+          pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+          setTimeout(() => {
+            stateChess.move({ from: squareActive, to: square });
+            setBoard(stateChess.board());
+
+            // // TEMP
+            // myColor = myColor === 'b' ? 'w' : 'b';
+          }, 250);
+        }
+
+        return;
+      }
+
+      stateChess.move({ from: squareActive, to: square });
+      setBoard(stateChess.board());
+      resetCell();
+      // // TEMP
+      // myColor = myColor === 'b' ? 'w' : 'b';
+      return;
+    }
+
+    if (myColor === color && piece) {
+      setActiveCell(square);
+    }
+  };
+
   return (
-    <div className={styles.board}>
+    <div className={styles.board} ref={boardRef}>
       {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
         return (
           <div key={sym} className={styles.row}>
@@ -38,25 +128,11 @@ const TemplateBoard: React.FC<IProps> = ({
 
               const Icon: SvgIcon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
 
-              const _onClickCell = (
-                event: React.MouseEvent<HTMLDivElement, MouseEvent> | React.KeyboardEvent<HTMLDivElement>
-              ) => {
-                if (typeof onClickCell === 'function' && !isNoEvents) {
-                  onClickCell(event, id, !Icon);
-                }
-              };
-
-              const _onClickPiece = (square: ChessJS.Square, color: TChessColor) => () => {
-                if (typeof onClickPiece === 'function' && !isNoEvents) {
-                  onClickPiece(square, color);
-                }
-              };
-
               return (
                 <div
                   tabIndex={0}
-                  onKeyDown={_onClickCell}
-                  onClick={_onClickCell}
+                  onKeyDown={onClickCell(id, cellItem?.color, cellItem?.type)}
+                  onClick={onClickCell(id, cellItem?.color, cellItem?.type)}
                   key={id}
                   id={id}
                   className={cn(styles.cell, {
@@ -68,11 +144,7 @@ const TemplateBoard: React.FC<IProps> = ({
                     [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
                   })}
                 >
-                  {Icon && cellItem && (
-                    <button className={styles.button} type="button" onClick={_onClickPiece(id, cellItem.color)}>
-                      <Icon className={styles.icon} />
-                    </button>
-                  )}
+                  {Icon && cellItem && <Icon className={styles.icon} />}
                 </div>
               );
             })}

@@ -57,7 +57,7 @@ const RandomBoard: React.FC = () => {
         <HorizontalSymbols />
         <div className={styles.game}>
           <VerticalSymbols />
-          <TemplateBoard board={boardState} isRotate={false} isNoEvents />
+          {/* <TemplateBoard board={boardState} isRotate={false} isNoEvents /> */}
           <VerticalSymbols />
         </div>
         <HorizontalSymbols />
