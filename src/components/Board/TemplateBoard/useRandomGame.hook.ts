@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
 import * as ChessJS from 'chess.js';
 
+import { PromotionPieceType } from '.';
+
 interface IProps {
   stateChess: ChessJS.ChessInstance;
   withAnimation: boolean;
   isRandom: boolean;
-  animationMove: (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => void;
-  staticMove: (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => void;
+  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
 }
 
 const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: IProps) => {
@@ -18,14 +20,16 @@ const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, sta
         intervalId = setInterval(() => {
           const moves = stateChess.moves({ verbose: true });
           const randomMove = moves[Math.floor(Math.random() * moves.length)];
-          withAnimation ? animationMove(randomMove.from, randomMove.to) : staticMove(randomMove.from, randomMove.to);
+          withAnimation
+            ? animationMove(randomMove.from, randomMove.to, randomMove.promotion)
+            : staticMove(randomMove.from, randomMove.to, randomMove.promotion);
 
           if (stateChess.game_over() && intervalId) {
             clearInterval(intervalId);
             stateChess.reset();
             setRandomMove();
           }
-        }, 1000);
+        }, 500);
       };
 
       setRandomMove();

@@ -76,7 +76,7 @@ const TemplateBoard: React.FC<IProps> = ({
   };
 
   const animationMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
+    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
       resetCell();
       const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
       const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
@@ -95,27 +95,25 @@ const TemplateBoard: React.FC<IProps> = ({
 
         pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 
-        if (!isPromotion) {
-          setTimeout(() => {
-            stateChess.move({ from, to });
-            setBoard(stateChess.board());
+        setTimeout(() => {
+          stateChess.move({ from, to, promotion });
+          setBoard(stateChess.board());
 
-            // TEMP
-            myColor = myColor === 'b' ? 'w' : 'b';
-          }, 250);
-        }
+          // TEMP
+          myColor = myColor === 'b' ? 'w' : 'b';
+        }, 250);
       }
     },
     [stateChess]
   );
 
   const staticMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, isPromotion?: boolean) => {
-      stateChess.move({ from, to });
+    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
+      stateChess.move({ from, to, promotion });
       setBoard(stateChess.board());
       resetCell();
       // TEMP
-      if (!isPromotion) {
+      if (!promotion) {
         myColor = myColor === 'b' ? 'w' : 'b';
       }
     },
@@ -145,7 +143,7 @@ const TemplateBoard: React.FC<IProps> = ({
         setSquareTo({ from: squareActive, to: square });
       }
 
-      withAnimation ? animationMove(squareActive, square, isPromotion) : staticMove(squareActive, square, isPromotion);
+      withAnimation ? animationMove(squareActive, square) : staticMove(squareActive, square);
       return;
     }
 
@@ -159,8 +157,6 @@ const TemplateBoard: React.FC<IProps> = ({
       stateChess.move({ from: squareTo.from, to: squareTo.to, promotion: pieceType });
       setSquareTo({ from: null, to: null });
       setBoard(stateChess.board());
-      // TEMP
-      myColor = myColor === 'b' ? 'w' : 'b';
     }
   };
 
