@@ -83,10 +83,6 @@
     }
   }
 
-  &--rotate {
-    transform: rotate(180deg);
-  }
-
   &--active {
     box-shadow: 0 0 0 3px #5bcc5b inset;
     border-radius: 12px;

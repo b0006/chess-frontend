@@ -1,7 +1,6 @@
 import React from 'react';
-import cn from 'classnames';
 
-import { VERTICAL_SYMBOLS_REVERSE } from '../../constants';
+import { VERTICAL_SYMBOLS_REVERSE, VERTICAL_SYMBOLS } from '../../constants';
 
 import styles from './VerticalSymbols.module.scss';
 
@@ -10,15 +9,12 @@ interface IProps {
 }
 
 const VerticalSymbols: React.FC<IProps> = ({ isRotate }) => {
+  const list = isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
+
   return (
     <div className={styles['vertical-panel']}>
-      {VERTICAL_SYMBOLS_REVERSE.map((sym) => (
-        <div
-          className={cn(styles['digit-symbol'], {
-            [styles['digit-symbol--rotate']]: isRotate,
-          })}
-          key={sym}
-        >
+      {list.map((sym) => (
+        <div className={styles['digit-symbol']} key={sym}>
           {sym.toUpperCase()}
         </div>
       ))}

@@ -1,7 +1,6 @@
 import React from 'react';
-import cn from 'classnames';
 
-import { HORIZONTAL_SYMBOLS } from '../../constants';
+import { HORIZONTAL_SYMBOLS, HORIZONTAL_SYMBOLS_REVERSE } from '../../constants';
 
 import styles from './HorizontalSymbols.module.scss';
 
@@ -10,15 +9,12 @@ interface IProps {
 }
 
 const HorizontalSymbols: React.FC<IProps> = ({ isRotate }) => {
+  const list = isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
+
   return (
     <div className={styles['horizontal-panel']}>
-      {HORIZONTAL_SYMBOLS.map((sym) => (
-        <div
-          className={cn(styles['alphabet-symbol'], {
-            [styles['alphabet-symbol--rotate']]: isRotate,
-          })}
-          key={sym}
-        >
+      {list.map((sym) => (
+        <div className={styles['alphabet-symbol']} key={sym}>
           {sym.toUpperCase()}
         </div>
       ))}

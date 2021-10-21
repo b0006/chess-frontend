@@ -2,7 +2,12 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
-import { HORIZONTAL_SYMBOLS, VERTICAL_SYMBOLS_REVERSE } from '../constants';
+import {
+  HORIZONTAL_SYMBOLS,
+  HORIZONTAL_SYMBOLS_REVERSE,
+  VERTICAL_SYMBOLS,
+  VERTICAL_SYMBOLS_REVERSE,
+} from '../constants';
 import { PromotionModal } from '../PromotionModal';
 import { Popup } from '../../Common/Popup';
 
@@ -14,6 +19,7 @@ import { useRandomGame } from './useRandomGame.hook';
 
 export type ChessColor = 'b' | 'w';
 export type PromotionPieceType = Exclude<ChessJS.PieceType, 'p' | 'k'>;
+type Board = Array<Array<{ type: ChessJS.PieceType; color: 'w' | 'b' } | null>>;
 
 type LegalMoves = {
   [key in ChessJS.Square]: ChessJS.Move;
@@ -50,12 +56,23 @@ const TemplateBoard: React.FC<IProps> = ({
   const [isVisibleGameOver, setIsVisibleGameOver] = useState(false);
   const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
   const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
-  const [board, setBoard] = useState(stateChess.board());
+  const [board, setBoard] = useState<Board>([]);
   const [squareActive, setSquareActive] = useState<ChessJS.Square | null>(null);
   const [squareTo, setSquareTo] = useState<{ from: ChessJS.Square | null; to: ChessJS.Square | null }>({
     from: null,
     to: null,
   });
+
+  const computedNewBoard = useCallback(() => {
+    const newBoard = stateChess.board();
+    setBoard(() => {
+      return isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard;
+    });
+  }, [isRotate, stateChess]);
+
+  useEffect(() => {
+    computedNewBoard();
+  }, [computedNewBoard]);
 
   const resetCell = () => {
     setSquareActive(null);
@@ -97,27 +114,27 @@ const TemplateBoard: React.FC<IProps> = ({
 
         setTimeout(() => {
           stateChess.move({ from, to, promotion });
-          setBoard(stateChess.board());
+          computedNewBoard();
 
           // TEMP
           myColor = myColor === 'b' ? 'w' : 'b';
         }, 250);
       }
     },
-    [stateChess]
+    [computedNewBoard, stateChess]
   );
 
   const staticMove = useCallback(
     (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
       stateChess.move({ from, to, promotion });
-      setBoard(stateChess.board());
+      computedNewBoard();
       resetCell();
       // TEMP
       if (!promotion) {
         myColor = myColor === 'b' ? 'w' : 'b';
       }
     },
-    [stateChess]
+    [stateChess, computedNewBoard]
   );
 
   const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
@@ -156,7 +173,7 @@ const TemplateBoard: React.FC<IProps> = ({
     if (squareTo.from && squareTo.to) {
       stateChess.move({ from: squareTo.from, to: squareTo.to, promotion: pieceType });
       setSquareTo({ from: null, to: null });
-      setBoard(stateChess.board());
+      computedNewBoard();
     }
   };
 
@@ -168,20 +185,22 @@ const TemplateBoard: React.FC<IProps> = ({
     }
   }, [board, stateChess, isRandom]);
 
+  const horList = isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
+  const verList = isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
+
   return (
     <React.Fragment>
       <div className={styles.chessboard}>
-        <div className={cn(styles.inner, { [styles['inner--rotate']]: isRotate })}>
+        <div className={styles.inner}>
           <HorizontalSymbols isRotate={isRotate} />
           <div className={styles.game}>
             <VerticalSymbols isRotate={isRotate} />
             <div className={styles.board} ref={boardRef}>
-              {HORIZONTAL_SYMBOLS.map((sym, symIndex) => {
+              {horList.map((sym, symIndex) => {
                 return (
                   <div key={sym} className={styles.row}>
-                    {VERTICAL_SYMBOLS_REVERSE.map((_, digitindex) => {
-                      const id =
-                        `${HORIZONTAL_SYMBOLS[digitindex]}${VERTICAL_SYMBOLS_REVERSE[symIndex]}` as ChessJS.Square;
+                    {verList.map((_, digitindex) => {
+                      const id = `${horList[digitindex]}${verList[symIndex]}` as ChessJS.Square;
                       const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
 
                       const Icon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
@@ -197,7 +216,6 @@ const TemplateBoard: React.FC<IProps> = ({
                             [styles['cell--no-events']]: isRandom,
                             [styles['cell--move']]: isColoredMoves && legalMoves[id],
                             [styles['cell--active']]: squareActive === id,
-                            [styles['cell--rotate']]: isRotate,
                             [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
                             [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
                           })}
