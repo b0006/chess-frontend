@@ -1,0 +1,111 @@
+@import 'src/assets/scss/utils';
+
+.wrapper {
+  display: inline-block;
+}
+
+.inner {
+  display: inline-block;
+  position: relative;
+  background-color: $c-white;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.input {
+  padding: 16px 46px 4px 16px;
+  border: 0;
+  background-color: $c-white;
+  box-shadow: $shadow-default;
+  min-height: 56px;
+  font-size: 16px;
+  line-height: 24px;
+  color: $c-black;
+  border-radius: 4px;
+  transition: background-color 0.25s, box-shadow 0.25s;
+  width: 100%;
+
+  &::placeholder {
+    opacity: 0;
+    color: $c-black;
+    transition: opacity 0.25s;
+  }
+
+  &:focus {
+    &::placeholder {
+      opacity: 0.24;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: $c-gray-l;
+  }
+
+  &_without-label {
+    padding: 16px 46px 16px 16px;
+    &::placeholder {
+      opacity: 0.24;
+    }
+  }
+
+  &_error {
+    box-shadow: $shadow-error;
+    background-color: $c-red-girl;
+  }
+
+  &_success {
+    box-shadow: $shadow-success;
+    background-color: $c-green-l;
+  }
+}
+
+.label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  line-height: 24px;
+  transition: font-size 0.25s, top 0.25s;
+  color: $c-gray;
+
+  &_focus {
+    font-size: 13px;
+    line-height: 20px;
+    top: 25%;
+  }
+
+  &_disabled {
+    cursor: not-allowed;
+    color: $c-gray-s;
+  }
+}
+
+.error {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: -19px;
+  color: $c-red;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.icon {
+  position: absolute;
+  right: 16px;
+  height: 18px;
+  width: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $c-green;
+}
+
+.description {
+  display: block;
+  font-size: 16px;
+  line-height: 24px;
+  color: $c-gray;
+  margin-top: 8px;
+}

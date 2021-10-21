@@ -1,0 +1,137 @@
+@import 'src/assets/scss/utils';
+
+@keyframes top-right-show {
+  0% {
+    right: -999px;
+  }
+
+  100% {
+    right: 0;
+  }
+}
+
+@keyframes top-right-hide {
+  0% {
+    right: 0;
+    max-height: 1000px;
+  }
+
+  20% {
+    max-height: 800px;
+  }
+
+  40% {
+    max-height: 600px;
+  }
+
+  60% {
+    max-height: 400px;
+  }
+
+  80% {
+    max-height: 200px;
+  }
+
+  100% {
+    right: -999px;
+    max-height: 0;
+  }
+}
+
+.notification {
+  animation-name: top-right-show;
+  animation-duration: 0.25s;
+  animation-iteration-count: 1;
+
+  position: relative;
+  transition: right 0.25s;
+  box-shadow: $shadow-default;
+  background-color: $c-white;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 12px;
+
+  &_close {
+    animation-name: top-right-hide;
+  }
+
+  @media #{$screen-xm} {
+    min-width: 394px;
+    max-width: 450px;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  flex: 1;
+  padding-right: 12px;
+}
+
+.title {
+  font-size: 20px;
+  line-height: 28px;
+  color: $c-black;
+  font-weight: bold;
+}
+
+.description {
+  font-size: 16px;
+  line-height: 24px;
+  color: $c-black;
+  margin-top: 8px;
+
+  &_no-title {
+    margin-top: 0;
+  }
+}
+
+.buttons {
+  margin-top: 16px;
+}
+
+.icon-wrapper {
+  border-radius: 100%;
+  display: flex;
+  padding: 20px;
+
+  &_success {
+    background-color: $c-green-l;
+
+    .icon {
+      color: $c-green;
+    }
+  }
+
+  &_info {
+    background-color: $c-primary-disabled;
+
+    .icon {
+      color: $c-primary;
+    }
+  }
+
+  &_warning {
+    background-color: $c-star-l;
+
+    .icon {
+      color: $c-star;
+    }
+  }
+
+  &_error {
+    background-color: $c-red-girl;
+
+    .icon {
+      color: $c-red;
+    }
+  }
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+}

@@ -1,0 +1,106 @@
+@import 'src/assets/scss/utils';
+
+.wrapper {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover .input:not(:checked) ~ .checkmark {
+    background-color: $c-gray-m;
+  }
+
+  &:hover .input:checked ~ .checkmark {
+    background-color: $c-primary-hover;
+  }
+
+  &:active .input:not(:checked) ~ .checkmark {
+    background-color: $c-gray-l;
+  }
+
+  &:active .input:checked ~ .checkmark {
+    background-color: $c-primary-active;
+  }
+
+  &_error {
+    .input:not(:checked) ~ .checkmark {
+      background-color: $c-red-girl;
+    }
+
+    .label {
+      color: $c-red;
+    }
+  }
+
+  &_disabled {
+    cursor: not-allowed;
+
+    &:hover .input:not(:checked) ~ .checkmark,
+    &:active .input:not(:checked) ~ .checkmark {
+      background-color: transparent;
+    }
+
+    &:hover .input:checked ~ .checkmark,
+    &:active .input:checked ~ .checkmark {
+      background-color: $c-primary-disabled;
+    }
+
+    .input:not(:checked) ~ .checkmark {
+      border: 1px solid $c-gray-l;
+    }
+
+    .input:checked ~ .checkmark {
+      background-color: $c-primary-disabled;
+    }
+
+    .label {
+      color: $c-gray-k;
+    }
+
+    .input {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+  &:checked ~ .checkmark {
+    background-color: $c-primary;
+    border: 1px solid transparent;
+
+    .icon {
+      display: block;
+    }
+  }
+}
+
+.checkmark {
+  display: inline-block;
+  transition: opacity 0.25s, background-color 0.25s, border 0.25s;
+  border-radius: 4px;
+  height: 24px;
+  width: 24px;
+  border: 1px solid $c-gray-s;
+}
+
+.label {
+  margin-left: 10px;
+  color: $c-black;
+  font-size: 16px;
+  line-height: 24px;
+  transition: color 0.25s;
+}
+
+.icon {
+  display: none;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  color: $c-white;
+}

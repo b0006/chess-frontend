@@ -1,19 +1,26 @@
 import React from 'react';
 import { HashRouter, Switch } from 'react-router-dom';
 
+import { Provider } from '../components/Common/Notification';
 import { StartPage } from '../pages/StartPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
+import { SignUpPage } from '../pages/SignUpPage';
+import { SignInPage } from '../pages/SignInPage';
 
 import { PublicRoute } from './types';
 
 const Router: React.FC = () => (
-  <HashRouter basename={process.env.PUBLIC_URL}>
-    <Switch>
-      <PublicRoute exact path="/" component={StartPage} />
+  <Provider>
+    <HashRouter basename={process.env.PUBLIC_URL}>
+      <Switch>
+        <PublicRoute exact path="/" component={StartPage} />
+        <PublicRoute exact path="/sign-in" component={SignInPage} />
+        <PublicRoute exact path="/sign-up" component={SignUpPage} />
 
-      <PublicRoute path="*" component={NotFoundPage} />
-    </Switch>
-  </HashRouter>
+        <PublicRoute path="*" component={NotFoundPage} />
+      </Switch>
+    </HashRouter>
+  </Provider>
 );
 
 export default Router;
