@@ -14,15 +14,14 @@
 
 .input {
   padding: 16px 46px 4px 16px;
-  border: 0;
+  border: 1px solid $c-gray;
   background-color: $c-white;
-  box-shadow: $shadow-default;
   min-height: 56px;
   font-size: 16px;
   line-height: 24px;
   color: $c-black;
   border-radius: 4px;
-  transition: background-color 0.25s, box-shadow 0.25s;
+  transition: background-color 0.25s;
   width: 100%;
 
   &::placeholder {
@@ -50,13 +49,11 @@
   }
 
   &_error {
-    box-shadow: $shadow-error;
-    background-color: $c-red-girl;
+    border: 1px solid $c-red;
   }
 
   &_success {
-    box-shadow: $shadow-success;
-    background-color: $c-green-l;
+    border: 1px solid $c-green;
   }
 }
 
