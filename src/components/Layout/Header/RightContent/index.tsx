@@ -5,13 +5,14 @@ import { UnknownObject } from '../../../../agent';
 import { useFetchDataApi } from '../../../../hook/useFetchDataApi.hook';
 import { useMediaBreakpoint } from '../../../../hook/useMedia.hook';
 import { userStore } from '../../../../mobx';
+import { BREAKPOINT_SM } from '../../../../utils/breakpoints';
 import { Button } from '../../../Common/Button';
 import { useNotification } from '../../../Common/Notification';
 
 import styles from './RightContent.module.scss';
 
 const RightContent: React.FC = observer(() => {
-  const isDesktop = useMediaBreakpoint(768);
+  const isDesktop = useMediaBreakpoint(BREAKPOINT_SM);
 
   const { user, resetProfileData } = userStore;
   const { addNotification } = useNotification();
@@ -43,7 +44,7 @@ const RightContent: React.FC = observer(() => {
           />
         </React.Fragment>
       )}
-      {user.isAuth && !isDesktop && (
+      {!isDesktop && (
         <React.Fragment>
           <Button icon="bars" theme="flat" />
         </React.Fragment>
