@@ -1,8 +1,13 @@
 import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 
+import { useFetchDataApi } from '../../../hook/useFetchDataApi.hook';
+import { userStore } from '../../../mobx';
+import { ProfileData } from '../../../mobx/userStore';
 import { Button } from '../../Common/Button';
 import { Input } from '../../Common/Input';
+import { useNotification } from '../../Common/Notification';
 import { FormLayout } from '../FormLayout';
 
 import styles from './SignUpForm.module.scss';
@@ -15,6 +20,12 @@ interface IFormFields {
 }
 
 const SignUpForm: React.FC = () => {
+  const history = useHistory();
+  const { setProfileData } = userStore;
+
+  const { addNotification } = useNotification();
+  const [isLoading, signUpRequst] = useFetchDataApi<IFormFields, ProfileData>('/auth/sign-up/', 'POST');
+
   const {
     register,
     handleSubmit,
@@ -25,12 +36,20 @@ const SignUpForm: React.FC = () => {
   const password = useRef('');
   password.current = watch('password', '');
 
-  const onSubmit = (data: IFormFields): void => {
-    window.console.log(data);
+  const onSubmit = async (data: IFormFields): Promise<void> => {
+    const { error, response } = await signUpRequst(data);
+
+    if (error || !response) {
+      addNotification({ title: 'Ошибка', description: error || 'Попробуйте еще раз' }, { appearance: 'error' });
+      return;
+    }
+
+    setProfileData(response);
+    history.push('/');
   };
 
   return (
-    <FormLayout>
+    <FormLayout isLoading={isLoading}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className={styles.title}>Зарегистрируйтесь для своей учетной записи</h1>
         <Input

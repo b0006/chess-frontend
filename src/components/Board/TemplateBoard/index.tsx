@@ -37,6 +37,7 @@ const TemplateBoard: React.FC<Props> = ({
   // myColor = 'w',
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
+  const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
 
   const [isVisibleGameOver, setIsVisibleGameOver] = useState(false);
   const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
@@ -62,6 +63,12 @@ const TemplateBoard: React.FC<Props> = ({
 
   useEffect(() => {
     computedNewBoard();
+
+    return () => {
+      if (moveTimeoutIdRef.current) {
+        clearTimeout(moveTimeoutIdRef.current);
+      }
+    };
   }, [computedNewBoard]);
 
   const staticMove = useCallback(
@@ -98,7 +105,7 @@ const TemplateBoard: React.FC<Props> = ({
         pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         pieceEl.style.zIndex = `11`;
 
-        setTimeout(() => {
+        moveTimeoutIdRef.current = setTimeout(() => {
           stateChess.move({ from, to, promotion });
           computedNewBoard();
 

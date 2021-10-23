@@ -19,7 +19,7 @@ interface IFormFields {
 
 const LoginForm: React.FC = () => {
   const history = useHistory();
-  const { signIn } = userStore;
+  const { setProfileData } = userStore;
 
   const { addNotification } = useNotification();
   const [isLoading, signInRequst] = useFetchDataApi<IFormFields, ProfileData>('/auth/sign-in/', 'POST');
@@ -38,7 +38,7 @@ const LoginForm: React.FC = () => {
       return;
     }
 
-    signIn(response);
+    setProfileData(response);
     history.push('/');
   };
 

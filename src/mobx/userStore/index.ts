@@ -25,7 +25,7 @@ export class UserStore {
     makeAutoObservable(this);
   }
 
-  public signIn = (data: ProfileData) => {
+  public setProfileData = (data: ProfileData) => {
     this.user = {
       isAuth: true,
       profileData: data,
