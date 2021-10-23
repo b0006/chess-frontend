@@ -9,20 +9,22 @@ import { SignInPage } from '../pages/SignInPage';
 
 import { PublicRoute, PrivateRoute } from './types';
 
-const Router: React.FC = () => (
-  <Provider>
-    <HashRouter basename={process.env.PUBLIC_URL}>
-      <Switch>
-        <PublicRoute exact path="/" component={StartPage} />
-        <PublicRoute exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
-        <PublicRoute exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
+const Router: React.FC = () => {
+  return (
+    <Provider>
+      <HashRouter basename={process.env.PUBLIC_URL}>
+        <Switch>
+          <PublicRoute exact path="/" component={StartPage} />
+          <PublicRoute exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
+          <PublicRoute exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
 
-        <PrivateRoute exact path="/lobby-online" component={StartPage} />
+          <PrivateRoute exact path="/lobby-online" component={StartPage} />
 
-        <PublicRoute path="*" component={NotFoundPage} />
-      </Switch>
-    </HashRouter>
-  </Provider>
-);
+          <PublicRoute path="*" component={NotFoundPage} />
+        </Switch>
+      </HashRouter>
+    </Provider>
+  );
+};
 
 export { Router };

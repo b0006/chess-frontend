@@ -1,5 +1,7 @@
 import { makeAutoObservable } from 'mobx';
 
+import { requests as agent } from '../../agent';
+
 import * as service from './userStore.service';
 
 export interface ProfileData {
@@ -23,6 +25,13 @@ export class UserStore {
 
   constructor() {
     makeAutoObservable(this);
+
+    agent
+      .GET<any, ProfileData>('/auth/profile')
+      .then((response) => {
+        this.setProfileData(response.data);
+      })
+      .catch((err) => err);
   }
 
   public setProfileData = (data: ProfileData) => {
@@ -30,6 +39,10 @@ export class UserStore {
       isAuth: true,
       profileData: data,
     };
+  };
+
+  public resetProfileData = () => {
+    this.user = initUser;
   };
 
   public signInAsGuest = () => {

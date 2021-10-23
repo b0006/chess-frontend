@@ -7,6 +7,7 @@ import { ReactComponent as InfoIcon } from '../../../assets/common-icons/info.sv
 import { ReactComponent as WarningIcon } from '../../../assets/common-icons/warning.svg';
 import { ReactComponent as GoogleIcon } from '../../../assets/common-icons/google.svg';
 import { ReactComponent as VkIcon } from '../../../assets/common-icons/vk.svg';
+import { ReactComponent as LogoutIcon } from '../../../assets/common-icons/logout.svg';
 
 const Empty: React.FC = () => null;
 
@@ -19,6 +20,7 @@ export const ICON_LIST = {
   warning: WarningIcon,
   google: GoogleIcon,
   vk: VkIcon,
+  logout: LogoutIcon,
 };
 
 export interface Props extends React.SVGAttributes<SVGElement> {

@@ -4,12 +4,25 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  align-items: center;
 }
 
-.login-button {
-  margin-right: 6px;
+.button {
+  margin-left: 12px;
+  cursor: pointer;
+  appearance: none;
+  background-color: transparent;
+  border: 0;
+  outline: none;
+
+  &:hover .icon {
+    color: $c-gray;
+  }
 }
 
-.logout-button {
-  margin-left: 6px;
+.icon {
+  color: $c-black;
+  transition: color 0.25s;
+  width: 32px;
+  height: 32px;
 }
