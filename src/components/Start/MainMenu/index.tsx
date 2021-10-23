@@ -26,10 +26,12 @@ const MainMenu: React.FC = observer(() => {
         <div className={styles.menu}>
           {user.isAuth && (
             <React.Fragment>
+              <h2 className={styles.title}>Выберите режим игры</h2>
               <Button
                 classNameLink={styles.link}
                 className={styles.button}
                 href="/lobby-online"
+                icon="profile"
                 text="Против человека"
                 theme="primary"
               />
@@ -37,6 +39,7 @@ const MainMenu: React.FC = observer(() => {
                 classNameLink={styles.link}
                 className={styles.button}
                 href="/lobby-offline"
+                icon="desktop"
                 text="Против компьютера"
                 theme="primary"
               />
@@ -49,17 +52,25 @@ const MainMenu: React.FC = observer(() => {
                 className={styles.button}
                 href="/sign-in"
                 text="Войти"
+                icon="signIn"
                 theme="primary"
               />
               <Button
                 classNameLink={styles.link}
                 className={styles.button}
                 href="/sign-up"
+                icon="userPlus"
                 text="Регистрация"
                 theme="primary"
               />
 
-              <Button className={styles.button} text="Войти как гость" onClick={signInAsGuest} theme="secondary" />
+              <Button
+                className={styles.button}
+                text="Войти как гость"
+                icon="userClock"
+                onClick={signInAsGuest}
+                theme="secondary"
+              />
             </React.Fragment>
           )}
         </div>

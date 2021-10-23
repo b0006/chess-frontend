@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { Container } from '../Container';
+import { Button } from '../../Common/Button';
 
 import { RightContent } from './RightContent';
 import styles from './Header.module.scss';
@@ -11,7 +11,7 @@ const Header: React.FC = () => {
     <header className={styles.header}>
       <Container className={styles.inner}>
         <div className={styles.left}>
-          <Link to="/">Chess</Link>
+          <Button href="/" icon="home" theme="flat" />
         </div>
         <div className={styles.center}>center</div>
         <div className={styles.right}>

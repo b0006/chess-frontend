@@ -3,6 +3,7 @@ import React from 'react';
 
 import { UnknownObject } from '../../../../agent';
 import { useFetchDataApi } from '../../../../hook/useFetchDataApi.hook';
+import { useMediaBreakpoint } from '../../../../hook/useMedia.hook';
 import { userStore } from '../../../../mobx';
 import { Button } from '../../../Common/Button';
 import { useNotification } from '../../../Common/Notification';
@@ -10,6 +11,8 @@ import { useNotification } from '../../../Common/Notification';
 import styles from './RightContent.module.scss';
 
 const RightContent: React.FC = observer(() => {
+  const isMobile = useMediaBreakpoint(768, 'max');
+
   const { user, resetProfileData } = userStore;
   const { addNotification } = useNotification();
   const [isLogoutProcess, logoutRequest] = useFetchDataApi<UnknownObject, { success: boolean }>('/auth/logout/', 'GET');
@@ -27,7 +30,7 @@ const RightContent: React.FC = observer(() => {
 
   return (
     <div className={styles.wrapper}>
-      {user.isAuth && (
+      {user.isAuth && !isMobile && (
         <React.Fragment>
           <Button href="/profile" text="Профиль" icon="profile" iconSide="right" />
           <Button
@@ -38,6 +41,11 @@ const RightContent: React.FC = observer(() => {
             isLoading={isLogoutProcess}
             onClick={onLogoutClick}
           />
+        </React.Fragment>
+      )}
+      {user.isAuth && isMobile && (
+        <React.Fragment>
+          <Button icon="bars" theme="flat" />
         </React.Fragment>
       )}
     </div>

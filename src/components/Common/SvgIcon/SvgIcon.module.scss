@@ -1,0 +1,11 @@
+@import 'src/assets/scss/utils';
+
+.icon {
+  height: 18px;
+  width: 18px;
+
+  @media #{$screen-sm} {
+    height: 22px;
+    width: 22px;
+  }
+}
