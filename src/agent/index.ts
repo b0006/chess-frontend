@@ -13,18 +13,18 @@ const timeout = 60000;
 
 const requests = {
   POST<T = UnknownObject, R = UnknownObject>(path: string, data?: T): Promise<AxiosResponse<R, any>> {
-    return axios.post(path, data, { timeout }) as Promise<AxiosResponse<R>>;
+    return axios.post(path, data, { timeout });
   },
 
   PUT<T = UnknownObject, R = UnknownObject>(path: string, data?: T): Promise<AxiosResponse<R, any>> {
-    return axios.put(path, data, { timeout }) as Promise<AxiosResponse<R>>;
+    return axios.put(path, data, { timeout });
   },
 
   GET<T = UnknownObject, R = UnknownObject>(path: string, params?: T): Promise<AxiosResponse<R, any>> {
     return axios.get(path, {
       params,
       timeout,
-    }) as Promise<AxiosResponse<R>>;
+    });
   },
 };
 
