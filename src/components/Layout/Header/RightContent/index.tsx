@@ -11,7 +11,7 @@ import { useNotification } from '../../../Common/Notification';
 import styles from './RightContent.module.scss';
 
 const RightContent: React.FC = observer(() => {
-  const isMobile = useMediaBreakpoint(768, 'max');
+  const isDesktop = useMediaBreakpoint(768);
 
   const { user, resetProfileData } = userStore;
   const { addNotification } = useNotification();
@@ -30,7 +30,7 @@ const RightContent: React.FC = observer(() => {
 
   return (
     <div className={styles.wrapper}>
-      {user.isAuth && !isMobile && (
+      {user.isAuth && isDesktop && (
         <React.Fragment>
           <Button href="/profile" text="Профиль" icon="profile" iconSide="right" />
           <Button
@@ -43,7 +43,7 @@ const RightContent: React.FC = observer(() => {
           />
         </React.Fragment>
       )}
-      {user.isAuth && isMobile && (
+      {user.isAuth && !isDesktop && (
         <React.Fragment>
           <Button icon="bars" theme="flat" />
         </React.Fragment>
