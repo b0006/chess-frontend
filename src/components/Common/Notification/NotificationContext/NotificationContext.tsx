@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
 
+// eslint-disable-next-line no-shadow
 export enum ACTIONS {
   add,
   update,

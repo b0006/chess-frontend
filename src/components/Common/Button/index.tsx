@@ -6,7 +6,7 @@ import { SvgIcon, ICON_LIST } from '../SvgIcon';
 
 import styles from './Button.module.scss';
 
-export interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Текст кнопки */
   text?: string;
   /** Состояние загрузки */
@@ -23,7 +23,7 @@ export interface IProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
 }
 
-const Button = forwardRef<HTMLButtonElement, IProps>(
+const Button = forwardRef<HTMLButtonElement, Props>(
   (
     {
       text,

@@ -3,12 +3,12 @@ import cn from 'classnames';
 
 import { Button } from '../../Button';
 import { SvgIcon, ICON_LIST } from '../../SvgIcon';
-import { TAppearance, INotificationState } from '../types';
+import { Appearance, INotificationState } from '../types';
 import { useNotificationContext, ACTIONS } from '../NotificationContext/NotificationContext';
 
 import styles from './NotificationItem.module.scss';
 
-const ICON_KIND_DATA: Record<TAppearance, keyof typeof ICON_LIST> = {
+const ICON_KIND_DATA: Record<Appearance, keyof typeof ICON_LIST> = {
   success: 'checked',
   error: 'cross',
   info: 'info',

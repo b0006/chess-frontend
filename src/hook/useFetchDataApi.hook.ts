@@ -1,23 +1,23 @@
 import { useState, useCallback } from 'react';
 
-import agent from '../agent';
+import { requests } from '../agent';
 
-type Method = keyof typeof agent;
+type Method = keyof typeof requests;
 
-interface IResponseReturn<R> {
+interface ResponseReturn<R> {
   statusCode: number;
   data?: R;
   message?: string[];
   error?: Error | string | null;
 }
 
-interface IResponse<R> {
+interface Response<R> {
   isLoading: boolean;
   data: R | undefined;
   error: string | Error | null | undefined;
 }
 
-const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [IResponse<R>, (data?: T) => void] => {
+const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [Response<R>, (data?: T) => void] => {
   const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState<R>();
   const [error, setError] = useState<Error | string | null>();
@@ -28,7 +28,7 @@ const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [
       setError(null);
 
       try {
-        const response = await agent[method]<T, IResponseReturn<R>>(url, data);
+        const response = await requests[method]<T, ResponseReturn<R>>(url, data);
         if (response.data.statusCode !== 200) {
           throw response.data.message;
         }
@@ -47,4 +47,4 @@ const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [
   return [{ isLoading, data: responseData, error }, fetchData];
 };
 
-export default useFetchDataApi;
+export { useFetchDataApi };

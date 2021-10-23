@@ -5,14 +5,14 @@ import { SvgIcon } from '../SvgIcon';
 
 import styles from './Checkbox.module.scss';
 
-export interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   className?: string;
   isError?: boolean;
   disabled?: boolean;
 }
 
-const Checkbox = React.forwardRef((props: IProps, ref?: React.LegacyRef<HTMLInputElement>) => {
+const Checkbox = React.forwardRef((props: Props, ref?: React.LegacyRef<HTMLInputElement>) => {
   const { label, className, isError, disabled, ...rest } = props;
 
   return (

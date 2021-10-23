@@ -5,11 +5,11 @@ import { Provider as InnerProvider } from './NotificationContext/NotificationPro
 
 export { useNotification } from './NotificationContext/NotificationProvider';
 
-interface IProps {
+interface Props {
   portalTargetSelector?: string;
 }
 
-export const Provider: React.FC<IProps> = ({ children, portalTargetSelector }) => (
+export const Provider: React.FC<Props> = ({ children, portalTargetSelector }) => (
   <NotificationProvider>
     <InnerProvider portalTargetSelector={portalTargetSelector}>{children}</InnerProvider>
   </NotificationProvider>

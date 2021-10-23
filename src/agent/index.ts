@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
 
-import axios from './axios';
+import { HTTP as axios } from './axios';
 
 const timeout = 60000;
 
-export default {
+const requests = {
   POST<T = object, R = object>(path: string, data?: T) {
     return axios.post(path, data, { timeout }) as Promise<AxiosResponse<R>>;
   },
@@ -20,3 +20,5 @@ export default {
     }) as Promise<AxiosResponse<R>>;
   },
 };
+
+export { requests };

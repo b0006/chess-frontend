@@ -1,6 +1,6 @@
-export type TAppearance = 'info' | 'error' | 'success' | 'warning';
+export type Appearance = 'info' | 'error' | 'success' | 'warning';
 
-export type TPlacement = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
+export type Placement = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 
 export interface IContent {
   title: string;
@@ -10,8 +10,8 @@ export interface IContent {
 
 export interface IOptions {
   id?: string;
-  placement?: TPlacement;
-  appearance?: TAppearance;
+  placement?: Placement;
+  appearance?: Appearance;
 }
 
 export interface INotificationState extends IContent, IOptions {

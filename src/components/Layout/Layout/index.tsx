@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Header from '../Header';
-import Footer from '../Footer';
+import { Header } from '../Header';
+import { Footer } from '../Footer';
 
 import styles from './Layout.module.scss';
 
-interface IProps {
+interface Props {
   title?: string;
 }
 
-const Layout: React.FC<IProps> = ({ children }) => {
+const Layout: React.FC<Props> = ({ children }) => {
   return (
     <div className={styles.layout}>
       <Header />
@@ -19,4 +19,4 @@ const Layout: React.FC<IProps> = ({ children }) => {
   );
 };
 
-export default Layout;
+export { Layout };

@@ -18,4 +18,4 @@ HTTP.interceptors.response.use(
   }
 );
 
-export default HTTP;
+export { HTTP };

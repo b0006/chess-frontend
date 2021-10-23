@@ -4,11 +4,11 @@ import { HORIZONTAL_SYMBOLS, HORIZONTAL_SYMBOLS_REVERSE } from '../../constants'
 
 import styles from './HorizontalSymbols.module.scss';
 
-interface IProps {
+interface Props {
   isRotate?: boolean;
 }
 
-const HorizontalSymbols: React.FC<IProps> = ({ isRotate }) => {
+const HorizontalSymbols: React.FC<Props> = ({ isRotate }) => {
   const list = isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
 
   return (

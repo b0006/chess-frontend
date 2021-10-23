@@ -28,4 +28,4 @@ const RightContent: React.FC = () => {
   );
 };
 
-export default RightContent;
+export { RightContent };

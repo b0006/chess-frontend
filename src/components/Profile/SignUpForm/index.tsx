@@ -26,7 +26,7 @@ const SignUpForm: React.FC = () => {
   password.current = watch('password', '');
 
   const onSubmit = (data: IFormFields): void => {
-    console.log(data);
+    window.console.log(data);
   };
 
   return (

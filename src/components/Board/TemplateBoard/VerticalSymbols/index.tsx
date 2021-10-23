@@ -4,11 +4,11 @@ import { VERTICAL_SYMBOLS_REVERSE, VERTICAL_SYMBOLS } from '../../constants';
 
 import styles from './VerticalSymbols.module.scss';
 
-interface IProps {
+interface Props {
   isRotate?: boolean;
 }
 
-const VerticalSymbols: React.FC<IProps> = ({ isRotate }) => {
+const VerticalSymbols: React.FC<Props> = ({ isRotate }) => {
   const list = isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
 
   return (

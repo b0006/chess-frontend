@@ -6,7 +6,7 @@ import { SvgIcon } from '../SvgIcon';
 import { ClientOnlyPortal } from './ClientOnlyPortal';
 import styles from './ModalLayout.module.scss';
 
-export interface IProps {
+export interface Props {
   isVisible: boolean;
   onClose: () => void;
   portalTargetSelector?: string;
@@ -17,7 +17,7 @@ export interface IProps {
   classNameContent?: string;
 }
 
-const ModalLayout: React.FC<IProps> = ({
+const ModalLayout: React.FC<Props> = ({
   portalTargetSelector,
   overlayClickClose,
   children,

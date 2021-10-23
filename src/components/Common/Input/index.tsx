@@ -5,7 +5,7 @@ import { SvgIcon } from '../SvgIcon';
 
 import styles from './Input.module.scss';
 
-export interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   errorText?: string;
   placeholder?: string;
   label?: string;
@@ -13,7 +13,7 @@ export interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
   description?: string;
 }
 
-const Input = React.forwardRef((props: IProps, ref?: React.LegacyRef<HTMLInputElement>) => {
+const Input = React.forwardRef((props: Props, ref?: React.LegacyRef<HTMLInputElement>) => {
   const {
     className,
     label,

@@ -1,1 +1,1 @@
-export type TAppearance = 'info' | 'error' | 'success' | 'warning';
+export type Appearance = 'info' | 'error' | 'success' | 'warning';

@@ -5,26 +5,26 @@ import { ModalLayout } from '../ModalLayout';
 import { SvgIcon, ICON_LIST } from '../SvgIcon';
 import { Button } from '../Button';
 
-import { TAppearance } from './types';
+import { Appearance } from './types';
 import styles from './Popup.module.scss';
 
-const ICON_KIND_DATA: Record<TAppearance, keyof typeof ICON_LIST> = {
+const ICON_KIND_DATA: Record<Appearance, keyof typeof ICON_LIST> = {
   success: 'checked',
   error: 'cross',
   info: 'info',
   warning: 'warning',
 };
 
-export interface IHandler {
+export interface Handler {
   label: string;
   handler: () => void;
 }
 
-export interface IProps {
+export interface Props {
   isVisible: boolean;
-  confirm?: IHandler;
-  cancel?: IHandler;
-  appearance?: TAppearance;
+  confirm?: Handler;
+  cancel?: Handler;
+  appearance?: Appearance;
   onClose: () => void;
   overlayClickClose?: boolean;
   showCloseButton?: boolean;
@@ -32,7 +32,7 @@ export interface IProps {
   description?: string;
 }
 
-const Popup: React.FC<IProps> = ({
+const Popup: React.FC<Props> = ({
   isVisible,
   showCloseButton,
   appearance = 'info',

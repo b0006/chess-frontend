@@ -23,4 +23,4 @@ const Router: React.FC = () => (
   </Provider>
 );
 
-export default Router;
+export { Router };

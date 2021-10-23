@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
@@ -16,34 +16,10 @@ import { VerticalSymbols } from './VerticalSymbols';
 import { ICONS_DEFAULT } from './icons';
 import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
+import { Props, ChessColor, LegalMoves, Board, PromotionPieceType } from './types';
+import { useMoves } from './useMoves.hook';
 
-export type ChessColor = 'b' | 'w';
-export type PromotionPieceType = Exclude<ChessJS.PieceType, 'p' | 'k'>;
-type Board = Array<Array<{ type: ChessJS.PieceType; color: 'w' | 'b' } | null>>;
-
-type LegalMoves = {
-  [key in ChessJS.Square]: ChessJS.Move;
-};
-
-interface IProps {
-  isRotate?: boolean;
-  stateChess: ChessJS.ChessInstance;
-  myColor?: ChessColor;
-  withAnimation?: boolean;
-  isColoredMoves?: boolean;
-  isRandom?: boolean;
-}
-
-const getCenterOfCell = (el: Element) => {
-  const state = el.getBoundingClientRect();
-  const x = state.left + state.width / 2;
-  const y = state.top + state.height / 2;
-  return { x, y };
-};
-
-let myColor: ChessColor = 'w';
-
-const TemplateBoard: React.FC<IProps> = ({
+const TemplateBoard: React.FC<Props> = ({
   stateChess,
   isRotate,
   withAnimation = true,
@@ -51,8 +27,6 @@ const TemplateBoard: React.FC<IProps> = ({
   isRandom = false,
   // myColor = 'w',
 }) => {
-  const boardRef = useRef<HTMLDivElement>(null);
-
   const [isVisibleGameOver, setIsVisibleGameOver] = useState(false);
   const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
   const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
@@ -62,6 +36,11 @@ const TemplateBoard: React.FC<IProps> = ({
     from: null,
     to: null,
   });
+
+  const resetCell = () => {
+    setSquareActive(null);
+    setLegalMoves({});
+  };
 
   const computedNewBoard = useCallback(() => {
     const newBoard = stateChess.board();
@@ -74,10 +53,8 @@ const TemplateBoard: React.FC<IProps> = ({
     computedNewBoard();
   }, [computedNewBoard]);
 
-  const resetCell = () => {
-    setSquareActive(null);
-    setLegalMoves({});
-  };
+  const { animationMove, staticMove, boardRef, myColor } = useMoves({ stateChess, computedNewBoard, resetCell });
+  useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {
@@ -91,51 +68,6 @@ const TemplateBoard: React.FC<IProps> = ({
     const legalMovesData = moves.reduce((result, move) => ({ ...result, [move.to]: move }), {});
     setLegalMoves(legalMovesData);
   };
-
-  const animationMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
-      resetCell();
-      const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
-      const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
-
-      if (fromCellEl && toCellEl) {
-        const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
-        const { x: toX, y: toY } = getCenterOfCell(toCellEl);
-
-        const x = toX - fromX;
-        const y = toY - fromY;
-
-        const pieceEl = fromCellEl?.firstChild as HTMLElement;
-        if (!pieceEl) {
-          return;
-        }
-
-        pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
-        setTimeout(() => {
-          stateChess.move({ from, to, promotion });
-          computedNewBoard();
-
-          // TEMP
-          myColor = myColor === 'b' ? 'w' : 'b';
-        }, 250);
-      }
-    },
-    [computedNewBoard, stateChess]
-  );
-
-  const staticMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
-      stateChess.move({ from, to, promotion });
-      computedNewBoard();
-      resetCell();
-      // TEMP
-      if (!promotion) {
-        myColor = myColor === 'b' ? 'w' : 'b';
-      }
-    },
-    [stateChess, computedNewBoard]
-  );
 
   const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
     if (isRandom) {
@@ -176,8 +108,6 @@ const TemplateBoard: React.FC<IProps> = ({
       computedNewBoard();
     }
   };
-
-  useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
 
   useEffect(() => {
     if (stateChess.game_over() && !isRandom) {

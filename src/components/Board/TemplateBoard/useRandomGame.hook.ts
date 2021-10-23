@@ -1,17 +1,8 @@
 import { useEffect } from 'react';
-import * as ChessJS from 'chess.js';
 
-import { PromotionPieceType } from '.';
+import { UseRandom } from './types';
 
-interface IProps {
-  stateChess: ChessJS.ChessInstance;
-  withAnimation: boolean;
-  isRandom: boolean;
-  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
-  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
-}
-
-const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: IProps): void => {
+const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: UseRandom): void => {
   useEffect(() => {
     if (isRandom) {
       let intervalId: NodeJS.Timeout | null = null;
@@ -29,7 +20,7 @@ const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, sta
             stateChess.reset();
             setRandomMove();
           }
-        }, 500);
+        }, 1000);
       };
 
       setRandomMove();

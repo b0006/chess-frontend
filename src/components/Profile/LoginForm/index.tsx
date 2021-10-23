@@ -20,7 +20,7 @@ const LoginForm: React.FC = () => {
   } = useForm<IFormFields>();
 
   const onSubmit = async (data: IFormFields): Promise<void> => {
-    console.log(data);
+    window.console.log(data);
   };
 
   return (

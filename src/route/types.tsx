@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, RouteComponentProps, RouteProps } from 'react-router-dom';
 // import { observer } from 'mobx-react-lite';
 
-import Layout from '../components/Layout/Layout';
+import { Layout } from '../components/Layout/Layout';
 
 interface IRouteComponentProps extends RouteProps {
   component: React.ComponentType<RouteComponentProps>;

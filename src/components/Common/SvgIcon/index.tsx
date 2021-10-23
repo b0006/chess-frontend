@@ -21,12 +21,12 @@ export const ICON_LIST = {
   vk: VkIcon,
 };
 
-export interface IProps extends React.SVGAttributes<SVGElement> {
+export interface Props extends React.SVGAttributes<SVGElement> {
   /** Название иконки */
   kind?: keyof typeof ICON_LIST;
 }
 
-const SvgIcon: React.FC<IProps> = ({ kind, ...rest }) => {
+const SvgIcon: React.FC<Props> = ({ kind, ...rest }) => {
   if (!kind) {
     return null;
   }

@@ -10,11 +10,11 @@ import { useNotificationContext, ACTIONS } from './NotificationContext';
 
 const canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
-interface IProps {
+interface Props {
   portalTargetSelector?: string;
 }
 
-const Provider: React.FC<IProps> = ({ portalTargetSelector, children }) => {
+const Provider: React.FC<Props> = ({ portalTargetSelector, children }) => {
   const [state] = useNotificationContext();
 
   const portalTarget = canUseDOM
