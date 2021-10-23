@@ -28,10 +28,10 @@ export class UserStore {
     };
   };
 
-  public changeUserName = (newName: string) => {
+  public signInAsGuest = () => {
     this.user = {
       ...this.user,
-      name: newName,
+      isAuth: true,
     };
   };
 
