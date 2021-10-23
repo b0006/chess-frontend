@@ -1,11 +1,12 @@
 import { useState, useCallback } from 'react';
+import axios from 'axios';
 
-import { requests, UnknownObject } from '../agent';
+import { ErrorApi, requests, UnknownObject } from '../agent';
 
 type Method = keyof typeof requests;
 
 interface FetchReturn<T> {
-  error: string | Error | null | unknown;
+  error: string | null;
   response: T | null | undefined;
 }
 
@@ -34,8 +35,11 @@ const useFetchDataApi = <T = UnknownObject, R = UnknownObject>(
       } catch (err) {
         resultData.error = 'Unknown error';
 
-        if (err instanceof Error || typeof err === 'string') {
-          resultData.error = err;
+        if (axios.isAxiosError(err)) {
+          const errorData = err.response?.data as ErrorApi;
+          resultData.error = errorData?.error || 'Unknown error';
+        } else if (err instanceof Error || typeof err === 'string') {
+          resultData.error = err.toString();
         }
 
         return resultData;

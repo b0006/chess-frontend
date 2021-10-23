@@ -1,7 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 
 import { useFetchDataApi } from '../../../hook/useFetchDataApi.hook';
+import { userStore } from '../../../mobx';
+import { ProfileData } from '../../../mobx/userStore';
 import { Button } from '../../Common/Button';
 import { Input } from '../../Common/Input';
 import { useNotification } from '../../Common/Notification';
@@ -15,8 +18,11 @@ interface IFormFields {
 }
 
 const LoginForm: React.FC = () => {
+  const history = useHistory();
+  const { signIn } = userStore;
+
   const { addNotification } = useNotification();
-  const [, signInRequst] = useFetchDataApi<IFormFields>('/auth/sign-in/', 'POST');
+  const [, signInRequst] = useFetchDataApi<IFormFields, ProfileData>('/auth/sign-in/', 'POST');
 
   const {
     register,
@@ -28,11 +34,12 @@ const LoginForm: React.FC = () => {
     const { error, response } = await signInRequst(data);
 
     if (error || !response) {
-      addNotification({ title: 'Ошибка', description: 'Попробуйте еще раз' }, { appearance: 'error' });
+      addNotification({ title: 'Ошибка', description: error || 'Попробуйте еще раз' }, { appearance: 'error' });
       return;
     }
 
-    addNotification({ title: 'Успех', description: 'Вы успешно авторизировались' }, { appearance: 'success' });
+    signIn(response);
+    history.push('/');
   };
 
   return (

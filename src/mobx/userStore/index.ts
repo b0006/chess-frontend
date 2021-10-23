@@ -2,29 +2,33 @@ import { makeAutoObservable } from 'mobx';
 
 import * as service from './userStore.service';
 
-export interface IUserData {
-  isAuth: boolean;
-  name: string;
-  error: string | null;
+export interface ProfileData {
+  id: string;
+  username: string;
+  email: string;
 }
 
-const initUser: IUserData = {
+export interface UserData {
+  isAuth: boolean;
+  profileData: ProfileData | null;
+}
+
+const initUser: UserData = {
   isAuth: false,
-  name: 'SuperUser',
-  error: null,
+  profileData: null,
 };
 
 export class UserStore {
-  public user: IUserData = initUser;
+  public user: UserData = initUser;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  public signIn = () => {
+  public signIn = (data: ProfileData) => {
     this.user = {
-      ...this.user,
       isAuth: true,
+      profileData: data,
     };
   };
 

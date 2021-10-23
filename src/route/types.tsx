@@ -1,22 +1,20 @@
 import React from 'react';
-import { Route, RouteComponentProps, RouteProps } from 'react-router-dom';
-// import { observer } from 'mobx-react-lite';
+import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import { Layout } from '../components/Layout/Layout';
+import { userStore } from '../mobx';
 
 interface IRouteComponentProps extends RouteProps {
   component: React.ComponentType<RouteComponentProps>;
+  redirectAuthPath?: string;
 }
 
-interface IRoutePublicProps extends IRouteComponentProps {
-  isRedirectAuth?: boolean;
-}
-
-const PublicRoute: React.FC<IRoutePublicProps> = ({ component: Component, isRedirectAuth, ...rest }) => {
-  // const { profile } = profileStore;
-  // if (isRedirectAuth && profile.isAuth) {
-  //   return <Redirect to="/" />;
-  // }
+const PublicRoute: React.FC<IRouteComponentProps> = observer(({ component: Component, redirectAuthPath, ...rest }) => {
+  const { user } = userStore;
+  if (redirectAuthPath && user.isAuth) {
+    return <Redirect to={redirectAuthPath} />;
+  }
 
   return (
     <Route
@@ -28,22 +26,26 @@ const PublicRoute: React.FC<IRoutePublicProps> = ({ component: Component, isRedi
       )}
     />
   );
-};
+});
 
-// const PrivateRoute: React.FC<IRouteComponentProps> = observer(({ component: Component, ...rest }) => {
-//   const { profile } = profileStore;
-//   return (
-//     <Route
-//       {...rest}
-//       render={(props) =>
-//         profile.isAuth ? (
-//           <Layout>
-//             <Component {...props} />
-//           </Layout>
-//         ) : (<Redirect to="/sign-in" />)
-//       }
-//     />
-//   );
-// });
+const PrivateRoute: React.FC<IRouteComponentProps> = observer(
+  ({ component: Component, redirectAuthPath = '/sign-in', ...rest }) => {
+    const { user } = userStore;
+    return (
+      <Route
+        {...rest}
+        render={(props) =>
+          user.isAuth ? (
+            <Layout>
+              <Component {...props} />
+            </Layout>
+          ) : (
+            <Redirect to={redirectAuthPath} />
+          )
+        }
+      />
+    );
+  }
+);
 
-export { PublicRoute };
+export { PublicRoute, PrivateRoute };

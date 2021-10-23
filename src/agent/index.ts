@@ -4,6 +4,11 @@ import { HTTP as axios } from './axios';
 
 export type UnknownObject = Record<string, unknown>;
 
+export interface ErrorApi {
+  statusCode: number;
+  error: string;
+}
+
 const timeout = 60000;
 
 const requests = {
