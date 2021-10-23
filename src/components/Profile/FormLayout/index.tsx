@@ -1,11 +1,16 @@
 import React from 'react';
+import cn from 'classnames';
 
 import { Button } from '../../Common/Button';
 import { useNotification } from '../../Common/Notification';
 
 import styles from './FormLayout.module.scss';
 
-const FormLayout: React.FC = ({ children }) => {
+interface Props {
+  isLoading?: boolean;
+}
+
+const FormLayout: React.FC<Props> = ({ isLoading, children }) => {
   const { addNotification } = useNotification();
 
   const onProviderClick = () => {
@@ -13,7 +18,11 @@ const FormLayout: React.FC = ({ children }) => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={cn(styles.wrapper, {
+        [styles['wrapper_loading']]: isLoading,
+      })}
+    >
       <div className={styles.form}>{children}</div>
       <div className={styles.or}>или</div>
       <Button

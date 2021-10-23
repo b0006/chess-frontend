@@ -22,7 +22,7 @@ const LoginForm: React.FC = () => {
   const { signIn } = userStore;
 
   const { addNotification } = useNotification();
-  const [, signInRequst] = useFetchDataApi<IFormFields, ProfileData>('/auth/sign-in/', 'POST');
+  const [isLoading, signInRequst] = useFetchDataApi<IFormFields, ProfileData>('/auth/sign-in/', 'POST');
 
   const {
     register,
@@ -43,7 +43,7 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <FormLayout>
+    <FormLayout isLoading={isLoading}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1 className={styles.title}>Войдите в свою учетную запись</h1>
         <Input

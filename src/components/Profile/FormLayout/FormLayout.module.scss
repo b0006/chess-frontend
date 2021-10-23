@@ -3,6 +3,13 @@
 .wrapper {
   width: 100%;
   margin: 24px 0;
+  opacity: 1;
+  transition: opacity 0.25s;
+
+  &_loading {
+    pointer-events: none;
+    opacity: 0.3;
+  }
 
   @media #{$screen-sm} {
     box-shadow: $shadow-default;
