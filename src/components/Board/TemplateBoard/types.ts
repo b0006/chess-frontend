@@ -27,7 +27,7 @@ export interface UseMovesReturn {
   staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
   animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
   boardRef: React.RefObject<HTMLDivElement>;
-  myColor: ChessColor;
+  // myColor: ChessColor;
 }
 
 export interface UseRandom {

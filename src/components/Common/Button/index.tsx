@@ -21,6 +21,8 @@ export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: 'primary' | 'primary-white' | 'secondary' | 'secondary-white' | 'flat' | 'flat-white';
   /** Кнопка в виде ссылки */
   href?: string;
+  /** Класс для ссылки */
+  classNameLink?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, Props>(
@@ -28,6 +30,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
     {
       text,
       className,
+      classNameLink,
       disabled,
       isLoading,
       isCircle,
@@ -82,7 +85,7 @@ const Button = forwardRef<HTMLButtonElement, Props>(
     );
 
     return href ? (
-      <Link to={href} className={styles.link}>
+      <Link to={href} className={cn(styles.link, classNameLink)}>
         {button}
       </Link>
     ) : (

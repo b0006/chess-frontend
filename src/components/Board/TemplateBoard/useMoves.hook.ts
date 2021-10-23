@@ -1,7 +1,7 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import * as ChessJS from 'chess.js';
 
-import { PromotionPieceType, ChessColor, UseMoves, UseMovesReturn } from './types';
+import { PromotionPieceType, UseMoves, UseMovesReturn } from './types';
 
 const getCenterOfCell = (el: Element) => {
   const state = el.getBoundingClientRect();
@@ -12,7 +12,7 @@ const getCenterOfCell = (el: Element) => {
 
 const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMovesReturn => {
   // TEMP myColor при реальной игре не нужно изменять
-  const [myColor, setMyColor] = useState<ChessColor>('w');
+  // const [myColor, setMyColor] = useState<ChessColor>('w');
 
   const boardRef = useRef<HTMLDivElement>(null);
 
@@ -22,9 +22,9 @@ const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMov
       computedNewBoard();
       resetCell();
       // TEMP
-      if (!promotion) {
-        setMyColor((prevColor) => (prevColor === 'b' ? 'w' : 'b'));
-      }
+      // if (!promotion) {
+      //   setMyColor((prevColor) => (prevColor === 'b' ? 'w' : 'b'));
+      // }
     },
     [stateChess, computedNewBoard, resetCell]
   );
@@ -55,14 +55,14 @@ const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMov
           computedNewBoard();
 
           // TEMP
-          setMyColor((prevColor) => (prevColor === 'b' ? 'w' : 'b'));
+          // setMyColor((prevColor) => (prevColor === 'b' ? 'w' : 'b'));
         }, 250);
       }
     },
     [computedNewBoard, resetCell, stateChess]
   );
 
-  return { staticMove, animationMove, boardRef, myColor };
+  return { staticMove, animationMove, boardRef };
 };
 
 export { useMoves };

@@ -11,6 +11,10 @@ const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, sta
         intervalId = setInterval(() => {
           const moves = stateChess.moves({ verbose: true });
           const randomMove = moves[Math.floor(Math.random() * moves.length)];
+          if (!randomMove) {
+            return;
+          }
+
           withAnimation
             ? animationMove(randomMove.from, randomMove.to, randomMove.promotion)
             : staticMove(randomMove.from, randomMove.to, randomMove.promotion);
