@@ -44,6 +44,26 @@ const RightContent: React.FC = observer(() => {
           />
         </React.Fragment>
       )}
+      {!user.isAuth && isDesktop && (
+        <React.Fragment>
+          <Button
+            className={styles.button}
+            href="/sign-in"
+            text="Войти"
+            icon="signIn"
+            iconSide="right"
+            theme="secondary"
+          />
+          <Button
+            className={styles.button}
+            href="/sign-up"
+            text="Регистрация"
+            icon="userPlus"
+            iconSide="right"
+            theme="primary"
+          />
+        </React.Fragment>
+      )}
       {!isDesktop && (
         <React.Fragment>
           <Button icon="bars" theme="flat" />
