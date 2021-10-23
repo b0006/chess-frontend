@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/chess-frontend/static/css/main.be6c435d.chunk.css",
-    "main.js": "/chess-frontend/static/js/main.dcf24d70.chunk.js",
-    "main.js.map": "/chess-frontend/static/js/main.dcf24d70.chunk.js.map",
+    "main.css": "/chess-frontend/static/css/main.57de9931.chunk.css",
+    "main.js": "/chess-frontend/static/js/main.7ecffc0b.chunk.js",
+    "main.js.map": "/chess-frontend/static/js/main.7ecffc0b.chunk.js.map",
     "runtime-main.js": "/chess-frontend/static/js/runtime-main.2dcc97c9.js",
     "runtime-main.js.map": "/chess-frontend/static/js/runtime-main.2dcc97c9.js.map",
-    "static/js/2.4d4e1dd3.chunk.js": "/chess-frontend/static/js/2.4d4e1dd3.chunk.js",
-    "static/js/2.4d4e1dd3.chunk.js.map": "/chess-frontend/static/js/2.4d4e1dd3.chunk.js.map",
+    "static/js/2.170dba5e.chunk.js": "/chess-frontend/static/js/2.170dba5e.chunk.js",
+    "static/js/2.170dba5e.chunk.js.map": "/chess-frontend/static/js/2.170dba5e.chunk.js.map",
     "index.html": "/chess-frontend/index.html",
-    "static/css/main.be6c435d.chunk.css.map": "/chess-frontend/static/css/main.be6c435d.chunk.css.map",
-    "static/js/2.4d4e1dd3.chunk.js.LICENSE.txt": "/chess-frontend/static/js/2.4d4e1dd3.chunk.js.LICENSE.txt",
+    "static/css/main.57de9931.chunk.css.map": "/chess-frontend/static/css/main.57de9931.chunk.css.map",
+    "static/js/2.170dba5e.chunk.js.LICENSE.txt": "/chess-frontend/static/js/2.170dba5e.chunk.js.LICENSE.txt",
     "static/media/index.scss": "/chess-frontend/static/media/Roboto-Thin.c38fab23.ttf",
     "static/media/bishop-dark.f8aaef92.svg": "/chess-frontend/static/media/bishop-dark.f8aaef92.svg",
     "static/media/bishop-light.b3a6ab13.svg": "/chess-frontend/static/media/bishop-light.b3a6ab13.svg",
@@ -22,8 +22,10 @@
     "static/media/knight-dark.694d39f7.svg": "/chess-frontend/static/media/knight-dark.694d39f7.svg",
     "static/media/knight-light.00f692b4.svg": "/chess-frontend/static/media/knight-light.00f692b4.svg",
     "static/media/loader.046ebe1f.svg": "/chess-frontend/static/media/loader.046ebe1f.svg",
+    "static/media/logout.941f1ebb.svg": "/chess-frontend/static/media/logout.941f1ebb.svg",
     "static/media/pawn-dark.5cd04fdd.svg": "/chess-frontend/static/media/pawn-dark.5cd04fdd.svg",
     "static/media/pawn-light.a4fcf0dd.svg": "/chess-frontend/static/media/pawn-light.a4fcf0dd.svg",
+    "static/media/profile.97178e42.svg": "/chess-frontend/static/media/profile.97178e42.svg",
     "static/media/queen-dark.0b7a0a9f.svg": "/chess-frontend/static/media/queen-dark.0b7a0a9f.svg",
     "static/media/queen-light.82f75271.svg": "/chess-frontend/static/media/queen-light.82f75271.svg",
     "static/media/rook-dark.72a1f080.svg": "/chess-frontend/static/media/rook-dark.72a1f080.svg",
@@ -33,8 +35,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.2dcc97c9.js",
-    "static/js/2.4d4e1dd3.chunk.js",
-    "static/css/main.be6c435d.chunk.css",
-    "static/js/main.dcf24d70.chunk.js"
+    "static/js/2.170dba5e.chunk.js",
+    "static/css/main.57de9931.chunk.css",
+    "static/js/main.7ecffc0b.chunk.js"
   ]
 }
