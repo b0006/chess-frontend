@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const HTTP = axios.create();
+const HTTP = axios.create({
+  baseURL: 'http://localhost:4000',
+});
 
 HTTP.interceptors.response.use(
   (response) => {

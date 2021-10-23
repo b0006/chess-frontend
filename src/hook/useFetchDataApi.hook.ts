@@ -1,42 +1,44 @@
 import { useState, useCallback } from 'react';
 
-import { requests } from '../agent';
+import { requests, UnknownObject } from '../agent';
 
 type Method = keyof typeof requests;
 
-interface ResponseReturn<R> {
-  statusCode: number;
-  data?: R;
-  message?: string[];
-  error?: Error | string | null;
+interface FetchReturn<T> {
+  error: string | Error | null | unknown;
+  response: T | null | undefined;
 }
 
-interface Response<R> {
-  isLoading: boolean;
-  data: R | undefined;
-  error: string | Error | null | undefined;
-}
-
-const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [Response<R>, (data?: T) => void] => {
+const useFetchDataApi = <T = UnknownObject, R = UnknownObject>(
+  url: string,
+  method: Method
+): [boolean, (data?: T) => Promise<FetchReturn<R>>] => {
   const [isLoading, setIsLoading] = useState(false);
-  const [responseData, setResponseData] = useState<R>();
-  const [error, setError] = useState<Error | string | null>();
 
   const fetchData = useCallback(
     async (data?: T) => {
       setIsLoading(true);
-      setError(null);
+      const resultData: FetchReturn<R> = {
+        error: null,
+        response: null,
+      };
 
       try {
-        const response = await requests[method]<T, ResponseReturn<R>>(url, data);
-        if (response.data.statusCode !== 200) {
-          throw response.data.message;
+        const response = await requests[method]<T, R>(url, data);
+        if (response.status !== 200) {
+          throw response.statusText;
         }
-        setResponseData(response.data.data);
+
+        resultData.response = response.data;
+        return resultData;
       } catch (err) {
+        resultData.error = 'Unknown error';
+
         if (err instanceof Error || typeof err === 'string') {
-          setError(err);
+          resultData.error = err;
         }
+
+        return resultData;
       } finally {
         setIsLoading(false);
       }
@@ -44,7 +46,7 @@ const useFetchDataApi = <T = object, R = object>(url: string, method: Method): [
     [method, url]
   );
 
-  return [{ isLoading, data: responseData, error }, fetchData];
+  return [isLoading, fetchData];
 };
 
 export { useFetchDataApi };

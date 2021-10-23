@@ -1,8 +1,10 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
+import { useFetchDataApi } from '../../../hook/useFetchDataApi.hook';
 import { Button } from '../../Common/Button';
 import { Input } from '../../Common/Input';
+import { useNotification } from '../../Common/Notification';
 import { FormLayout } from '../FormLayout';
 
 import styles from './LoginForm.module.scss';
@@ -13,6 +15,9 @@ interface IFormFields {
 }
 
 const LoginForm: React.FC = () => {
+  const { addNotification } = useNotification();
+  const [, signInRequst] = useFetchDataApi<IFormFields>('/auth/sign-in/', 'POST');
+
   const {
     register,
     handleSubmit,
@@ -20,7 +25,14 @@ const LoginForm: React.FC = () => {
   } = useForm<IFormFields>();
 
   const onSubmit = async (data: IFormFields): Promise<void> => {
-    window.console.log(data);
+    const { error, response } = await signInRequst(data);
+
+    if (error || !response) {
+      addNotification({ title: 'Ошибка', description: 'Попробуйте еще раз' }, { appearance: 'error' });
+      return;
+    }
+
+    addNotification({ title: 'Успех', description: 'Вы успешно авторизировались' }, { appearance: 'success' });
   };
 
   return (
