@@ -3,15 +3,15 @@ import React from 'react';
 
 import { useFetchDataApi } from '../../../../hook/useFetchDataApi.hook';
 import { userStore } from '../../../../mobx';
+import { Button } from '../../../Common/Button';
 import { useNotification } from '../../../Common/Notification';
-import { SvgIcon } from '../../../Common/SvgIcon';
 
 import styles from './RightContent.module.scss';
 
 const RightContent: React.FC = observer(() => {
   const { user, resetProfileData } = userStore;
   const { addNotification } = useNotification();
-  const [, logoutRequest] = useFetchDataApi<any, { success: boolean }>('/auth/logout/', 'GET');
+  const [isLogoutProcess, logoutRequest] = useFetchDataApi<any, { success: boolean }>('/auth/logout/', 'GET');
 
   const onLogoutClick = async () => {
     const { error, response } = await logoutRequest();
@@ -28,9 +28,14 @@ const RightContent: React.FC = observer(() => {
     <div className={styles.wrapper}>
       {user.profileData?.username && <span>{user.profileData.username}</span>}
       {user.isAuth && (
-        <button type="button" className={styles.button} onClick={onLogoutClick}>
-          <SvgIcon kind="logout" className={styles.icon} />
-        </button>
+        <Button
+          className={styles.button}
+          text="Выход"
+          icon="logout"
+          iconSide="right"
+          isLoading={isLogoutProcess}
+          onClick={onLogoutClick}
+        />
       )}
     </div>
   );

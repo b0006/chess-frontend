@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import axios from 'axios';
 
 import { ErrorApi, requests, UnknownObject } from '../agent';
+import { sleep } from '../utils/time';
 
 type Method = keyof typeof requests;
 
@@ -13,16 +14,20 @@ interface FetchReturn<T> {
 const useFetchDataApi = <T = UnknownObject, R = UnknownObject>(
   url: string,
   method: Method
-): [boolean, (data?: T) => Promise<FetchReturn<R>>] => {
+): [boolean, (data?: T, sleepMs?: number) => Promise<FetchReturn<R>>] => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = useCallback(
-    async (data?: T) => {
+    async (data?: T, sleepMs?: number) => {
       setIsLoading(true);
       const resultData: FetchReturn<R> = {
         error: null,
         response: null,
       };
+
+      if (sleepMs) {
+        await sleep(sleepMs);
+      }
 
       try {
         const response = await requests[method]<T, R>(url, data);

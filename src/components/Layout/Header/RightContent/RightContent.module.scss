@@ -9,20 +9,4 @@
 
 .button {
   margin-left: 12px;
-  cursor: pointer;
-  appearance: none;
-  background-color: transparent;
-  border: 0;
-  outline: none;
-
-  &:hover .icon {
-    color: $c-gray;
-  }
-}
-
-.icon {
-  color: $c-black;
-  transition: color 0.25s;
-  width: 32px;
-  height: 32px;
 }
