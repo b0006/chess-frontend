@@ -41,7 +41,7 @@ const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
   };
 
   return (
-    <ModalLayout classNameInner={styles['modal-inner']} isVisible={isVisible} onClose={onClose} overlayClickClose>
+    <ModalLayout classNameInner={styles['modal-inner']} isVisible={isVisible} onClose={onClose}>
       <h3 className={styles.title}>Настройка игры</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.field}>
