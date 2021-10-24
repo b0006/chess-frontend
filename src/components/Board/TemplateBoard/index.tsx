@@ -33,7 +33,7 @@ const TemplateBoard: React.FC<Props> = ({
   stateChess,
   isRotate,
   withAnimation = true,
-  isColoredMoves = true,
+  // isColoredMoves = true,
   isRandom = false,
   myColor = 'w',
   game,
@@ -218,7 +218,7 @@ const TemplateBoard: React.FC<Props> = ({
                           id={id}
                           className={cn(styles.cell, {
                             [styles['cell--no-events']]: isRandom,
-                            [styles['cell--move']]: isColoredMoves && legalMoves[id],
+                            [styles['cell--move']]: game.isColoredMoves && legalMoves[id],
                             [styles['cell--active']]: squareActive === id,
                             [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
                             [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,

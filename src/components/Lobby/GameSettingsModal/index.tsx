@@ -100,22 +100,22 @@ const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
             }) => <Select label="Моя сторона" options={COLOR_LIST} onChange={onChange} value={value} />}
           />
         </div>
-        <div className={cn(styles['switcher-line'], styles.field)}>
+        {/* <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Авто превращение</span>
           <Switcher className={styles.switcher} {...register('isAutoPromotion')} />
-        </div>
+        </div> */}
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Подсвечивать возможные ходы</span>
           <Switcher className={styles.switcher} {...register('isColoredMoves')} />
         </div>
-        <div className={cn(styles['switcher-line'], styles.field)}>
+        {/* <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Подтверждать каждый ход</span>
           <Switcher className={styles.switcher} {...register('isConfirmSteps')} />
         </div>
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Включить звуки</span>
           <Switcher className={styles.switcher} {...register('isConfirmSteps')} />
-        </div>
+        </div> */}
         <Button type="submit" text="Начать игру" theme="primary" />
       </form>
     </ModalLayout>
