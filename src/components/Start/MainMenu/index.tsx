@@ -18,6 +18,20 @@ const MainMenu: React.FC = observer(() => {
   useEffect(() => {
     const chess = new Chess();
     setStateChess(chess);
+
+    const loadEngine = () => {
+      const stock = window.STOCKFISH();
+
+      stock.onmessage = function (event: any) {
+        console.log('event', event);
+      };
+    };
+
+    window.addEventListener('DOMContentLoaded', loadEngine);
+
+    return () => {
+      window.removeEventListener('DOMContentLoaded', loadEngine);
+    };
   }, []);
 
   return (
