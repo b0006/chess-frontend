@@ -9,11 +9,7 @@
 }
 
 .field {
-  padding: 8px 0;
-
-  &:not(:first-child) {
-    border-top: 1px solid $c-gray;
-  }
+  margin: 24px 0;
 }
 
 .switcher-line {

@@ -1,0 +1,132 @@
+@import 'src/assets/scss/utils';
+
+.wrapper {
+  position: relative;
+  display: flex;
+  align-self: center;
+  box-shadow: $shadow-default;
+  background-color: $c-white;
+  border-radius: 4px;
+  min-height: 56px;
+  transition: border-radius 0.25s;
+
+  &_open {
+    border-radius: 4px 4px 0 0;
+  }
+}
+
+.label {
+  position: absolute;
+  top: 0px;
+  left: 16px;
+  font-size: 13px;
+  line-height: 20px;
+  color: $c-gray;
+}
+
+.preview {
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.icons {
+  display: flex;
+  flex-direction: row;
+}
+
+.active-option {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.button {
+  padding: 10px;
+  display: flex;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  transition: background-color 0.25s;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: $c-gray-l;
+  }
+}
+
+.button-remove {
+  margin-right: 6px;
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+  color: $c-gray;
+}
+
+.arrow {
+  transform: rotate(0deg);
+  transition: transform 0.25s;
+
+  &_up {
+    transform: rotate(180deg);
+  }
+}
+
+.list-wrapper {
+  position: absolute;
+  top: 100%;
+  background-color: $c-white;
+  box-shadow: $shadow-default;
+  width: 100%;
+  max-height: 500px;
+  margin-top: 4px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  z-index: 10;
+  
+  &_overflow {
+    overflow-y: auto;
+  }
+}
+
+// .list-item {
+//   position: relative;
+//   list-style-type: none;
+//   background-color: transparent;
+//   transition: background-color 0.25s;
+
+//   &_active {
+//     background-color: $c-primary-disabled;
+//   }
+
+//   &:hover {
+//     background-color: $c-gray-l;
+//   }
+// }
+
+// .list-item-button {
+//   border: none;
+//   background-color: transparent;
+//   width: 100%;
+//   text-align: left;
+//   cursor: pointer;
+//   padding: 5px 16px;
+//   font-size: 16px;
+//   line-height: 24px;
+// }
+
+// .icon-active {
+//   width: 14px;
+//   height: 14px;
+//   color: $c-primary;
+//   position: absolute;
+//   right: 16px;
+//   top: 50%;
+//   transform: translateY(-50%);
+// }

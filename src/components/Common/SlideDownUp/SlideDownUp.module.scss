@@ -1,0 +1,13 @@
+.slide-down-up {
+  overflow: hidden;
+  pointer-events: none;
+  transition: height 0.3s;
+
+  &_opened {
+    pointer-events: all;
+  }
+
+  &_open-once {
+    transition: none;
+  }
+}

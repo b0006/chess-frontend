@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Button } from '../../Common/Button';
 import { ModalLayout } from '../../Common/ModalLayout';
 import { Switcher } from '../../Common/Switcher';
+import { Select } from '../../Common/Select';
 
 import styles from './GameSettingsModal.module.scss';
 
@@ -18,7 +19,19 @@ interface FormFields {
   isColoredMoves: boolean;
   isConfirmSteps: boolean;
   isAudioOn: boolean;
+  difficult: number;
 }
+
+const AI_DIFFICULT = [
+  { label: '800 (легко)', value: 800 },
+  { label: '1000', value: 1000 },
+  { label: '1200', value: 1200 },
+  { label: '1400', value: 1400 },
+  { label: '1600', value: 1600 },
+  { label: '1800', value: 1800 },
+  { label: '2000', value: 2000 },
+  { label: '2200 (сложно)', value: 2200 },
+];
 
 const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
   const { register, handleSubmit } = useForm<FormFields>();
@@ -31,6 +44,9 @@ const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
     <ModalLayout classNameInner={styles['modal-inner']} isVisible={isVisible} onClose={onClose} overlayClickClose>
       <h3 className={styles.title}>Настройка игры</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.field}>
+          <Select label="Сложность" options={AI_DIFFICULT} />
+        </div>
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Авто превращение</span>
           <Switcher className={styles.switcher} {...register('isAutoPromotion')} />

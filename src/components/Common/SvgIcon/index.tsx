@@ -16,6 +16,7 @@ import { ReactComponent as DesktopIcon } from '../../../assets/common-icons/desk
 import { ReactComponent as SignInIcon } from '../../../assets/common-icons/sign-in.svg';
 import { ReactComponent as UserClockIcon } from '../../../assets/common-icons/user-clock.svg';
 import { ReactComponent as UserPlusIcon } from '../../../assets/common-icons/user-plus.svg';
+import { ReactComponent as ChevronDownicon } from '../../../assets/common-icons/chevronDown.svg';
 
 import styles from './SvgIcon.module.scss';
 
@@ -38,6 +39,7 @@ export const ICON_LIST = {
   signIn: SignInIcon,
   userClock: UserClockIcon,
   userPlus: UserPlusIcon,
+  chevronDown: ChevronDownicon,
 };
 
 export interface Props extends React.SVGAttributes<SVGElement> {
