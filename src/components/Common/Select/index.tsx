@@ -25,7 +25,7 @@ export interface Props {
   emptyOptionLabel?: string;
   value?: OptionValue;
   defaultValue?: OptionValue;
-  onChange?: (value: Option | null) => void;
+  onChange?: (value: OptionValue) => void;
 }
 
 const Select: React.FC<Props> = ({
@@ -69,7 +69,7 @@ const Select: React.FC<Props> = ({
     setActiveOption(findOption);
     onCloseList();
     if (onChange) {
-      onChange(findOption);
+      onChange(findOption?.value || null);
     }
   };
 

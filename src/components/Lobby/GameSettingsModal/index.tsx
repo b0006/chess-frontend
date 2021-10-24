@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 
 import { Button } from '../../Common/Button';
 import { ModalLayout } from '../../Common/ModalLayout';
@@ -34,7 +34,7 @@ const AI_DIFFICULT = [
 ];
 
 const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
-  const { register, handleSubmit } = useForm<FormFields>();
+  const { register, handleSubmit, control } = useForm<FormFields>();
 
   const onSubmit = async (data: FormFields): Promise<void> => {
     window.console.log(data);
@@ -45,7 +45,15 @@ const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
       <h3 className={styles.title}>Настройка игры</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.field}>
-          <Select label="Сложность" options={AI_DIFFICULT} />
+          <Controller
+            control={control}
+            name="difficult"
+            // rules={{ required: true }}
+            render={({
+              field: { onChange, value },
+              // fieldState: { invalid, isTouched, isDirty, error },
+            }) => <Select label="Сложность" options={AI_DIFFICULT} onChange={onChange} value={value} />}
+          />
         </div>
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Авто превращение</span>
