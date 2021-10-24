@@ -24,7 +24,6 @@ export interface Props {
   withEmptyOption?: boolean;
   emptyOptionLabel?: string;
   value?: OptionValue;
-  defaultValue?: OptionValue;
   onChange?: (value: OptionValue) => void;
 }
 

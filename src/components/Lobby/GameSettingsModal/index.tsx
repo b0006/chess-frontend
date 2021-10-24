@@ -1,11 +1,14 @@
 import React from 'react';
 import cn from 'classnames';
 import { useForm, Controller } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
 
 import { Button } from '../../Common/Button';
 import { ModalLayout } from '../../Common/ModalLayout';
 import { Switcher } from '../../Common/Switcher';
 import { Select } from '../../Common/Select';
+import { ChessColor } from '../../Board/TemplateBoard/types';
+import { gameStore } from '../../../mobx';
 
 import styles from './GameSettingsModal.module.scss';
 
@@ -20,9 +23,20 @@ interface FormFields {
   isConfirmSteps: boolean;
   isAudioOn: boolean;
   difficult: number;
+  myColor: ChessColor;
 }
 
-const AI_DIFFICULT = [
+interface DificultItem {
+  label: string;
+  value: number;
+}
+
+interface ColorItem {
+  label: string;
+  value: ChessColor;
+}
+
+const AI_DIFFICULT: DificultItem[] = [
   { label: '800 (легко)', value: 800 },
   { label: '1000', value: 1000 },
   { label: '1200', value: 1200 },
@@ -33,11 +47,31 @@ const AI_DIFFICULT = [
   { label: '2200 (сложно)', value: 2200 },
 ];
 
-const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
-  const { register, handleSubmit, control } = useForm<FormFields>();
+const COLOR_LIST: ColorItem[] = [
+  { label: 'Белые', value: 'w' },
+  { label: 'Черные', value: 'b' },
+];
 
-  const onSubmit = async (data: FormFields): Promise<void> => {
-    window.console.log(data);
+const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
+  const { setGameData } = gameStore;
+  const history = useHistory();
+
+  const { register, handleSubmit, control } = useForm<FormFields>({
+    defaultValues: {
+      difficult: AI_DIFFICULT[0].value,
+      myColor: COLOR_LIST[0].value,
+      isColoredMoves: true,
+    },
+  });
+
+  const onSubmit = (data: FormFields): void => {
+    setGameData({
+      ...data,
+      isPlaying: true,
+      versusAi: true,
+    });
+
+    history.push('/offline-game');
   };
 
   return (
@@ -55,13 +89,24 @@ const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
             }) => <Select label="Сложность" options={AI_DIFFICULT} onChange={onChange} value={value} />}
           />
         </div>
+        <div className={styles.field}>
+          <Controller
+            control={control}
+            name="myColor"
+            // rules={{ required: true }}
+            render={({
+              field: { onChange, value },
+              // fieldState: { invalid, isTouched, isDirty, error },
+            }) => <Select label="Моя сторона" options={COLOR_LIST} onChange={onChange} value={value} />}
+          />
+        </div>
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Авто превращение</span>
           <Switcher className={styles.switcher} {...register('isAutoPromotion')} />
         </div>
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Подсвечивать возможные ходы</span>
-          <Switcher className={styles.switcher} defaultChecked {...register('isColoredMoves')} />
+          <Switcher className={styles.switcher} {...register('isColoredMoves')} />
         </div>
         <div className={cn(styles['switcher-line'], styles.field)}>
           <span className={styles['switcher-title']}>Подтверждать каждый ход</span>
