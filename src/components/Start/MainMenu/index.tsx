@@ -92,7 +92,7 @@ const MainMenu: React.FC = observer(() => {
             )}
           </div>
         </div>
-        {stateChess && <TemplateBoard stateChess={stateChess} isRandom myColor="w" />}
+        {stateChess && <TemplateBoard game={{}} stateChess={stateChess} isRandom myColor="w" />}
       </div>
       <GameSettingsModal isVisible={isVisibleSettings} onClose={() => setIsVisibleSettings(false)} />
     </React.Fragment>

@@ -1,5 +1,7 @@
 import * as ChessJS from 'chess.js';
 
+import { GameData } from '../../../mobx/gameStore';
+
 export type ChessColor = 'b' | 'w';
 export type PromotionPieceType = Exclude<ChessJS.PieceType, 'p' | 'k'>;
 export type Board = Array<Array<{ type: ChessJS.PieceType; color: 'w' | 'b' } | null>>;
@@ -16,6 +18,7 @@ export interface Props {
   isColoredMoves?: boolean;
   isRandom?: boolean;
   onMoveEnd?: () => void;
+  game: Partial<GameData>;
 }
 
 export interface UseMoves {

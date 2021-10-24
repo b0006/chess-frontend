@@ -17,7 +17,7 @@ import { ICONS_DEFAULT } from './icons';
 import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
 import { Props, ChessColor, LegalMoves, Board, PromotionPieceType } from './types';
-// import { useMoves } from './useMoves.hook';
+import { useAiParty } from './useAiParty.hook';
 
 const getCenterOfCell = (el: Element) => {
   const state = el.getBoundingClientRect();
@@ -26,6 +26,7 @@ const getCenterOfCell = (el: Element) => {
   return { x, y };
 };
 
+// TEMP
 // let myColor: ChessColor = 'w';
 
 const TemplateBoard: React.FC<Props> = ({
@@ -35,7 +36,8 @@ const TemplateBoard: React.FC<Props> = ({
   isColoredMoves = true,
   isRandom = false,
   myColor = 'w',
-  onMoveEnd,
+  game,
+  // onMoveEnd,
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
   const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
@@ -49,6 +51,8 @@ const TemplateBoard: React.FC<Props> = ({
     from: null,
     to: null,
   });
+
+  const { onMoveEnd } = useAiParty({ stateChess, game });
 
   const resetCell = () => {
     setSquareActive(null);
@@ -123,7 +127,7 @@ const TemplateBoard: React.FC<Props> = ({
         }, 250);
       }
     },
-    [computedNewBoard, onMoveEnd, stateChess]
+    [computedNewBoard, stateChess, onMoveEnd]
   );
 
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
