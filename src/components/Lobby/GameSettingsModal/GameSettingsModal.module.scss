@@ -1,0 +1,32 @@
+@import 'src/assets/scss/utils';
+
+.modal-inner {
+  max-width: 400px;
+}
+
+.title {
+  text-align: center;
+}
+
+.field {
+  padding: 8px 0;
+
+  &:not(:first-child) {
+    border-top: 1px solid $c-gray;
+  }
+}
+
+.switcher-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switcher-title {
+  flex: 1;
+}
+
+.switcher {
+  margin-left: 12px;
+}
