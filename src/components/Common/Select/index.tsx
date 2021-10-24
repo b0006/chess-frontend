@@ -98,7 +98,7 @@ const Select: React.FC<Props> = ({
       <div className={styles.preview} role="button" tabIndex={0} onClick={onClickPreview} onKeyPress={onClickPreview}>
         <span className={styles['active-option']}>{activeOption && activeOption.label}</span>
         <div className={styles.icons} ref={buttonsRef}>
-          {activeOption && (
+          {activeOption && withEmptyOption && (
             <button className={cn(styles.button, styles['button-remove'])} onClick={onClickOption(null)} type="button">
               <SvgIcon kind="cross" className={styles.icon} />
             </button>

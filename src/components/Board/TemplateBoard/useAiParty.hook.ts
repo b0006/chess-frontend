@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as ChessJS from 'chess.js';
 
 import { GameData } from '../../../mobx/gameStore';
@@ -17,14 +17,24 @@ interface UseAiParty {
   staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
 }
 
-const useAiParty = ({ game, stateChess, withAnimation, animationMove, staticMove }: UseAiParty): any => {
+const useAiParty = ({
+  game,
+  stateChess,
+  withAnimation,
+  animationMove,
+  staticMove,
+}: UseAiParty): { isEnemyMoving: boolean } => {
   const chessRef = useRef(stateChess);
   const engineRef = useRef<any>();
+
+  const [isEnemyMoving, setIsEnemyMoving] = useState(false);
 
   const isMyTurn = stateChess.turn() === game.myColor;
 
   const startEnemyMove = useCallback(() => {
     if (engineRef.current && chessRef.current && chessRef.current.turn() !== game.myColor) {
+      setIsEnemyMoving(true);
+
       engineRef.current.postMessage(`position fen ${chessRef.current.fen()}`);
       engineRef.current.postMessage(`go depth ${game.difficult}`);
     }
@@ -52,6 +62,8 @@ const useAiParty = ({ game, stateChess, withAnimation, animationMove, staticMove
         withAnimation
           ? animationMove(movesData[value].from, movesData[value].to, movesData[value].promotion)
           : staticMove(movesData[value].from, movesData[value].to, movesData[value].promotion);
+
+        setIsEnemyMoving(false);
       }
     },
     [animationMove, stateChess, staticMove, withAnimation]
@@ -99,6 +111,8 @@ const useAiParty = ({ game, stateChess, withAnimation, animationMove, staticMove
 
     loadEngine();
   }, [game.difficult, game.myColor, game.versusAi, onEngineEvent, stateChess]);
+
+  return { isEnemyMoving };
 };
 
 export { useAiParty };

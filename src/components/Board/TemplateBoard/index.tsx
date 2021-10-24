@@ -124,7 +124,7 @@ const TemplateBoard: React.FC<Props> = ({
   );
 
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
-  useAiParty({ stateChess, game, staticMove, animationMove, withAnimation });
+  const { isEnemyMoving } = useAiParty({ stateChess, game, staticMove, animationMove, withAnimation });
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {
@@ -193,7 +193,11 @@ const TemplateBoard: React.FC<Props> = ({
       <div className={styles.chessboard}>
         <div className={styles.inner}>
           <HorizontalSymbols isRotate={_isRotate} />
-          <div className={styles.game}>
+          <div
+            className={cn(styles.game, {
+              [styles['enemy-moving']]: isEnemyMoving,
+            })}
+          >
             <VerticalSymbols isRotate={_isRotate} />
             <div className={styles.board} ref={boardRef}>
               {horList.map((sym, symIndex) => {
