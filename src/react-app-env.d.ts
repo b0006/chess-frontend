@@ -1,7 +1,7 @@
 /// <reference types="react-scripts" />
 
 interface Window {
-  STOCKFISH: Function;
+  STOCKFISH: () => any;
 }
 
-declare var window: Window;
+declare let window: Window;

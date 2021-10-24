@@ -37,14 +37,14 @@ interface ColorItem {
 }
 
 const AI_DIFFICULT: DificultItem[] = [
-  { label: '800 (легко)', value: 800 },
-  { label: '1000', value: 1000 },
-  { label: '1200', value: 1200 },
-  { label: '1400', value: 1400 },
-  { label: '1600', value: 1600 },
-  { label: '1800', value: 1800 },
-  { label: '2000', value: 2000 },
-  { label: '2200 (сложно)', value: 2200 },
+  { label: '800 (легко)', value: 1 },
+  { label: '1000', value: 3 },
+  { label: '1200', value: 5 },
+  { label: '1400', value: 7 },
+  { label: '1600', value: 9 },
+  { label: '1800', value: 11 },
+  { label: '2000', value: 13 },
+  { label: '2200 (сложно)', value: 15 },
 ];
 
 const COLOR_LIST: ColorItem[] = [

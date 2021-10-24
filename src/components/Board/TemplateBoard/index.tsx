@@ -26,7 +26,7 @@ const getCenterOfCell = (el: Element) => {
   return { x, y };
 };
 
-let myColor: ChessColor = 'w';
+// let myColor: ChessColor = 'w';
 
 const TemplateBoard: React.FC<Props> = ({
   stateChess,
@@ -34,7 +34,8 @@ const TemplateBoard: React.FC<Props> = ({
   withAnimation = true,
   isColoredMoves = true,
   isRandom = false,
-  // myColor = 'w',
+  myColor = 'w',
+  onMoveEnd,
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
   const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
@@ -76,12 +77,16 @@ const TemplateBoard: React.FC<Props> = ({
       stateChess.move({ from, to, promotion });
       computedNewBoard();
       resetCell();
-      // TEMP
-      if (!promotion) {
-        myColor = myColor === 'b' ? 'w' : 'b';
+
+      if (typeof onMoveEnd === 'function') {
+        onMoveEnd();
       }
+      // // TEMP
+      // if (!promotion) {
+      //   myColor = myColor === 'b' ? 'w' : 'b';
+      // }
     },
-    [stateChess, computedNewBoard]
+    [stateChess, computedNewBoard, onMoveEnd]
   );
 
   const animationMove = useCallback(
@@ -109,12 +114,16 @@ const TemplateBoard: React.FC<Props> = ({
           stateChess.move({ from, to, promotion });
           computedNewBoard();
 
-          // TEMP
-          myColor = myColor === 'b' ? 'w' : 'b';
+          if (typeof onMoveEnd === 'function') {
+            onMoveEnd();
+          }
+
+          // // TEMP
+          // myColor = myColor === 'b' ? 'w' : 'b';
         }, 250);
       }
     },
-    [computedNewBoard, stateChess]
+    [computedNewBoard, onMoveEnd, stateChess]
   );
 
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });

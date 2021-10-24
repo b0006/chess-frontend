@@ -15,6 +15,7 @@ export interface Props {
   withAnimation?: boolean;
   isColoredMoves?: boolean;
   isRandom?: boolean;
+  onMoveEnd?: () => void;
 }
 
 export interface UseMoves {
