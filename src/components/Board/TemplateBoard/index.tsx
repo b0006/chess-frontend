@@ -52,8 +52,6 @@ const TemplateBoard: React.FC<Props> = ({
     to: null,
   });
 
-  const { onMoveEnd } = useAiParty({ stateChess, game });
-
   const resetCell = () => {
     setSquareActive(null);
     setLegalMoves({});
@@ -82,15 +80,15 @@ const TemplateBoard: React.FC<Props> = ({
       computedNewBoard();
       resetCell();
 
-      if (typeof onMoveEnd === 'function') {
-        onMoveEnd();
-      }
+      // if (typeof onMoveEnd === 'function') {
+      //   onMoveEnd();
+      // }
       // // TEMP
       // if (!promotion) {
       //   myColor = myColor === 'b' ? 'w' : 'b';
       // }
     },
-    [stateChess, computedNewBoard, onMoveEnd]
+    [stateChess, computedNewBoard]
   );
 
   const animationMove = useCallback(
@@ -118,19 +116,20 @@ const TemplateBoard: React.FC<Props> = ({
           stateChess.move({ from, to, promotion });
           computedNewBoard();
 
-          if (typeof onMoveEnd === 'function') {
-            onMoveEnd();
-          }
+          // if (typeof onMoveEnd === 'function') {
+          //   onMoveEnd();
+          // }
 
           // // TEMP
           // myColor = myColor === 'b' ? 'w' : 'b';
         }, 250);
       }
     },
-    [computedNewBoard, stateChess, onMoveEnd]
+    [computedNewBoard, stateChess]
   );
 
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
+  useAiParty({ stateChess, game, staticMove, animationMove, withAnimation });
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {

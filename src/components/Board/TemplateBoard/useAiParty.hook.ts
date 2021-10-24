@@ -1,21 +1,66 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import * as ChessJS from 'chess.js';
 
 import { GameData } from '../../../mobx/gameStore';
 
+import { PromotionPieceType } from './types';
+
+type MoveData = {
+  [key in string]: ChessJS.Move;
+};
+
 interface UseAiParty {
   game: Partial<GameData>;
   stateChess: ChessJS.ChessInstance;
+  withAnimation: boolean;
+  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
 }
 
-const useAiParty = ({ game, stateChess }: UseAiParty): any => {
-  // const { difficult, myColor, versusAi } = game;
-
+const useAiParty = ({ game, stateChess, withAnimation, animationMove, staticMove }: UseAiParty): any => {
   const chessRef = useRef(stateChess);
   const engineRef = useRef<any>();
 
+  const isMyTurn = stateChess.turn() === game.myColor;
+
+  const startEnemyMove = useCallback(() => {
+    if (engineRef.current && chessRef.current && chessRef.current.turn() !== game.myColor) {
+      engineRef.current.postMessage(`position fen ${chessRef.current.fen()}`);
+      engineRef.current.postMessage(`go depth ${game.difficult}`);
+    }
+  }, [game.difficult, game.myColor]);
+
+  useEffect(() => {
+    if (game.versusAi && isMyTurn === false) {
+      startEnemyMove();
+    }
+  }, [isMyTurn, game.versusAi, startEnemyMove]);
+
+  const enemyMove = (value: string) => {
+    const moves = stateChess.moves({ verbose: true });
+
+    const movesData = moves.reduce(
+      (result, acc) => ({
+        ...result,
+        [`${acc.from}${acc.to}`]: acc,
+      }),
+      {} as MoveData
+    );
+
+    if (movesData[value]) {
+      withAnimation
+        ? animationMove(movesData[value].from, movesData[value].to, movesData[value].promotion)
+        : staticMove(movesData[value].from, movesData[value].to, movesData[value].promotion);
+    }
+  };
+
   const onEngineEvent = (event: any) => {
     window.console.log('STOCKFISH event', event);
+
+    const [name, value]: string[] = event.split(' ');
+    if (name === 'bestmove' && value) {
+      enemyMove(value);
+    }
   };
 
   useEffect(() => {
@@ -46,15 +91,6 @@ const useAiParty = ({ game, stateChess }: UseAiParty): any => {
 
     loadEngine();
   }, [game.difficult, game.myColor, game.versusAi, stateChess]);
-
-  const onMoveEnd = () => {
-    if (engineRef.current && chessRef.current && chessRef.current.turn() !== game.myColor) {
-      engineRef.current.postMessage(`position fen ${chessRef.current.fen()}`);
-      engineRef.current.postMessage(`go depth ${game.difficult}`);
-    }
-  };
-
-  return { onMoveEnd };
 };
 
 export { useAiParty };
