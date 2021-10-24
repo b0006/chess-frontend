@@ -37,7 +37,6 @@ const TemplateBoard: React.FC<Props> = ({
   isRandom = false,
   myColor = 'w',
   game,
-  // onMoveEnd,
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
   const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
@@ -57,12 +56,15 @@ const TemplateBoard: React.FC<Props> = ({
     setLegalMoves({});
   };
 
+  const _isRotate = myColor === 'b' ? !isRotate : isRotate;
+
   const computedNewBoard = useCallback(() => {
     const newBoard = stateChess.board();
+
     setBoard(() => {
-      return isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard;
+      return _isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard;
     });
-  }, [isRotate, stateChess]);
+  }, [_isRotate, stateChess]);
 
   useEffect(() => {
     computedNewBoard();
@@ -80,9 +82,6 @@ const TemplateBoard: React.FC<Props> = ({
       computedNewBoard();
       resetCell();
 
-      // if (typeof onMoveEnd === 'function') {
-      //   onMoveEnd();
-      // }
       // // TEMP
       // if (!promotion) {
       //   myColor = myColor === 'b' ? 'w' : 'b';
@@ -115,10 +114,6 @@ const TemplateBoard: React.FC<Props> = ({
         moveTimeoutIdRef.current = setTimeout(() => {
           stateChess.move({ from, to, promotion });
           computedNewBoard();
-
-          // if (typeof onMoveEnd === 'function') {
-          //   onMoveEnd();
-          // }
 
           // // TEMP
           // myColor = myColor === 'b' ? 'w' : 'b';
@@ -190,16 +185,16 @@ const TemplateBoard: React.FC<Props> = ({
     }
   }, [board, stateChess, isRandom]);
 
-  const horList = isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
-  const verList = isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
+  const horList = _isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
+  const verList = _isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
 
   return (
     <React.Fragment>
       <div className={styles.chessboard}>
         <div className={styles.inner}>
-          <HorizontalSymbols isRotate={isRotate} />
+          <HorizontalSymbols isRotate={_isRotate} />
           <div className={styles.game}>
-            <VerticalSymbols isRotate={isRotate} />
+            <VerticalSymbols isRotate={_isRotate} />
             <div className={styles.board} ref={boardRef}>
               {horList.map((sym, symIndex) => {
                 return (
@@ -233,9 +228,9 @@ const TemplateBoard: React.FC<Props> = ({
                 );
               })}
             </div>
-            <VerticalSymbols isRotate={isRotate} />
+            <VerticalSymbols isRotate={_isRotate} />
           </div>
-          <HorizontalSymbols isRotate={isRotate} />
+          <HorizontalSymbols isRotate={_isRotate} />
         </div>
       </div>
       <PromotionModal

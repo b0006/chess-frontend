@@ -16,21 +16,7 @@ const VersusAiGame: React.FC = observer(() => {
     setStateChess(chess);
   }, []);
 
-  return (
-    <div>
-      <div>
-        VersusAiGame
-        {stateChess && (
-          <TemplateBoard
-            game={game}
-            stateChess={stateChess}
-            myColor={game.myColor}
-            // isColoredMoves={isColoredMoves}
-          />
-        )}
-      </div>
-    </div>
-  );
+  return <div>{stateChess && <TemplateBoard game={game} stateChess={stateChess} myColor={game.myColor} />}</div>;
 });
 
 export { VersusAiGame };

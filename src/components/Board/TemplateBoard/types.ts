@@ -17,7 +17,6 @@ export interface Props {
   withAnimation?: boolean;
   isColoredMoves?: boolean;
   isRandom?: boolean;
-  onMoveEnd?: () => void;
   game: Partial<GameData>;
 }
 

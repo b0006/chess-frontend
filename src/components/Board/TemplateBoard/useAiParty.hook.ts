@@ -36,32 +36,40 @@ const useAiParty = ({ game, stateChess, withAnimation, animationMove, staticMove
     }
   }, [isMyTurn, game.versusAi, startEnemyMove]);
 
-  const enemyMove = (value: string) => {
-    const moves = stateChess.moves({ verbose: true });
+  const enemyMove = useCallback(
+    (value: string) => {
+      const moves = stateChess.moves({ verbose: true });
 
-    const movesData = moves.reduce(
-      (result, acc) => ({
-        ...result,
-        [`${acc.from}${acc.to}`]: acc,
-      }),
-      {} as MoveData
-    );
+      const movesData = moves.reduce(
+        (result, acc) => ({
+          ...result,
+          [`${acc.from}${acc.to}`]: acc,
+        }),
+        {} as MoveData
+      );
 
-    if (movesData[value]) {
-      withAnimation
-        ? animationMove(movesData[value].from, movesData[value].to, movesData[value].promotion)
-        : staticMove(movesData[value].from, movesData[value].to, movesData[value].promotion);
-    }
-  };
+      if (movesData[value]) {
+        withAnimation
+          ? animationMove(movesData[value].from, movesData[value].to, movesData[value].promotion)
+          : staticMove(movesData[value].from, movesData[value].to, movesData[value].promotion);
+      }
+    },
+    [animationMove, stateChess, staticMove, withAnimation]
+  );
 
-  const onEngineEvent = (event: any) => {
-    window.console.log('STOCKFISH event', event);
+  const onEngineEvent = useCallback(
+    (event: unknown) => {
+      window.console.log('STOCKFISH event', event);
 
-    const [name, value]: string[] = event.split(' ');
-    if (name === 'bestmove' && value) {
-      enemyMove(value);
-    }
-  };
+      if (typeof event === 'string') {
+        const [name, value]: string[] = event.split(' ');
+        if (name === 'bestmove' && value) {
+          enemyMove(value);
+        }
+      }
+    },
+    [enemyMove]
+  );
 
   useEffect(() => {
     if (!game.versusAi) {
@@ -90,7 +98,7 @@ const useAiParty = ({ game, stateChess, withAnimation, animationMove, staticMove
     };
 
     loadEngine();
-  }, [game.difficult, game.myColor, game.versusAi, stateChess]);
+  }, [game.difficult, game.myColor, game.versusAi, onEngineEvent, stateChess]);
 };
 
 export { useAiParty };
