@@ -5,6 +5,8 @@ import { observer } from 'mobx-react-lite';
 import { TemplateBoard } from '../TemplateBoard';
 import { gameStore } from '../../../mobx';
 
+import styles from './VersusAiGame.module.scss';
+
 const VersusAiGame: React.FC = observer(() => {
   const { game } = gameStore;
 
@@ -17,7 +19,7 @@ const VersusAiGame: React.FC = observer(() => {
   }, []);
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       {stateChess && (
         <TemplateBoard
           difficult={game.difficult}
