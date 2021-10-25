@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import cn from 'classnames';
 import * as ChessJS from 'chess.js';
 
 import {
@@ -13,12 +12,12 @@ import { Popup } from '../../Common/Popup';
 
 import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
-import { ICONS_DEFAULT } from './icons';
 import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
 import { Props, ChessColor, LegalMoves, Board, PromotionPieceType } from './types';
 import { useAiParty } from './useAiParty.hook';
 import { useMoves } from './useMoves.hook';
+import { BoardRow } from './BoardRow';
 
 const TemplateBoard: React.FC<Props> = ({
   stateChess,
@@ -131,37 +130,20 @@ const TemplateBoard: React.FC<Props> = ({
           <div className={styles.game}>
             <VerticalSymbols isRotate={_isRotate} />
             <div className={styles.board} ref={boardRef}>
-              {horList.map((sym, symIndex) => {
-                return (
-                  <div key={sym} className={styles.row}>
-                    {verList.map((_, digitindex) => {
-                      const id = `${horList[digitindex]}${verList[symIndex]}` as ChessJS.Square;
-                      const cellItem = board[symIndex] ? board[symIndex][digitindex] : null;
-
-                      const Icon = cellItem ? ICONS_DEFAULT[cellItem.color][cellItem.type] : null;
-
-                      return (
-                        <div
-                          tabIndex={0}
-                          onKeyDown={onClickCell(id, cellItem?.color, cellItem?.type)}
-                          onClick={onClickCell(id, cellItem?.color, cellItem?.type)}
-                          key={id}
-                          id={id}
-                          className={cn(styles.cell, {
-                            [styles['cell--no-events']]: isRandom,
-                            [styles['cell--move']]: isColoredMoves && legalMoves[id],
-                            [styles['cell--active']]: squareActive === id,
-                            [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
-                            [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,
-                          })}
-                        >
-                          {Icon && <Icon className={styles.icon} />}
-                        </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
+              {horList.map((sym, symIndex) => (
+                <BoardRow
+                  key={sym}
+                  rowIndex={symIndex}
+                  onClickCell={onClickCell}
+                  isRandom={isRandom}
+                  isColoredMoves={isColoredMoves}
+                  board={board}
+                  horizontalList={horList}
+                  verticalList={verList}
+                  legalMoves={legalMoves}
+                  squareActive={squareActive}
+                />
+              ))}
             </div>
             <VerticalSymbols isRotate={_isRotate} />
           </div>
