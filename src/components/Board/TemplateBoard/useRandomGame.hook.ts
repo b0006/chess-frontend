@@ -1,16 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { UseRandom } from './types';
 
+const MOVE_TIMEOUT = 800;
+
+let t = 0;
+
 const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: UseRandom): void => {
+  const chess = useRef(stateChess);
+
   useEffect(() => {
-    if (isRandom) {
+    if (isRandom && t === 0) {
+      t = 1;
       let intervalId: NodeJS.Timeout | null = null;
-      console.log('START rando');
+      console.log('init', chess.current.moves({ verbose: true }));
 
       const setRandomMove = () => {
+        console.log('setRandomMove', chess.current.moves({ verbose: true }));
         intervalId = setInterval(() => {
-          const moves = stateChess.moves({ verbose: true });
+          console.log('TIME', chess.current.moves({ verbose: true }));
+          const moves = chess.current.moves({ verbose: true });
           const randomMove = moves[Math.floor(Math.random() * moves.length)];
           if (!randomMove) {
             return;
@@ -20,24 +29,26 @@ const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, sta
             ? animationMove(randomMove.from, randomMove.to, randomMove.promotion)
             : staticMove(randomMove.from, randomMove.to, randomMove.promotion);
 
-          if (stateChess.game_over() && intervalId) {
+          if (chess.current.game_over() && intervalId) {
             clearInterval(intervalId);
-            stateChess.reset();
+            chess.current.reset();
             setRandomMove();
           }
-        }, 1000);
+        }, MOVE_TIMEOUT);
       };
 
       setRandomMove();
 
+      const chessCleanUp = chess.current;
+
       return () => {
-        stateChess.clear();
+        chessCleanUp.clear();
         if (intervalId) {
           clearInterval(intervalId);
         }
       };
     }
-  }, [animationMove, isRandom, stateChess, staticMove, withAnimation]);
+  }, [animationMove, isRandom, staticMove, withAnimation]);
 };
 
 export { useRandomGame };

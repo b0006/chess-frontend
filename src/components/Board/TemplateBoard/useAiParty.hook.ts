@@ -14,6 +14,7 @@ const useAiParty = ({
   const chessRef = useRef(stateChess);
   const engineRef = useRef<ChessEngine>();
 
+  const [wasLoad, setWasLoad] = useState(false);
   const [isAiMoving, setIsAiMoving] = useState(false);
 
   const isMyTurn = stateChess.turn() === myColor;
@@ -71,7 +72,7 @@ const useAiParty = ({
   );
 
   useEffect(() => {
-    if (!versusAi) {
+    if (!versusAi || wasLoad) {
       return;
     }
 
@@ -94,10 +95,12 @@ const useAiParty = ({
       if (myColor === 'b') {
         engine.postMessage(`go depth ${difficult}`);
       }
+
+      setWasLoad(true);
     };
 
     loadEngine();
-  }, [difficult, myColor, versusAi, onEngineEvent, stateChess]);
+  }, [difficult, myColor, versusAi, onEngineEvent, stateChess, wasLoad]);
 
   return { isAiMoving };
 };
