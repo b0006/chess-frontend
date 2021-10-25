@@ -25,7 +25,7 @@ const TemplateBoard: React.FC<Props> = ({
   isColoredMoves = true,
   isRandom = false,
   myColor = 'w',
-  versusAi = false,
+  isVersusAi = false,
   difficult = 3,
 }) => {
   const [isVisibleGameOver, setIsVisibleGameOver] = useState(false);
@@ -55,7 +55,15 @@ const TemplateBoard: React.FC<Props> = ({
     }
   );
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
-  useAiParty({ stateChess, difficult, myColor, versusAi, staticMove, animationMove, withAnimation });
+  const { isAiMoving } = useAiParty({
+    stateChess,
+    difficult,
+    myColor,
+    isVersusAi,
+    staticMove,
+    animationMove,
+    withAnimation,
+  });
 
   useEffect(() => {
     if (stateChess.game_over() && !isRandom) {
@@ -79,7 +87,7 @@ const TemplateBoard: React.FC<Props> = ({
                   key={sym}
                   rowIndex={symIndex}
                   onClickCell={onClickCell}
-                  isRandom={isRandom}
+                  isNoEvents={isRandom || isAiMoving}
                   isColoredMoves={isColoredMoves}
                   board={board}
                   horizontalList={horList}

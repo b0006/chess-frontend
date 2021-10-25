@@ -10,7 +10,7 @@ import styles from './BoardRow.module.scss';
 interface Props {
   verticalList: string[];
   horizontalList: string[];
-  isRandom: boolean;
+  isNoEvents: boolean;
   isColoredMoves: boolean;
   legalMoves: LegalMoves | Record<string, never>;
   squareActive: ChessJS.Square | null;
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const BoardRow: React.FC<Props> = ({
-  isRandom,
+  isNoEvents,
   isColoredMoves,
   legalMoves,
   squareActive,
@@ -46,7 +46,7 @@ const BoardRow: React.FC<Props> = ({
             key={id}
             id={id}
             className={cn(styles.cell, {
-              [styles['cell--no-events']]: isRandom,
+              [styles['cell--no-events']]: isNoEvents,
               [styles['cell--move']]: isColoredMoves && legalMoves[id],
               [styles['cell--active']]: squareActive === id,
               [styles['cell--light']]: (rowIndex + digitindex) % 2 === 0,

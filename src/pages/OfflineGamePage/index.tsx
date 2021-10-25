@@ -8,7 +8,7 @@ import { VersusAiGame } from '../../components/Board/VersusAiGame';
 const OfflineGamePage: React.FC = observer(() => {
   const { game } = gameStore;
 
-  if (!game.versusAi && !game.isPlaying) {
+  if (!game.isVersusAi && !game.isPlaying) {
     return <Redirect to="/" />;
   }
 

@@ -68,7 +68,7 @@ const GameSettingsModal: React.FC<Props> = ({ isVisible, onClose }) => {
     setGameData({
       ...data,
       isPlaying: true,
-      versusAi: true,
+      isVersusAi: true,
     });
 
     history.push('/offline-game');

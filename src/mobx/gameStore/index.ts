@@ -4,7 +4,7 @@ import { ChessColor } from '../../components/Board/TemplateBoard/types';
 
 export interface GameData {
   isPlaying: boolean; // в состоянии игры
-  versusAi: boolean; // партия против ИИ
+  isVersusAi: boolean; // партия против ИИ
   isAutoPromotion: boolean; // автопревращение пешки
   isColoredMoves: boolean; // подсветка возможных ходов
   isConfirmSteps: boolean; // подтверждать каждый ход через отдельную кнопку
@@ -14,7 +14,7 @@ export interface GameData {
 }
 
 const initGameData: GameData = {
-  versusAi: false,
+  isVersusAi: false,
   isPlaying: false,
   isAutoPromotion: false,
   isColoredMoves: true,

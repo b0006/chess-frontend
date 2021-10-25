@@ -14,7 +14,7 @@ export interface Props {
   myColor?: ChessColor;
   withAnimation?: boolean;
   isColoredMoves?: boolean;
-  versusAi?: boolean;
+  isVersusAi?: boolean;
   difficult?: number | null;
   isRandom?: boolean;
 }
@@ -46,7 +46,7 @@ export type MoveData = {
 
 export interface UseAiParty extends MoveMethods {
   myColor: ChessColor;
-  versusAi: boolean;
+  isVersusAi: boolean;
   difficult: number | null;
   stateChess: ChessJS.ChessInstance;
   withAnimation: boolean;

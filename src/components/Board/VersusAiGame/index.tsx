@@ -25,7 +25,7 @@ const VersusAiGame: React.FC = observer(() => {
           difficult={game.difficult}
           stateChess={stateChess}
           isColoredMoves={game.isColoredMoves}
-          versusAi={game.versusAi}
+          isVersusAi={game.isVersusAi}
           myColor={game.myColor}
         />
       )}

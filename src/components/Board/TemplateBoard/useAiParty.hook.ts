@@ -4,7 +4,7 @@ import { MoveData, UseAiParty, ChessEngine } from './types';
 
 const useAiParty = ({
   myColor,
-  versusAi,
+  isVersusAi,
   stateChess,
   withAnimation,
   animationMove,
@@ -29,10 +29,10 @@ const useAiParty = ({
   }, [difficult, myColor]);
 
   useEffect(() => {
-    if (versusAi && isMyTurn === false) {
+    if (isVersusAi && isMyTurn === false) {
       startEnemyMove();
     }
-  }, [isMyTurn, versusAi, startEnemyMove]);
+  }, [isMyTurn, isVersusAi, startEnemyMove]);
 
   const enemyMove = useCallback(
     (value: string) => {
@@ -72,7 +72,7 @@ const useAiParty = ({
   );
 
   useEffect(() => {
-    if (!versusAi || wasLoad) {
+    if (!isVersusAi || wasLoad) {
       return;
     }
 
@@ -100,7 +100,7 @@ const useAiParty = ({
     };
 
     loadEngine();
-  }, [difficult, myColor, versusAi, onEngineEvent, stateChess, wasLoad]);
+  }, [difficult, myColor, isVersusAi, onEngineEvent, stateChess, wasLoad]);
 
   return { isAiMoving };
 };
