@@ -1,48 +1,84 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as ChessJS from 'chess.js';
 
-import { ChessColor, LegalMoves, MoveMethods, PromotionPieceType } from './types';
+import { ChessColor, LegalMoves, PromotionPieceType, UseUserActions, UseUserActionsReturn } from './types';
 
-interface UseUserActions extends MoveMethods {
-  stateChess: ChessJS.ChessInstance;
-  legalMoves: LegalMoves | Record<string, never>;
-  setLegalMoves: React.Dispatch<React.SetStateAction<LegalMoves | Record<string, never>>>;
-  isRandom: boolean;
-  myColor: ChessColor;
-  withAnimation: boolean;
-  computedNewBoard: () => void;
-  setIsVisiblePromotion: React.Dispatch<React.SetStateAction<boolean>>;
-  resetCell: () => void;
-  squareActive: ChessJS.Square | null;
-  setSquareActive: React.Dispatch<React.SetStateAction<ChessJS.Square | null>>;
-}
+const getCenterOfCell = (el: Element) => {
+  const state = el.getBoundingClientRect();
+  const x = state.left + state.width / 2;
+  const y = state.top + state.height / 2;
+  return { x, y };
+};
 
 const useUserActions = ({
   isRandom,
   stateChess,
   myColor,
-  legalMoves,
-  setLegalMoves,
   withAnimation,
-  animationMove,
-  staticMove,
   computedNewBoard,
   setIsVisiblePromotion,
-  resetCell,
-  squareActive,
-  setSquareActive,
-}: UseUserActions): {
-  onClickCell: (
-    square: ChessJS.Square,
-    color?: ChessColor | undefined,
-    piece?: ChessJS.PieceType | undefined
-  ) => () => void;
-  onChooseFigure: (pieceType: PromotionPieceType) => void;
-} => {
+}: UseUserActions): UseUserActionsReturn => {
+  const [squareActive, setSquareActive] = useState<ChessJS.Square | null>(null);
+  const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
   const [squareTo, setSquareTo] = useState<{ from: ChessJS.Square | null; to: ChessJS.Square | null }>({
     from: null,
     to: null,
   });
+
+  const boardRef = useRef<HTMLDivElement>(null);
+  const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
+
+  const resetCell = useCallback(() => {
+    setSquareActive(null);
+    setLegalMoves({});
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (moveTimeoutIdRef.current) {
+        clearTimeout(moveTimeoutIdRef.current);
+      }
+    };
+  }, []);
+
+  const staticMove = useCallback(
+    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
+      stateChess.move({ from, to, promotion });
+      computedNewBoard();
+      resetCell();
+    },
+    [stateChess, computedNewBoard, resetCell]
+  );
+
+  const animationMove = useCallback(
+    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
+      resetCell();
+      const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
+      const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
+
+      if (fromCellEl && toCellEl) {
+        const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
+        const { x: toX, y: toY } = getCenterOfCell(toCellEl);
+
+        const x = toX - fromX;
+        const y = toY - fromY;
+
+        const pieceEl = fromCellEl?.firstChild as HTMLElement;
+        if (!pieceEl) {
+          return;
+        }
+
+        pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        pieceEl.style.zIndex = `11`;
+
+        moveTimeoutIdRef.current = setTimeout(() => {
+          stateChess.move({ from, to, promotion });
+          computedNewBoard();
+        }, 250);
+      }
+    },
+    [computedNewBoard, resetCell, stateChess]
+  );
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {
@@ -97,7 +133,7 @@ const useUserActions = ({
     }
   };
 
-  return { onClickCell, onChooseFigure };
+  return { legalMoves, squareActive, staticMove, animationMove, onClickCell, onChooseFigure, boardRef };
 };
 
 export { useUserActions };

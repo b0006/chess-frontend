@@ -19,12 +19,6 @@ export interface Props {
   isRandom?: boolean;
 }
 
-export interface UseMoves {
-  stateChess: ChessJS.ChessInstance;
-  resetCell: () => void;
-  computedNewBoard: () => void;
-}
-
 export interface MoveMethods {
   staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
   animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
@@ -55,4 +49,27 @@ export interface UseAiParty extends MoveMethods {
 export interface ChessEngine {
   postMessage: (line: string) => void;
   onmessage: (event: string) => void;
+}
+
+export interface UseUserActions {
+  stateChess: ChessJS.ChessInstance;
+  isRandom: boolean;
+  myColor: ChessColor;
+  withAnimation: boolean;
+  computedNewBoard: () => void;
+  setIsVisiblePromotion: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface UseUserActionsReturn {
+  legalMoves: LegalMoves | Record<string, never>;
+  squareActive: ChessJS.Square | null;
+  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
+  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
+  onClickCell: (
+    square: ChessJS.Square,
+    color?: ChessColor | undefined,
+    piece?: ChessJS.PieceType | undefined
+  ) => () => void;
+  onChooseFigure: (pieceType: PromotionPieceType) => void;
+  boardRef: React.RefObject<HTMLDivElement>;
 }
