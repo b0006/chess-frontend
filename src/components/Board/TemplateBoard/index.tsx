@@ -26,17 +26,15 @@ const getCenterOfCell = (el: Element) => {
   return { x, y };
 };
 
-// TEMP
-// let myColor: ChessColor = 'w';
-
 const TemplateBoard: React.FC<Props> = ({
   stateChess,
   isRotate,
   withAnimation = true,
-  // isColoredMoves = true,
+  isColoredMoves = true,
   isRandom = false,
   myColor = 'w',
-  game,
+  versusAi = false,
+  difficult = 3,
 }) => {
   const boardRef = useRef<HTMLDivElement>(null);
   const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
@@ -81,11 +79,6 @@ const TemplateBoard: React.FC<Props> = ({
       stateChess.move({ from, to, promotion });
       computedNewBoard();
       resetCell();
-
-      // // TEMP
-      // if (!promotion) {
-      //   myColor = myColor === 'b' ? 'w' : 'b';
-      // }
     },
     [stateChess, computedNewBoard]
   );
@@ -114,9 +107,6 @@ const TemplateBoard: React.FC<Props> = ({
         moveTimeoutIdRef.current = setTimeout(() => {
           stateChess.move({ from, to, promotion });
           computedNewBoard();
-
-          // // TEMP
-          // myColor = myColor === 'b' ? 'w' : 'b';
         }, 250);
       }
     },
@@ -124,7 +114,7 @@ const TemplateBoard: React.FC<Props> = ({
   );
 
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
-  const { isEnemyMoving } = useAiParty({ stateChess, game, staticMove, animationMove, withAnimation });
+  useAiParty({ stateChess, difficult, myColor, versusAi, staticMove, animationMove, withAnimation });
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {
@@ -193,11 +183,7 @@ const TemplateBoard: React.FC<Props> = ({
       <div className={styles.chessboard}>
         <div className={styles.inner}>
           <HorizontalSymbols isRotate={_isRotate} />
-          <div
-            className={cn(styles.game, {
-              [styles['enemy-moving']]: isEnemyMoving,
-            })}
-          >
+          <div className={styles.game}>
             <VerticalSymbols isRotate={_isRotate} />
             <div className={styles.board} ref={boardRef}>
               {horList.map((sym, symIndex) => {
@@ -218,7 +204,7 @@ const TemplateBoard: React.FC<Props> = ({
                           id={id}
                           className={cn(styles.cell, {
                             [styles['cell--no-events']]: isRandom,
-                            [styles['cell--move']]: game.isColoredMoves && legalMoves[id],
+                            [styles['cell--move']]: isColoredMoves && legalMoves[id],
                             [styles['cell--active']]: squareActive === id,
                             [styles['cell--light']]: (symIndex + digitindex) % 2 === 0,
                             [styles['cell--dark']]: (symIndex + digitindex) % 2 !== 0,

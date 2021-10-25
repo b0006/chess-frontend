@@ -10,16 +10,6 @@
   }
 }
 
-@keyframes moving-wait {
-  0% {
-    transform: rotate(0);
-  }
-
-  100% {
-    transform: rotate(180deg);
-  }
-}
-
 .chessboard {
   display: flex;
   flex-direction: column;
@@ -56,24 +46,6 @@
 .game {
   display: flex;
   flex-direction: row;
-}
-
-.enemy-moving {
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    height: 40px;
-    width: 40px;
-    background-color: $c-primary;
-
-    animation-name: moving-wait;
-    animation-duration: 0.5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
 }
 
 .board {

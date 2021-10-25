@@ -16,8 +16,9 @@ export interface Props {
   myColor?: ChessColor;
   withAnimation?: boolean;
   isColoredMoves?: boolean;
+  versusAi?: boolean;
+  difficult?: number | null;
   isRandom?: boolean;
-  game: Partial<GameData>;
 }
 
 export interface UseMoves {
