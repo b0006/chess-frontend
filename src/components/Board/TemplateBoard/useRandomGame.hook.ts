@@ -4,21 +4,15 @@ import { UseRandom } from './types';
 
 const MOVE_TIMEOUT = 800;
 
-let t = 0;
-
 const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, staticMove }: UseRandom): void => {
   const chess = useRef(stateChess);
 
   useEffect(() => {
-    if (isRandom && t === 0) {
-      t = 1;
+    if (isRandom) {
       let intervalId: NodeJS.Timeout | null = null;
-      console.log('init', chess.current.moves({ verbose: true }));
 
       const setRandomMove = () => {
-        console.log('setRandomMove', chess.current.moves({ verbose: true }));
         intervalId = setInterval(() => {
-          console.log('TIME', chess.current.moves({ verbose: true }));
           const moves = chess.current.moves({ verbose: true });
           const randomMove = moves[Math.floor(Math.random() * moves.length)];
           if (!randomMove) {
