@@ -26,6 +26,7 @@ export interface MoveMethods {
 
 export interface UseMovesReturn extends MoveMethods {
   boardRef: React.RefObject<HTMLDivElement>;
+  animationCastlingMove: (pieceOne: CastlingMove, pieceTwo: CastlingMove, promotion?: PromotionPieceType) => void;
 }
 
 export interface UseMoves {
@@ -64,6 +65,11 @@ export interface UseUserActions {
   withAnimation: boolean;
   computedNewBoard: () => void;
   setIsVisiblePromotion: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface CastlingMove {
+  from: ChessJS.Square;
+  to: ChessJS.Square;
 }
 
 export interface UseUserActionsReturn {

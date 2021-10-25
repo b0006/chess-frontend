@@ -1,8 +1,33 @@
 import { useCallback, useState } from 'react';
 import * as ChessJS from 'chess.js';
 
-import { ChessColor, LegalMoves, PromotionPieceType, UseUserActions, UseUserActionsReturn } from './types';
+import {
+  CastlingMove,
+  ChessColor,
+  LegalMoves,
+  PromotionPieceType,
+  UseUserActions,
+  UseUserActionsReturn,
+} from './types';
 import { useMoves } from './useMove.hook';
+
+const getPieceTwo = (
+  moveColor: ChessColor,
+  isCastlingKingSide: boolean,
+  isCastlingQueenSide: boolean
+): CastlingMove => {
+  if (moveColor === 'w') {
+    return {
+      from: isCastlingKingSide ? 'h1' : 'a1',
+      to: isCastlingQueenSide ? 'd1' : 'f1',
+    };
+  }
+
+  return {
+    from: isCastlingKingSide ? 'h8' : 'a8',
+    to: isCastlingQueenSide ? 'd8' : 'f8',
+  };
+};
 
 const useUserActions = ({
   isRandom,
@@ -24,7 +49,11 @@ const useUserActions = ({
     setLegalMoves({});
   }, []);
 
-  const { staticMove, animationMove, boardRef } = useMoves({ stateChess, resetCell, computedNewBoard });
+  const { staticMove, animationMove, animationCastlingMove, boardRef } = useMoves({
+    stateChess,
+    resetCell,
+    computedNewBoard,
+  });
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {
@@ -56,6 +85,18 @@ const useUserActions = ({
 
     if (legalMoves[square] && squareActive) {
       const isPromotion = Boolean(legalMoves[square].promotion);
+
+      const isCastlingQueenSide = legalMoves[square].san === 'O-O-O';
+      const isCastlingKingSide = legalMoves[square].san === 'O-O';
+      if (isCastlingQueenSide || isCastlingKingSide) {
+        const pieceOne = { from: legalMoves[square].from, to: legalMoves[square].to };
+        const pieceTwo = getPieceTwo(legalMoves[square].color, isCastlingKingSide, isCastlingQueenSide);
+
+        withAnimation
+          ? animationCastlingMove(pieceOne, pieceTwo, legalMoves[square].promotion)
+          : staticMove(squareActive, square);
+        return;
+      }
 
       if (isPromotion) {
         setIsVisiblePromotion(true);
