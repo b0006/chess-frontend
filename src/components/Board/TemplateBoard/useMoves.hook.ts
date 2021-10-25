@@ -11,9 +11,6 @@ const getCenterOfCell = (el: Element) => {
 };
 
 const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMovesReturn => {
-  // TEMP myColor при реальной игре не нужно изменять
-  // const [myColor, setMyColor] = useState<ChessColor>('w');
-
   const boardRef = useRef<HTMLDivElement>(null);
 
   const staticMove = useCallback(
@@ -21,10 +18,6 @@ const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMov
       stateChess.move({ from, to, promotion });
       computedNewBoard();
       resetCell();
-      // TEMP
-      // if (!promotion) {
-      //   setMyColor((prevColor) => (prevColor === 'b' ? 'w' : 'b'));
-      // }
     },
     [stateChess, computedNewBoard, resetCell]
   );
@@ -53,9 +46,6 @@ const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMov
         setTimeout(() => {
           stateChess.move({ from, to, promotion });
           computedNewBoard();
-
-          // TEMP
-          // setMyColor((prevColor) => (prevColor === 'b' ? 'w' : 'b'));
         }, 250);
       }
     },

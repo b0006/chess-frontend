@@ -1,7 +1,5 @@
 import * as ChessJS from 'chess.js';
 
-import { GameData } from '../../../mobx/gameStore';
-
 export type ChessColor = 'b' | 'w';
 export type PromotionPieceType = Exclude<ChessJS.PieceType, 'p' | 'k'>;
 export type Board = Array<Array<{ type: ChessJS.PieceType; color: 'w' | 'b' } | null>>;
@@ -27,32 +25,31 @@ export interface UseMoves {
   computedNewBoard: () => void;
 }
 
-export interface UseMovesReturn {
-  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
-  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
+export interface MoveMethods {
+  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+}
+
+export interface UseMovesReturn extends MoveMethods {
   boardRef: React.RefObject<HTMLDivElement>;
 }
 
-export interface UseRandom {
+export interface UseRandom extends MoveMethods {
   stateChess: ChessJS.ChessInstance;
   withAnimation: boolean;
   isRandom: boolean;
-  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
-  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
 }
 
 export type MoveData = {
   [key in string]: ChessJS.Move;
 };
 
-export interface UseAiParty {
+export interface UseAiParty extends MoveMethods {
   myColor: ChessColor;
   versusAi: boolean;
   difficult: number | null;
   stateChess: ChessJS.ChessInstance;
   withAnimation: boolean;
-  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
-  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
 }
 
 export interface ChessEngine {

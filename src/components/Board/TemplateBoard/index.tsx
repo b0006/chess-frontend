@@ -59,9 +59,7 @@ const TemplateBoard: React.FC<Props> = ({
   const computedNewBoard = useCallback(() => {
     const newBoard = stateChess.board();
 
-    setBoard(() => {
-      return _isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard;
-    });
+    setBoard(() => (_isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard));
   }, [_isRotate, stateChess]);
 
   useEffect(() => {
