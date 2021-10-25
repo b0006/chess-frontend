@@ -1,14 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import * as ChessJS from 'chess.js';
 
 import { ChessColor, LegalMoves, PromotionPieceType, UseUserActions, UseUserActionsReturn } from './types';
-
-const getCenterOfCell = (el: Element) => {
-  const state = el.getBoundingClientRect();
-  const x = state.left + state.width / 2;
-  const y = state.top + state.height / 2;
-  return { x, y };
-};
+import { useMoves } from './useMove.hook';
 
 const useUserActions = ({
   isRandom,
@@ -25,60 +19,12 @@ const useUserActions = ({
     to: null,
   });
 
-  const boardRef = useRef<HTMLDivElement>(null);
-  const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
-
   const resetCell = useCallback(() => {
     setSquareActive(null);
     setLegalMoves({});
   }, []);
 
-  useEffect(() => {
-    return () => {
-      if (moveTimeoutIdRef.current) {
-        clearTimeout(moveTimeoutIdRef.current);
-      }
-    };
-  }, []);
-
-  const staticMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
-      stateChess.move({ from, to, promotion });
-      computedNewBoard();
-      resetCell();
-    },
-    [stateChess, computedNewBoard, resetCell]
-  );
-
-  const animationMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
-      resetCell();
-      const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
-      const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
-
-      if (fromCellEl && toCellEl) {
-        const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
-        const { x: toX, y: toY } = getCenterOfCell(toCellEl);
-
-        const x = toX - fromX;
-        const y = toY - fromY;
-
-        const pieceEl = fromCellEl?.firstChild as HTMLElement;
-        if (!pieceEl) {
-          return;
-        }
-
-        pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        pieceEl.style.zIndex = `11`;
-
-        moveTimeoutIdRef.current = setTimeout(() => {
-          stateChess.move({ from, to, promotion });
-          computedNewBoard();
-        }, 250);
-      }
-    },
-    [computedNewBoard, resetCell, stateChess]
-  );
+  const { staticMove, animationMove, boardRef } = useMoves({ stateChess, resetCell, computedNewBoard });
 
   const setActiveCell = (square: ChessJS.Square) => {
     if (squareActive === square) {

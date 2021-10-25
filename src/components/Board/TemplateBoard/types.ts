@@ -28,6 +28,12 @@ export interface UseMovesReturn extends MoveMethods {
   boardRef: React.RefObject<HTMLDivElement>;
 }
 
+export interface UseMoves {
+  stateChess: ChessJS.ChessInstance;
+  resetCell: () => void;
+  computedNewBoard: () => void;
+}
+
 export interface UseRandom extends MoveMethods {
   stateChess: ChessJS.ChessInstance;
   withAnimation: boolean;
