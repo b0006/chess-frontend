@@ -6,6 +6,7 @@ const useRandomGame = ({ isRandom, stateChess, withAnimation, animationMove, sta
   useEffect(() => {
     if (isRandom) {
       let intervalId: NodeJS.Timeout | null = null;
+      console.log('START rando');
 
       const setRandomMove = () => {
         intervalId = setInterval(() => {

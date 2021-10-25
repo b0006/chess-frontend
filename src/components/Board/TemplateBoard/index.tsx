@@ -18,13 +18,14 @@ import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
 import { Props, ChessColor, LegalMoves, Board, PromotionPieceType } from './types';
 import { useAiParty } from './useAiParty.hook';
+import { useMoves } from './useMoves.hook';
 
-const getCenterOfCell = (el: Element) => {
-  const state = el.getBoundingClientRect();
-  const x = state.left + state.width / 2;
-  const y = state.top + state.height / 2;
-  return { x, y };
-};
+// const getCenterOfCell = (el: Element) => {
+//   const state = el.getBoundingClientRect();
+//   const x = state.left + state.width / 2;
+//   const y = state.top + state.height / 2;
+//   return { x, y };
+// };
 
 const TemplateBoard: React.FC<Props> = ({
   stateChess,
@@ -36,8 +37,8 @@ const TemplateBoard: React.FC<Props> = ({
   versusAi = false,
   difficult = 3,
 }) => {
-  const boardRef = useRef<HTMLDivElement>(null);
-  const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
+  // const boardRef = useRef<HTMLDivElement>(null);
+  // const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
 
   const [isVisibleGameOver, setIsVisibleGameOver] = useState(false);
   const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
@@ -65,52 +66,53 @@ const TemplateBoard: React.FC<Props> = ({
   useEffect(() => {
     computedNewBoard();
 
-    return () => {
-      if (moveTimeoutIdRef.current) {
-        clearTimeout(moveTimeoutIdRef.current);
-      }
-    };
+    // return () => {
+    //   if (moveTimeoutIdRef.current) {
+    //     clearTimeout(moveTimeoutIdRef.current);
+    //   }
+    // };
   }, [computedNewBoard]);
 
-  const staticMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
-      stateChess.move({ from, to, promotion });
-      computedNewBoard();
-      resetCell();
-    },
-    [stateChess, computedNewBoard]
-  );
+  // const staticMove = useCallback(
+  //   (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
+  //     stateChess.move({ from, to, promotion });
+  //     computedNewBoard();
+  //     resetCell();
+  //   },
+  //   [stateChess, computedNewBoard]
+  // );
 
-  const animationMove = useCallback(
-    (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
-      resetCell();
-      const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
-      const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
+  // const animationMove = useCallback(
+  //   (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
+  //     resetCell();
+  //     const fromCellEl = boardRef.current?.querySelector<HTMLElement>(`#${from}`);
+  //     const toCellEl = boardRef.current?.querySelector<HTMLElement>(`#${to}`);
 
-      if (fromCellEl && toCellEl) {
-        const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
-        const { x: toX, y: toY } = getCenterOfCell(toCellEl);
+  //     if (fromCellEl && toCellEl) {
+  //       const { x: fromX, y: fromY } = getCenterOfCell(fromCellEl);
+  //       const { x: toX, y: toY } = getCenterOfCell(toCellEl);
 
-        const x = toX - fromX;
-        const y = toY - fromY;
+  //       const x = toX - fromX;
+  //       const y = toY - fromY;
 
-        const pieceEl = fromCellEl?.firstChild as HTMLElement;
-        if (!pieceEl) {
-          return;
-        }
+  //       const pieceEl = fromCellEl?.firstChild as HTMLElement;
+  //       if (!pieceEl) {
+  //         return;
+  //       }
 
-        pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-        pieceEl.style.zIndex = `11`;
+  //       pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  //       pieceEl.style.zIndex = `11`;
 
-        moveTimeoutIdRef.current = setTimeout(() => {
-          stateChess.move({ from, to, promotion });
-          computedNewBoard();
-        }, 250);
-      }
-    },
-    [computedNewBoard, stateChess]
-  );
+  //       moveTimeoutIdRef.current = setTimeout(() => {
+  //         stateChess.move({ from, to, promotion });
+  //         computedNewBoard();
+  //       }, 250);
+  //     }
+  //   },
+  //   [computedNewBoard, stateChess]
+  // );
 
+  const { staticMove, animationMove, boardRef } = useMoves({ stateChess, computedNewBoard, resetCell });
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
   useAiParty({ stateChess, difficult, myColor, versusAi, staticMove, animationMove, withAnimation });
 

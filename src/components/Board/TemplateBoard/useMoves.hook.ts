@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import * as ChessJS from 'chess.js';
 
 import { PromotionPieceType, UseMoves, UseMovesReturn } from './types';
@@ -12,6 +12,15 @@ const getCenterOfCell = (el: Element) => {
 
 const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMovesReturn => {
   const boardRef = useRef<HTMLDivElement>(null);
+  const moveTimeoutIdRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    return () => {
+      if (moveTimeoutIdRef.current) {
+        clearTimeout(moveTimeoutIdRef.current);
+      }
+    };
+  }, []);
 
   const staticMove = useCallback(
     (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => {
@@ -43,7 +52,7 @@ const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMov
         pieceEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         pieceEl.style.zIndex = `11`;
 
-        setTimeout(() => {
+        moveTimeoutIdRef.current = setTimeout(() => {
           stateChess.move({ from, to, promotion });
           computedNewBoard();
         }, 250);
