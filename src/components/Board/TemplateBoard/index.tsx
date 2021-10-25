@@ -14,10 +14,11 @@ import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
 import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
-import { Props, ChessColor, LegalMoves, Board, PromotionPieceType } from './types';
+import { Props, LegalMoves, Board } from './types';
 import { useAiParty } from './useAiParty.hook';
 import { useMoves } from './useMoves.hook';
 import { BoardRow } from './BoardRow';
+import { useUserActions } from './useUserActions.hook';
 
 const TemplateBoard: React.FC<Props> = ({
   stateChess,
@@ -34,10 +35,6 @@ const TemplateBoard: React.FC<Props> = ({
   const [legalMoves, setLegalMoves] = useState<LegalMoves | Record<string, never>>({});
   const [board, setBoard] = useState<Board>([]);
   const [squareActive, setSquareActive] = useState<ChessJS.Square | null>(null);
-  const [squareTo, setSquareTo] = useState<{ from: ChessJS.Square | null; to: ChessJS.Square | null }>({
-    from: null,
-    to: null,
-  });
 
   const resetCell = useCallback(() => {
     setSquareActive(null);
@@ -59,59 +56,21 @@ const TemplateBoard: React.FC<Props> = ({
   const { staticMove, animationMove, boardRef } = useMoves({ stateChess, computedNewBoard, resetCell });
   useRandomGame({ isRandom, stateChess, staticMove, animationMove, withAnimation });
   useAiParty({ stateChess, difficult, myColor, versusAi, staticMove, animationMove, withAnimation });
-
-  const setActiveCell = (square: ChessJS.Square) => {
-    if (squareActive === square) {
-      resetCell();
-      return;
-    }
-
-    setSquareActive(square);
-
-    const moves = stateChess.moves({ square, verbose: true });
-    const legalMovesData = moves.reduce((result, move) => ({ ...result, [move.to]: move }), {});
-    setLegalMoves(legalMovesData);
-  };
-
-  const onClickCell = (square: ChessJS.Square, color?: ChessColor, piece?: ChessJS.PieceType) => () => {
-    if (isRandom) {
-      return;
-    }
-
-    const actualTurn = stateChess.turn();
-    if (myColor !== actualTurn) {
-      return;
-    }
-
-    if ((!legalMoves[square] && !piece) || (!legalMoves[square] && piece && color !== myColor)) {
-      resetCell();
-      return;
-    }
-
-    if (legalMoves[square] && squareActive) {
-      const isPromotion = Boolean(legalMoves[square].promotion);
-
-      if (isPromotion) {
-        setIsVisiblePromotion(true);
-        setSquareTo({ from: squareActive, to: square });
-      }
-
-      withAnimation ? animationMove(squareActive, square) : staticMove(squareActive, square);
-      return;
-    }
-
-    if (myColor === color && piece) {
-      setActiveCell(square);
-    }
-  };
-
-  const onChooseFigure = (pieceType: PromotionPieceType) => {
-    if (squareTo.from && squareTo.to) {
-      stateChess.move({ from: squareTo.from, to: squareTo.to, promotion: pieceType });
-      setSquareTo({ from: null, to: null });
-      computedNewBoard();
-    }
-  };
+  const { onChooseFigure, onClickCell } = useUserActions({
+    stateChess,
+    animationMove,
+    staticMove,
+    legalMoves,
+    setLegalMoves,
+    setIsVisiblePromotion,
+    isRandom,
+    myColor,
+    withAnimation,
+    computedNewBoard,
+    resetCell,
+    squareActive,
+    setSquareActive,
+  });
 
   useEffect(() => {
     if (stateChess.game_over() && !isRandom) {
