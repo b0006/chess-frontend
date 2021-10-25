@@ -1,10 +1,45 @@
 @import 'src/assets/scss/utils';
 
+// @keyframes rotate-turn {
+//   0% {
+//     transform: rotate(0);
+//   }
+
+//   100% {
+//     transform: rotate(180deg);
+//   }
+// }
+
 .horizontal-panel {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(10vmin * 0.4);
+}
+
+.turn-wrapper {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.turn-b, .turn-w {
+  height: 12px;
+  width: 12px;
+  // animation-name: rotate-turn;
+  // animation-duration: 0.8s;
+  // animation-iteration-count: infinite;
+  // animation-timing-function: ease-out;
+}
+
+.turn-b {
+  background-color: $c-black;
+}
+
+.turn-w {
+  background-color: $c-white;
 }
 
 .alphabet-symbol {

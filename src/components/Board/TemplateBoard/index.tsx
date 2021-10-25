@@ -13,7 +13,7 @@ import { HorizontalSymbols } from './HorizontalSymbols';
 import { VerticalSymbols } from './VerticalSymbols';
 import styles from './TemplateBoard.module.scss';
 import { useRandomGame } from './useRandomGame.hook';
-import { Props, Board } from './types';
+import { Props, Board, ChessColor } from './types';
 import { useAiParty } from './useAiParty.hook';
 import { BoardRow } from './BoardRow';
 import { useUserActions } from './useUserActions.hook';
@@ -84,11 +84,27 @@ const TemplateBoard: React.FC<Props> = ({
   const horList = isRotateRef.current ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
   const verList = isRotateRef.current ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
 
+  const getSideActualTurn = (color: ChessColor): ChessColor | undefined => {
+    const reverseColorData = {
+      b: 'w',
+      w: 'b',
+    };
+
+    const rotateColor = reverseColorData[color];
+
+    const actualTurn = stateChess.turn();
+    if (actualTurn === color && !isRotateRef.current) {
+      return color;
+    } else if (actualTurn === rotateColor && isRotateRef.current) {
+      return rotateColor;
+    }
+  };
+
   return (
     <React.Fragment>
       <div className={styles.chessboard}>
         <div className={styles.inner}>
-          <HorizontalSymbols isRotate={isRotateRef.current} />
+          <HorizontalSymbols isRotate={isRotateRef.current} actualTurn={getSideActualTurn('b')} />
           <div className={styles.game}>
             <VerticalSymbols isRotate={isRotateRef.current} />
             <div className={styles.board} ref={boardRef}>
@@ -109,7 +125,7 @@ const TemplateBoard: React.FC<Props> = ({
             </div>
             <VerticalSymbols isRotate={isRotateRef.current} />
           </div>
-          <HorizontalSymbols isRotate={isRotateRef.current} />
+          <HorizontalSymbols isRotate={isRotateRef.current} actualTurn={getSideActualTurn('w')} />
         </div>
       </div>
       <PromotionModal
