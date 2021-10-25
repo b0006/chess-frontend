@@ -56,6 +56,10 @@ const useMoves = ({ stateChess, computedNewBoard, resetCell }: UseMoves): UseMov
       if (moveTimeoutIdRef.current) {
         clearTimeout(moveTimeoutIdRef.current);
       }
+
+      if (moveTimeoutId2Ref.current) {
+        clearTimeout(moveTimeoutId2Ref.current);
+      }
     };
   }, []);
 
