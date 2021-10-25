@@ -20,7 +20,7 @@ import { useUserActions } from './useUserActions.hook';
 
 const TemplateBoard: React.FC<Props> = ({
   stateChess,
-  isRotate,
+  // isRotate,
   withAnimation = true,
   isColoredMoves = true,
   isRandom = false,
@@ -32,13 +32,13 @@ const TemplateBoard: React.FC<Props> = ({
   const [isVisiblePromotion, setIsVisiblePromotion] = useState(false);
   const [board, setBoard] = useState<Board>([]);
 
-  const _isRotate = myColor === 'b' ? !isRotate : isRotate;
+  const isRotate = myColor === 'b';
 
   const computedNewBoard = useCallback(() => {
     const newBoard = stateChess.board();
 
-    setBoard(() => (_isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard));
-  }, [_isRotate, stateChess]);
+    setBoard(() => (isRotate ? [...newBoard].reverse().map((row) => [...row].reverse()) : newBoard));
+  }, [isRotate, stateChess]);
 
   useEffect(() => {
     computedNewBoard();
@@ -71,16 +71,16 @@ const TemplateBoard: React.FC<Props> = ({
     }
   }, [board, stateChess, isRandom]);
 
-  const horList = _isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
-  const verList = _isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
+  const horList = isRotate ? HORIZONTAL_SYMBOLS_REVERSE : HORIZONTAL_SYMBOLS;
+  const verList = isRotate ? VERTICAL_SYMBOLS : VERTICAL_SYMBOLS_REVERSE;
 
   return (
     <React.Fragment>
       <div className={styles.chessboard}>
         <div className={styles.inner}>
-          <HorizontalSymbols isRotate={_isRotate} />
+          <HorizontalSymbols isRotate={isRotate} />
           <div className={styles.game}>
-            <VerticalSymbols isRotate={_isRotate} />
+            <VerticalSymbols isRotate={isRotate} />
             <div className={styles.board} ref={boardRef}>
               {horList.map((sym, symIndex) => (
                 <BoardRow
@@ -97,9 +97,9 @@ const TemplateBoard: React.FC<Props> = ({
                 />
               ))}
             </div>
-            <VerticalSymbols isRotate={_isRotate} />
+            <VerticalSymbols isRotate={isRotate} />
           </div>
-          <HorizontalSymbols isRotate={_isRotate} />
+          <HorizontalSymbols isRotate={isRotate} />
         </div>
       </div>
       <PromotionModal

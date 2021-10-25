@@ -4,12 +4,14 @@ import { observer } from 'mobx-react-lite';
 
 import { TemplateBoard } from '../TemplateBoard';
 import { gameStore } from '../../../mobx';
+import { Button } from '../../Common/Button';
 
 import styles from './VersusAiGame.module.scss';
 
 const VersusAiGame: React.FC = observer(() => {
   const { game } = gameStore;
 
+  const [isRotate, setIsRotate] = useState(false);
   const [stateChess, setStateChess] = useState<ChessJS.ChessInstance>();
 
   useEffect(() => {
@@ -22,6 +24,7 @@ const VersusAiGame: React.FC = observer(() => {
     <div className={styles.wrapper}>
       {stateChess && (
         <TemplateBoard
+          isRotate={isRotate}
           difficult={game.difficult}
           stateChess={stateChess}
           isColoredMoves={game.isColoredMoves}
@@ -29,6 +32,7 @@ const VersusAiGame: React.FC = observer(() => {
           myColor={game.myColor}
         />
       )}
+      <Button text="Развернуть" onClick={() => setIsRotate(!isRotate)} />
     </div>
   );
 });
