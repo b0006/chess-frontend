@@ -1,21 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import * as ChessJS from 'chess.js';
 
-import { ChessColor, PromotionPieceType } from './types';
-
-type MoveData = {
-  [key in string]: ChessJS.Move;
-};
-
-interface UseAiParty {
-  myColor: ChessColor;
-  versusAi: boolean;
-  difficult: number | null;
-  stateChess: ChessJS.ChessInstance;
-  withAnimation: boolean;
-  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
-  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
-}
+import { MoveData, UseAiParty, ChessEngine } from './types';
 
 const useAiParty = ({
   myColor,
@@ -27,7 +12,7 @@ const useAiParty = ({
   difficult = 5,
 }: UseAiParty): { isAiMoving: boolean } => {
   const chessRef = useRef(stateChess);
-  const engineRef = useRef<any>();
+  const engineRef = useRef<ChessEngine>();
 
   const [isAiMoving, setIsAiMoving] = useState(false);
 
@@ -52,12 +37,12 @@ const useAiParty = ({
     (value: string) => {
       const moves = stateChess.moves({ verbose: true });
 
-      const movesData = moves.reduce(
+      const movesData: MoveData = moves.reduce(
         (result, acc) => ({
           ...result,
           [`${acc.from}${acc.to}`]: acc,
         }),
-        {} as MoveData
+        {}
       );
 
       if (movesData[value]) {

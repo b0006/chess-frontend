@@ -31,7 +31,6 @@ export interface UseMovesReturn {
   staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
   animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType | undefined) => void;
   boardRef: React.RefObject<HTMLDivElement>;
-  // myColor: ChessColor;
 }
 
 export interface UseRandom {
@@ -40,4 +39,23 @@ export interface UseRandom {
   isRandom: boolean;
   animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
   staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+}
+
+export type MoveData = {
+  [key in string]: ChessJS.Move;
+};
+
+export interface UseAiParty {
+  myColor: ChessColor;
+  versusAi: boolean;
+  difficult: number | null;
+  stateChess: ChessJS.ChessInstance;
+  withAnimation: boolean;
+  animationMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+  staticMove: (from: ChessJS.Square, to: ChessJS.Square, promotion?: PromotionPieceType) => void;
+}
+
+export interface ChessEngine {
+  postMessage: (line: string) => void;
+  onmessage: (event: string) => void;
 }
