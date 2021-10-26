@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { MoveData, UseAiParty, ChessEngine } from './types';
+import { MoveData, UseAiParty, ChessEngine, PromotionPieceType } from './types';
 
 const useAiParty = ({
   myColor,
@@ -35,7 +35,10 @@ const useAiParty = ({
   }, [isMyTurn, isVersusAi, startEnemyMove]);
 
   const enemyMove = useCallback(
-    (value: string) => {
+    (bestMoveLine: string) => {
+      const bestMove = bestMoveLine.substring(0, 4);
+      const promotion = bestMoveLine.length === 5 && (bestMoveLine.substring(4, 5) as PromotionPieceType | undefined);
+
       const moves = stateChess.moves({ verbose: true });
 
       const movesData: MoveData = moves.reduce(
@@ -46,10 +49,10 @@ const useAiParty = ({
         {}
       );
 
-      if (movesData[value]) {
+      if (movesData[bestMove]) {
         withAnimation
-          ? animationMove(movesData[value].from, movesData[value].to, movesData[value].promotion)
-          : staticMove(movesData[value].from, movesData[value].to, movesData[value].promotion);
+          ? animationMove(movesData[bestMove].from, movesData[bestMove].to, promotion || movesData[bestMove].promotion)
+          : staticMove(movesData[bestMove].from, movesData[bestMove].to, promotion || movesData[bestMove].promotion);
 
         setIsAiMoving(false);
       }
