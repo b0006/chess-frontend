@@ -94,39 +94,3 @@
     overflow-y: auto;
   }
 }
-
-// .list-item {
-//   position: relative;
-//   list-style-type: none;
-//   background-color: transparent;
-//   transition: background-color 0.25s;
-
-//   &_active {
-//     background-color: $c-primary-disabled;
-//   }
-
-//   &:hover {
-//     background-color: $c-gray-l;
-//   }
-// }
-
-// .list-item-button {
-//   border: none;
-//   background-color: transparent;
-//   width: 100%;
-//   text-align: left;
-//   cursor: pointer;
-//   padding: 5px 16px;
-//   font-size: 16px;
-//   line-height: 24px;
-// }
-
-// .icon-active {
-//   width: 14px;
-//   height: 14px;
-//   color: $c-primary;
-//   position: absolute;
-//   right: 16px;
-//   top: 50%;
-//   transform: translateY(-50%);
-// }
