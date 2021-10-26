@@ -7,6 +7,7 @@ import { NotFoundPage } from '../pages/NotFoundPage';
 import { SignUpPage } from '../pages/SignUpPage';
 import { SignInPage } from '../pages/SignInPage';
 import { OfflineGamePage } from '../pages/OfflineGamePage';
+import { OnlineLobbyPage } from '../pages/OnlineLobbyPage';
 
 import { PublicRoute, PrivateRoute } from './types';
 
@@ -19,7 +20,7 @@ const Router: React.FC = () => {
           <PublicRoute exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
           <PublicRoute exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
 
-          <PrivateRoute exact path="/lobby-online" component={StartPage} />
+          <PrivateRoute exact path="/lobby-online" component={OnlineLobbyPage} />
           <PrivateRoute exact path="/offline-game" component={OfflineGamePage} />
 
           <PublicRoute path="*" component={NotFoundPage} />

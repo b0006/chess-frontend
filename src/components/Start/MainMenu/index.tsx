@@ -29,7 +29,9 @@ const MainMenu: React.FC = observer(() => {
           <div className={styles.menu}>
             {user.isAuth && (
               <React.Fragment>
-                <h2 className={styles.title}>Выберите режим игры</h2>
+                <h2 className={styles.title}>
+                  Выберите <br /> режим игры
+                </h2>
                 <Button
                   classNameLink={styles.link}
                   className={styles.button}

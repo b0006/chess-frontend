@@ -12,11 +12,7 @@ const OfflineGamePage: React.FC = observer(() => {
     return <Redirect to="/" />;
   }
 
-  return (
-    <div>
-      <VersusAiGame />
-    </div>
-  );
+  return <VersusAiGame />;
 });
 
 export { OfflineGamePage };

@@ -37,7 +37,7 @@ const useAiParty = ({
   const enemyMove = useCallback(
     (bestMoveLine: string) => {
       const bestMove = bestMoveLine.substring(0, 4);
-      const promotion = bestMoveLine.length === 5 && (bestMoveLine.substring(4, 5) as PromotionPieceType | undefined);
+      const promotion = bestMoveLine.length === 5 && (bestMoveLine.substring(4, 5) as PromotionPieceType);
 
       const moves = stateChess.moves({ verbose: true });
 
