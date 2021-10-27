@@ -9,7 +9,7 @@ export interface GameData {
   isColoredMoves: boolean; // подсветка возможных ходов
   isConfirmSteps: boolean; // подтверждать каждый ход через отдельную кнопку
   isAudioOn: boolean; // включить звуки
-  difficult: number | null; // сложность
+  difficult?: number | null; // сложность
   myColor: ChessColor; // цвет игрока
 }
 

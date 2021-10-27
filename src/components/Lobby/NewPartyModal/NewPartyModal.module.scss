@@ -1,0 +1,28 @@
+@import 'src/assets/scss/utils';
+
+.modal-inner {
+  max-width: 400px;
+}
+
+.title {
+  text-align: center;
+}
+
+.field {
+  margin: 24px 0;
+}
+
+.switcher-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switcher-title {
+  flex: 1;
+}
+
+.switcher {
+  margin-left: 12px;
+}
