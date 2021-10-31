@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
-import { Layout } from '../components/Layout/Layout';
 import { userStore } from '../mobx';
 import { LoaderMain } from '../components/Layout/LoaderMain';
 
@@ -21,16 +20,7 @@ const PublicRoute: React.FC<IRouteComponentProps> = observer(({ component: Compo
     return <Redirect to={redirectAuthPath} />;
   }
 
-  return (
-    <Route
-      {...rest}
-      render={(props) => (
-        <Layout>
-          <Component {...props} />
-        </Layout>
-      )}
-    />
-  );
+  return <Route {...rest} render={(props) => <Component {...props} />} />;
 });
 
 const PrivateRoute: React.FC<IRouteComponentProps> = observer(
@@ -43,15 +33,7 @@ const PrivateRoute: React.FC<IRouteComponentProps> = observer(
     return (
       <Route
         {...rest}
-        render={(props) =>
-          user.isAuth ? (
-            <Layout>
-              <Component {...props} />
-            </Layout>
-          ) : (
-            <Redirect to={redirectAuthPath} />
-          )
-        }
+        render={(props) => (user.isAuth ? <Component {...props} /> : <Redirect to={redirectAuthPath} />)}
       />
     );
   }

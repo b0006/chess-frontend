@@ -2,6 +2,7 @@ import React from 'react';
 import { HashRouter, Switch } from 'react-router-dom';
 
 import { Provider } from '../components/Common/Notification';
+import { Layout } from '../components/Layout/Layout';
 import { StartPage } from '../pages/StartPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { SignUpPage } from '../pages/SignUpPage';
@@ -15,16 +16,18 @@ const Router: React.FC = () => {
   return (
     <Provider>
       <HashRouter basename={process.env.PUBLIC_URL}>
-        <Switch>
-          <PublicRoute exact path="/" component={StartPage} />
-          <PublicRoute exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
-          <PublicRoute exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
+        <Layout>
+          <Switch>
+            <PublicRoute exact path="/" component={StartPage} />
+            <PublicRoute exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
+            <PublicRoute exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
 
-          <PrivateRoute exact path="/lobby-online" component={OnlineLobbyPage} />
-          <PrivateRoute exact path="/offline-game" component={OfflineGamePage} />
+            <PrivateRoute exact path="/lobby-online" component={OnlineLobbyPage} />
+            <PrivateRoute exact path="/offline-game" component={OfflineGamePage} />
 
-          <PublicRoute path="*" component={NotFoundPage} />
-        </Switch>
+            <PublicRoute path="*" component={NotFoundPage} />
+          </Switch>
+        </Layout>
       </HashRouter>
     </Provider>
   );
