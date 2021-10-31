@@ -1,11 +1,25 @@
 @import 'src/assets/scss/utils';
 
+@keyframes show-layout {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .layout {
   display: flex;
   flex-direction: column;
   height: 100vh;
   min-height: auto;
   width: 100%;
+
+  animation-name: show-layout;
+  animation-duration: 0.15s;
+  animation-iteration-count: 1;
 
   &__main {
     display: flex;

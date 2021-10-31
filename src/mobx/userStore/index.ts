@@ -70,9 +70,11 @@ export class UserStore {
         .GET<any, ProfileData>('/auth/profile')
         .then((response) => {
           this.setProfileData(response.data);
-          this.isInitLoading = false;
         })
-        .catch((err) => err);
+        .catch((err) => err)
+        .finally(() => {
+          this.isInitLoading = false;
+        });
     } else {
       this.isInitLoading = false;
     }
