@@ -12,8 +12,10 @@ interface Message {
   data?: Record<string, unknown> | string;
 }
 
+const WS_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+
 const useWebsocket = (
-  url = 'http://localhost:4000',
+  url = WS_URL,
   transport = 'websocket'
 ): {
   sendWsMsg: (event: string, message: Message) => void;
