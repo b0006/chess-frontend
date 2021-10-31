@@ -13,8 +13,12 @@ const StartPage: React.FC = () => {
         withCredentials: true,
         transports: ['websocket'],
       });
-      wsRef.current.on('msgToClient', (message: any) => {
-        console.log('msgToClient', message);
+      // wsRef.current.on('msgToClient', (message: any) => {
+      //   console.log('msgToClient', message);
+      // });
+
+      wsRef.current.on('userTest', (message: any) => {
+        console.log('userTest', message);
       });
     };
 
@@ -22,13 +26,14 @@ const StartPage: React.FC = () => {
   }, []);
 
   const onClick = () => {
-    wsRef.current?.emit('msgToServer', 'teeeeee');
+    // wsRef.current?.emit('msgToServer', 'teeeeee');
+    wsRef.current?.emit('userTest', JSON.stringify({ type: 'test', message: 'content' }));
   };
 
   return (
     <div>
-      <Button onClick={onClick} text="Send" />
       <MainMenu />
+      <Button onClick={onClick} text="Send" />
     </div>
   );
 };
