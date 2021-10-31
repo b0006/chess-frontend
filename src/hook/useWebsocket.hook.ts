@@ -1,4 +1,3 @@
-// import { DefaultEventsMap, Emitter } from '@socket.io/component-emitter';
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
@@ -8,7 +7,18 @@ interface DefaultEventsMap {
 
 type WS = Socket<DefaultEventsMap, DefaultEventsMap>;
 
-const useWebsocket = (url = 'http://localhost:81', transport = 'websocket'): { ws?: WS } => {
+interface Message {
+  type: string;
+  data?: Record<string, unknown> | string;
+}
+
+const useWebsocket = (
+  url = 'http://localhost:81',
+  transport = 'websocket'
+): {
+  sendWsMsg: (event: string, message: Message) => void;
+  listenWsMsg: (event: string, callback: (message: Message) => void) => void;
+} => {
   const wsRef = useRef<WS>();
 
   useEffect(() => {
@@ -16,17 +26,19 @@ const useWebsocket = (url = 'http://localhost:81', transport = 'websocket'): { w
       withCredentials: true,
       transports: [transport],
     });
-
-    // wsRef.current.on('msgToClient', (message: any) => {
-    //   console.log('msgToClient', message);
-    // });
-
-    // wsRef.current.on('userTest', (message: any) => {
-    //   console.log('userTest', message);
-    // });
   }, [transport, url]);
 
-  return { ws: wsRef.current };
+  const sendWsMsg = (event: string, message: Message) => {
+    wsRef.current?.emit(event, JSON.stringify(message));
+  };
+
+  const listenWsMsg = (event: string, callback: (message: Message) => void) => {
+    wsRef.current?.on(event, (message: Message) => {
+      callback(message);
+    });
+  };
+
+  return { sendWsMsg, listenWsMsg };
 };
 
 export { useWebsocket };

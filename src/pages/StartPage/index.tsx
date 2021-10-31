@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Button } from '../../components/Common/Button';
 import { MainMenu } from '../../components/Start/MainMenu';
 import { useWebsocket } from '../../hook/useWebsocket.hook';
 
 const StartPage: React.FC = () => {
-  const { ws } = useWebsocket();
+  const { sendWsMsg, listenWsMsg } = useWebsocket();
 
   const onClick = () => {
-    ws?.emit('userTest', JSON.stringify({ type: 'test', message: 'content' }));
+    sendWsMsg('userTest', { type: 'test', data: 'content' });
   };
+
+  useEffect(() => {
+    listenWsMsg('userTest', (message) => {
+      console.log(message);
+    });
+  }, [listenWsMsg]);
 
   return (
     <div>
