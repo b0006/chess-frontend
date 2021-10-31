@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface DefaultEventsMap {
@@ -26,17 +26,21 @@ const useWebsocket = (
       withCredentials: true,
       transports: [transport],
     });
+
+    return () => {
+      wsRef.current?.close();
+    };
   }, [transport, url]);
 
   const sendWsMsg = (event: string, message: Message) => {
     wsRef.current?.emit(event, JSON.stringify(message));
   };
 
-  const listenWsMsg = (event: string, callback: (message: Message) => void) => {
+  const listenWsMsg = useCallback((event: string, callback: (message: Message) => void) => {
     wsRef.current?.on(event, (message: Message) => {
       callback(message);
     });
-  };
+  }, []);
 
   return { sendWsMsg, listenWsMsg };
 };
