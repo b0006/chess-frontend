@@ -17,12 +17,17 @@ interface IFormFields {
   password: string;
 }
 
+interface SignInResponse {
+  accessToken: string;
+  userData: ProfileData;
+}
+
 const LoginForm: React.FC = () => {
   const history = useHistory();
-  const { setProfileData } = userStore;
+  const { setProfileData, saveToken } = userStore;
 
   const { addNotification } = useNotification();
-  const [isLoading, signInRequst] = useFetchDataApi<IFormFields, ProfileData>('/auth/sign-in/', 'POST');
+  const [isLoading, signInRequst] = useFetchDataApi<IFormFields, SignInResponse>('/auth/sign-in/', 'POST');
 
   const {
     register,
@@ -38,7 +43,8 @@ const LoginForm: React.FC = () => {
       return;
     }
 
-    setProfileData(response);
+    saveToken(response.accessToken);
+    setProfileData(response.userData);
     history.push('/');
   };
 

@@ -1,8 +1,7 @@
 import { action, makeAutoObservable, observable } from 'mobx';
 
-import { requests as agent } from '../../agent';
-
-import * as service from './userStore.service';
+import { HTTP } from '../../agent/axios';
+import { requests } from '../../agent';
 
 export interface Party {
   id: string;
@@ -26,6 +25,20 @@ export interface UserData {
   profileData: ProfileData | null;
 }
 
+const removeHeaderToken = () => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  HTTP.defaults.headers['Authorization'] = '';
+};
+
+const setHeaderToken = (token: string) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  HTTP.defaults.headers['Authorization'] = `Bearer ${token}`;
+};
+
+const TOKEN_KEY = 'user-token-chess';
+
 const initUser: UserData = {
   isAuth: false,
   profileData: null,
@@ -45,16 +58,26 @@ export class UserStore {
       setProfileData: action,
       signInAsGuest: action,
       logout: action,
-      resetProfileData: action,
+      saveToken: action,
     });
 
-    agent
-      .GET<any, ProfileData>('/auth/profile')
-      .then((response) => {
-        this.setProfileData(response.data);
-      })
-      .catch((err) => err);
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (token) {
+      setHeaderToken(token);
+
+      requests
+        .GET<any, ProfileData>('/auth/profile')
+        .then((response) => {
+          this.setProfileData(response.data);
+        })
+        .catch((err) => err);
+    }
   }
+
+  public saveToken = (token: string) => {
+    localStorage.setItem(TOKEN_KEY, token);
+    setHeaderToken(token);
+  };
 
   public insertParty = (partyData: Party) => {
     this.partyList = [...this.partyList, partyData];
@@ -79,11 +102,6 @@ export class UserStore {
     };
   };
 
-  public resetProfileData = () => {
-    this.user = initUser;
-    this.partyList = [];
-  };
-
   public signInAsGuest = () => {
     this.partyList = [];
     this.user = {
@@ -93,11 +111,10 @@ export class UserStore {
   };
 
   public logout = async () => {
-    const result = await service.logout();
-    if (result) {
-      this.user = initUser;
-    }
-    return result;
+    localStorage.removeItem(TOKEN_KEY);
+    removeHeaderToken();
+    this.user = initUser;
+    this.partyList = [];
   };
 }
 
