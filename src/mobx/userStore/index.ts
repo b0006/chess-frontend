@@ -45,6 +45,7 @@ const initUser: UserData = {
 };
 
 export class UserStore {
+  public isInitLoading = true;
   public user: UserData = initUser;
   public partyList: Party[] = [];
 
@@ -69,8 +70,11 @@ export class UserStore {
         .GET<any, ProfileData>('/auth/profile')
         .then((response) => {
           this.setProfileData(response.data);
+          this.isInitLoading = false;
         })
         .catch((err) => err);
+    } else {
+      this.isInitLoading = false;
     }
   }
 

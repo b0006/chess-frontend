@@ -73,6 +73,7 @@ const MainMenu: React.FC = observer(() => {
                   className={styles.button}
                   text="Войти как гость"
                   icon="userClock"
+                  disabled
                   onClick={signInAsGuest}
                   theme="secondary"
                 />
