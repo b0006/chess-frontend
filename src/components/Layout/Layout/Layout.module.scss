@@ -17,14 +17,14 @@
   min-height: auto;
   width: 100%;
 
-  animation-name: show-layout;
-  animation-duration: 0.15s;
-  animation-iteration-count: 1;
-
   &__main {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     flex-shrink: 0;
+
+    animation-name: show-layout;
+    animation-duration: 0.15s;
+    animation-iteration-count: 1;
   }
 }

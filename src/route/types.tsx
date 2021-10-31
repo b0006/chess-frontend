@@ -8,53 +8,32 @@ import { LoaderMain } from '../components/Layout/LoaderMain';
 
 interface IRouteComponentProps extends RouteProps {
   component: React.ComponentType<RouteComponentProps>;
+  isPrivate: boolean;
   redirectAuthPath?: string;
 }
 
-const PublicRoute: React.FC<IRouteComponentProps> = observer(({ component: Component, redirectAuthPath, ...rest }) => {
-  const { isInitLoading, user } = userStore;
-  if (isInitLoading) {
-    return <LoaderMain />;
-  }
-
-  if (redirectAuthPath && user.isAuth) {
-    return <Redirect to={redirectAuthPath} />;
-  }
-
-  return (
-    <Route
-      {...rest}
-      render={(props) => (
-        <Layout>
-          <Component {...props} />
-        </Layout>
-      )}
-    />
-  );
-});
-
-const PrivateRoute: React.FC<IRouteComponentProps> = observer(
-  ({ component: Component, redirectAuthPath = '/sign-in', ...rest }) => {
+const CommonRoute: React.FC<IRouteComponentProps> = observer(
+  ({ component: Component, isPrivate, redirectAuthPath = '/sign-in', ...rest }) => {
     const { isInitLoading, user } = userStore;
     if (isInitLoading) {
       return <LoaderMain />;
     }
 
+    if (isPrivate && !user.isAuth) {
+      return <Redirect to={redirectAuthPath} />;
+    }
+
     return (
       <Route
         {...rest}
-        render={(props) =>
-          user.isAuth ? (
-            <Layout>
-              <Component {...props} />
-            </Layout>
-          ) : (
-            <Redirect to={redirectAuthPath} />
-          )
-        }
+        render={(props) => (
+          <Layout>
+            <Component {...props} />
+          </Layout>
+        )}
       />
     );
   }
 );
 
-export { PublicRoute, PrivateRoute };
+export { CommonRoute };

@@ -9,21 +9,21 @@ import { SignInPage } from '../pages/SignInPage';
 import { OfflineGamePage } from '../pages/OfflineGamePage';
 import { OnlineLobbyPage } from '../pages/OnlineLobbyPage';
 
-import { PublicRoute, PrivateRoute } from './types';
+import { CommonRoute } from './types';
 
 const Router: React.FC = () => {
   return (
     <Provider>
       <HashRouter basename={process.env.PUBLIC_URL}>
         <Switch>
-          <PublicRoute exact path="/" component={StartPage} />
-          <PublicRoute exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
-          <PublicRoute exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
+          <CommonRoute isPrivate={false} exact path="/" component={StartPage} />
+          <CommonRoute isPrivate={false} exact path="/sign-in" component={SignInPage} redirectAuthPath="/" />
+          <CommonRoute isPrivate={false} exact path="/sign-up" component={SignUpPage} redirectAuthPath="/" />
 
-          <PrivateRoute exact path="/lobby-online" component={OnlineLobbyPage} />
-          <PrivateRoute exact path="/offline-game" component={OfflineGamePage} />
+          <CommonRoute isPrivate exact path="/lobby-online" component={OnlineLobbyPage} />
+          <CommonRoute isPrivate exact path="/offline-game" component={OfflineGamePage} />
 
-          <PublicRoute path="*" component={NotFoundPage} />
+          <CommonRoute isPrivate={false} path="*" component={NotFoundPage} />
         </Switch>
       </HashRouter>
     </Provider>
