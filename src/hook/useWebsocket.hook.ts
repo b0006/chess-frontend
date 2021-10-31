@@ -13,7 +13,7 @@ interface Message {
 }
 
 const useWebsocket = (
-  url = 'http://localhost:81',
+  url = 'http://localhost:4000',
   transport = 'websocket'
 ): {
   sendWsMsg: (event: string, message: Message) => void;
