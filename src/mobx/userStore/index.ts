@@ -45,12 +45,15 @@ const initUser: UserData = {
 };
 
 export class UserStore {
+  public token = '';
   public isInitLoading = true;
   public user: UserData = initUser;
   public partyList: Party[] = [];
 
   constructor() {
     makeAutoObservable(this, {
+      token: observable,
+      isInitLoading: observable,
       user: observable,
       partyList: observable,
       insertParty: action,
@@ -64,6 +67,7 @@ export class UserStore {
 
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
+      this.token = token;
       setHeaderToken(token);
 
       requests
@@ -81,6 +85,7 @@ export class UserStore {
   }
 
   public saveToken = (token: string) => {
+    this.token = token;
     localStorage.setItem(TOKEN_KEY, token);
     setHeaderToken(token);
   };
@@ -116,7 +121,8 @@ export class UserStore {
     };
   };
 
-  public logout = async () => {
+  public logout = () => {
+    this.token = '';
     localStorage.removeItem(TOKEN_KEY);
     removeHeaderToken();
     this.user = initUser;
