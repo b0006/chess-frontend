@@ -4,12 +4,12 @@ import { Button } from '../../components/Common/Button';
 import { Container } from '../../components/Layout/Container';
 import { LobbyMenu } from '../../components/Lobby/LobbyMenu';
 import { useFetchDataApi } from '../../hook/useFetchDataApi.hook';
-import { useWebsocket } from '../../hook/useWebsocket.hook';
+import { useWSActions } from '../../hook/useWSActions.hook';
 import { userStore } from '../../mobx';
 import { Party } from '../../mobx/userStore';
 
 const OnlineLobbyPage: React.FC = () => {
-  const { sendWsMsg, listenWsMsg } = useWebsocket();
+  const { sendWsMsg, listenWsMsg } = useWSActions();
   const { updatePartyList } = userStore;
 
   const [isLoading, fetchPartyList] = useFetchDataApi<any, Party[]>('/api/chess/', 'GET');
